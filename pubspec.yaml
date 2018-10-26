@@ -1,0 +1,10 @@
+name: plugin
+version: 0.2.0
+author: BlackSalt Team <misc@dartlang.org>
+description: Support for building plugins.
+homepage: https://github.com/blacksaltIT/dart_graphql
+environment:
+  sdk: '>=2.0.0 <3.0.0'
+dependencies:
+dev_dependencies:
+  test: ^1.3.4
