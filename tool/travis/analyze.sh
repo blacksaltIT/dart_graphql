@@ -5,5 +5,5 @@ set -ev
 #protoc --version
 dartanalyzer --version
 pub get
-make protos
+#make protos
 dartanalyzer .
