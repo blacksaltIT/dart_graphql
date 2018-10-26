@@ -4,4 +4,5 @@ set -ev
 #PATH=$HOME/protoc/bin:$PATH
 #protoc --version
 pub get
-make clean run-tests
+pub run test
+#make clean run-tests
