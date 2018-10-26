@@ -4,11 +4,11 @@
 
 import 'package:build_config/build_config.dart';
 import 'package:build_runner/build_runner.dart';
-import './graphql_fetch_generator.dart';
 import '../types/GraphqlSetting.dart';
+import './graphql_fetch_generator.dart';
 export '../types/GraphqlSetting.dart' show createSetting;
 
-final String schemaUrl = "https://foo.bar";
+final String schemaUrl = 'https://foo.bar';
 
 List<BuilderApplication> actions = [
   applyToRoot(
