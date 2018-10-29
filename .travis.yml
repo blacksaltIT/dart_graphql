@@ -3,8 +3,8 @@ sudo: false
 
 matrix:
   include:
-  - dart: dev
-    dart_task: dartfmt
+#  - dart: dev
+#    dart_task: dartfmt
   - dart: dev
     install: ./tool/travis/setup.sh
     script: ./tool/travis/test.sh
