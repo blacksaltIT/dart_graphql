@@ -1,3 +1,5 @@
+<img src="https://travis-ci.org/blacksaltIT/dart_graphql.svg?branch=master"/>
+
 # GraphQL Plugin
 
 Support for using graphql in Dart.
