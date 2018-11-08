@@ -1,4 +1,4 @@
-<img src="https://travis-ci.org/blacksaltIT/dart_graphql.svg?branch=master"/>
+<a href="https://travis-ci.org/blacksaltIT/dart_graphql"><img src="https://travis-ci.org/blacksaltIT/dart_graphql.svg?branch=master"/></a>
 
 # GraphQL Plugin
 
