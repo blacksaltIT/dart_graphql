@@ -1,4 +1,4 @@
-// Copyright (c) 2018, the Black Salt authors.  Please see the AUTHORS file
+// Copyright (c) 2019, the Black Salt authors.  Please see the AUTHORS file
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
@@ -19,9 +19,10 @@ part 'query.dart';
 class RestClient extends http.BaseClient {
   http.Client _client;
   String _endpoint;
+  String language;
   Uri _baseUri;
 
-  RestClient(this._endpoint) {
+  RestClient(this._endpoint, {this.language}) {
     this._client = new http.Client();
     this._baseUri = Uri.parse(this._endpoint);
   }
@@ -55,14 +56,13 @@ class RestClient extends http.BaseClient {
     Uri uri = _baseUri.replace(path: _baseUri.path + path);
 
     Map<String, String> _headers = {'Content-Type': 'application/json'};
-    if (headers != null) _headers..addAll(headers);
+
+    if (headers != null) _headers.addAll(headers);
 
     http.Response response = null;
     if (files != null && files.length > 0) {
       //response =
       var request = new http.MultipartRequest("POST", uri);
-      print("Query ${data['query']}");
-      print("Variables ${toJson(data['variables'])}");
 
       request.fields['query'] = data['query'];
       request.fields['variables'] = toJson(data['variables']);
@@ -85,7 +85,6 @@ class RestClient extends http.BaseClient {
       try {
         response = await Response.fromStream(await this.send(request));
       } catch (e) {
-        print(e);
         response = new Response('{"error": "${e.toString()}"', 500);
       }
     } else
@@ -141,7 +140,8 @@ class RestClient extends http.BaseClient {
 }
 
 class GraphqlClient extends RestClient {
-  GraphqlClient(String endpoint) : super(endpoint);
+  GraphqlClient(String endpoint, {String language})
+      : super(endpoint, language: language);
 
   Future<JsonResponse> request<T>(String query, Map<String, dynamic> variables,
       [Map<String, String> headers, List<String> files]) async {
@@ -152,11 +152,14 @@ class GraphqlClient extends RestClient {
 
   Future<GraphqlResponse<T>> query<T>(GraphqlQuery<T> query,
       [Map<String, String> headers, List<String> files]) async {
+    headers ??= {};
+    if (language != null) headers['Accept-Language'] = language;
+
     JsonResponse result =
         await request(query.query, query.variables, headers, files);
     return result.decode((body) {
       Map map = json.decode(body);
-      return new GraphqlResponse(query.constructorOfData, map);
+      return new GraphqlResponse<T>(query.constructorOfData, map);
     });
   }
 }

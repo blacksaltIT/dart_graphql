@@ -1,4 +1,4 @@
-// Copyright (c) 2018, the Black Salt authors.  Please see the AUTHORS file
+// Copyright (c) 2019, the Black Salt authors.  Please see the AUTHORS file
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
@@ -11,7 +11,10 @@ class Operation extends BaseTypes {
   Operation(this._context, GraphqlSchema schema) : super(schema);
 
   void generate(String path, LibraryBuilder fb) {
-    _queryTypes = new QueryTypes(_schema, methodName, path);
+    _queryTypes = new QueryTypes(_schema);
+
+    if (_schema.isRegistered(methodName)) return;
+    _schema.registerType(methodName);
 
     Method method = new Method((MethodBuilder b) {
       dynamic returns = generateReturn(fb);
@@ -26,7 +29,7 @@ class Operation extends BaseTypes {
 
   String get methodName => _context.name;
 
-  String get resultClassName => "${upperCaseFirst(methodName)}Result";
+  String get resultClassName => "${upperCaseFirst(methodName)}_OperationResult";
 
   generateCode(String resultClass) {
     Reference graphqlQuery = refer("GraphqlQuery", "../graphql/fetch.dart");
@@ -36,21 +39,17 @@ class Operation extends BaseTypes {
 
     String query = wrapStringCode(_context.span.text);
 
-    List<String> strings = _queryTypes.depFragments
-        .map<String>((r) => "${r.symbol}.fragmentString")
-        .toList(growable: true);
-    strings.insert(0, "query");
     return new Code.scope((a) {
       if (variables == null) {
         return "const query = $query;"
             "return new ${a(graphqlQuery)}("
-            "${strings.join(" + ")}, "
+            "query, "
             "null, "
             "$resultClass.fromMap);";
       } else {
         return "const query = $query;"
             "return new ${a(graphqlQuery)}("
-            "${strings.join(" + ")}, "
+            "query, "
             "{${variables.join(',')}},"
             "$resultClass.fromMap);";
       }
@@ -58,32 +57,36 @@ class Operation extends BaseTypes {
   }
 
   generateResultClass(
-      LibraryBuilder b, SelectionContext context, dynamic schemaObject) {
+      LibraryBuilder b, dynamic schemaObject, String payloadClassName) {
     dynamic cls = new Class((ClassBuilder cb) => generateClass(
             cb, resultClassName, {
           schemaObject.name:
-              _queryTypes.generateFieldType(b, context, schemaObject.type)
+              new TypedReference(refer(payloadClassName), GraphType.OBJECT)
         }));
     b.body.add(cls);
     return resultClassName;
   }
 
   generateReturn(LibraryBuilder b) {
-    for (SelectionContext sel in _context.selectionSet.selections) {
-      String field = sel.field.fieldName.name;
-      dynamic query = this._context.TYPE.text == "mutation"
-          ? _schema.findMutation(field)
-          : _schema.findQuery(field);
-      dynamic className = generateResultClass(b, sel, query);
-      return [
-        refer("GraphqlQuery<$className>", "../graphql/fetch.dart"),
-        className
-      ];
-    }
+    var sel = _context.selectionSet.selections[0];
+    String field = sel.field.fieldName.name;
+    dynamic query = this._context.TYPE.text == "mutation"
+        ? _schema.findMutation(field)
+        : _schema.findQuery(field);
+
+    dynamic payloadClassName = _queryTypes.generateClassForObject(
+        b, _schema.findObject(query?.type?.name));
+
+    dynamic className = generateResultClass(b, query, payloadClassName);
+
+    return [
+      refer("GraphqlQuery<$className>", "../graphql/fetch.dart"),
+      className
+    ];
   }
 
   void generateParameters(LibraryBuilder fb, MethodBuilder b, String path) {
-    InputTypes inputTypes = new InputTypes(_schema, path);
+    InputTypes inputTypes = new InputTypes(_schema);
 
     if (_context.variableDefinitions != null) {
       for (VariableDefinitionContext variable

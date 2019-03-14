@@ -1,4 +1,4 @@
-// Copyright (c) 2018, the Black Salt authors.  Please see the AUTHORS file
+// Copyright (c) 2019, the Black Salt authors.  Please see the AUTHORS file
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
@@ -7,7 +7,6 @@ library graphql_client_generator;
 import 'dart:async';
 
 import 'package:build/build.dart';
-import 'package:glob/glob.dart';
 import 'package:logging/logging.dart';
 
 import '../types/GraphqlSchema.dart';
@@ -54,12 +53,6 @@ class GraphqlBuilder extends Builder {
     GraphqlSchema schema = await buildStep.fetchResource(_schemaResource);
     await schema.awaitForSchema();
     var parser = new GraphqlParser(schema);
-    if (!schema.fragmentsRegistered) {
-      await for (AssetId aid in buildStep.findAssets(new Glob("**.graphql"))) {
-        String content = await buildStep.readAsString(aid);
-        parser.registerFragment(content, aid.addExtension(".dart").path);
-      }
-    }
     log.info("handling ${buildStep.inputId.path}");
     AssetId output = buildStep.inputId.addExtension('.dart');
     String query = await buildStep.readAsString(buildStep.inputId);

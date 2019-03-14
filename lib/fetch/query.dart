@@ -1,4 +1,4 @@
-// Copyright (c) 2018, the Black Salt authors.  Please see the AUTHORS file
+// Copyright (c) 2019, the Black Salt authors.  Please see the AUTHORS file
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
@@ -16,6 +16,52 @@ class JsonResponse {
   }
 
   String get body => _body;
+}
+
+class GraphqlExceptionErrorLocation {
+  int line;
+  int column;
+
+  GraphqlExceptionErrorLocation([this.line, this.column]) {}
+
+  String toString() {
+    if (line != null && column != null) return "$line:$column";
+    if (line != null) return "$line";
+    if (column != null) return "$column";
+    return "";
+  }
+}
+
+class GraphqlExceptionErrorEntry {
+  String message;
+  List<GraphqlExceptionErrorLocation> locations = [];
+
+  GraphqlExceptionErrorEntry([this.message, this.locations]) {}
+
+  String toString() {
+    if (message != null && locations != null && locations.isNotEmpty)
+      return "$message at (${locations.join(",")})";
+
+    if (message == null && locations != null && locations.isNotEmpty)
+      return "${locations.join(",")}";
+
+    return message;
+  }
+}
+
+class GraphqlException implements Exception {
+  String message;
+  List<GraphqlExceptionErrorEntry> errors = [];
+
+  GraphqlException([this.message, this.errors]) {}
+
+  String toString() {
+    if (message != null && errors != null && errors.isNotEmpty)
+      return "$message: $errors";
+    if (errors != null && errors.isNotEmpty) return "GraphqlException: $errors";
+
+    return "GraphqlException";
+  }
 }
 
 class GraphqlQuery<T> {
@@ -36,11 +82,26 @@ class GraphqlResponse<T> extends MapObject {
 
   T get data => dataCreator(MapObject.get(this, "data"));
 
-  List<GraphqlResponseError> get errors => MapObject.get(this, "errors")
-      ?.map<GraphqlResponseError>(GraphqlResponseError.fromMap);
+  List<GraphqlExceptionErrorEntry> _errors;
+  List<GraphqlExceptionErrorEntry> get errors {
+    if (_errors != null) return _errors;
+
+    _errors = [];
+    List<dynamic> errList = MapObject.get(this, "errors");
+    for (Map<String, dynamic> err in errList ?? []) {
+      _errors.add(GraphqlExceptionErrorEntry());
+      _errors.last.message = err["message"];
+      _errors.last.locations = [];
+      for (Map<String, dynamic> location in err["locations"] ?? []) {
+        _errors.last.locations.add(GraphqlExceptionErrorLocation(
+            location["line"], location["column"]));
+      }
+    }
+    return _errors;
+  }
 
   bool hasError() {
-    return errors != null && errors.length > 0;
+    return errors.isNotEmpty;
   }
 }
 
@@ -101,8 +162,21 @@ class MapObject {
   }
 }
 
+class EnumValue {
+  EnumValue({this.value}) {}
+
+  String value;
+
+  @override
+  String toString() {
+    return value;
+  }
+}
+
 Map<String, ScalarSerializer> scalarSerializers = {
-  "DateTime": new DateTimeConverter()
+  "DateTime": DateTimeConverter(),
+  "EnumValue": EnumSerializer(),
+  "JSONString": JSONStringSerializer()
 };
 
 abstract class ScalarSerializer<T> {
@@ -130,4 +204,41 @@ class DateTimeConverter implements ScalarSerializer<DateTime> {
 
   @override
   String get dartPackage => null;
+}
+
+class EnumSerializer implements ScalarSerializer<EnumValue> {
+  @override
+  EnumValue deserialize(d) => d == null ? null : EnumValue(value: d);
+
+  isType(dynamic value) => value is EnumValue;
+
+  @override
+  serialize(EnumValue data) {
+    if (data is EnumValue) {
+      return data.value;
+    }
+  }
+
+  String get dartName => "EnumValue";
+
+  @override
+  String get dartPackage => 'package:eflyr/graphql/fetch.dart';
+}
+
+class JSONStringSerializer implements ScalarSerializer<Map<String, dynamic>> {
+  @override
+  Map<String, dynamic> deserialize(dynamic d) =>
+      d == null ? null : json.decode(d);
+
+  isType(dynamic value) => value is Map<String, dynamic>;
+
+  @override
+  serialize(Map<String, dynamic> data) {
+    return json.encode(data);
+  }
+
+  String get dartName => "Map<String, dynamic>";
+
+  @override
+  String get dartPackage => 'dart:core';
 }

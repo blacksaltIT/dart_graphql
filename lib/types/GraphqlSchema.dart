@@ -1,17 +1,14 @@
-// Copyright (c) 2018, the Black Salt authors.  Please see the AUTHORS file
+// Copyright (c) 2019, the Black Salt authors.  Please see the AUTHORS file
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
 
-import 'generator.dart';
-
 class GraphqlSchema {
   Future _schemaFuture;
 
   dynamic _schema;
-  Map<String, TypedReference> _generatedTypes = {};
-  bool fragmentsRegistered = false;
+  List<String> _generatedTypes = [];
 
   GraphqlSchema(this._schemaFuture);
 
@@ -43,13 +40,11 @@ class GraphqlSchema {
         .firstWhere((d) => d.name == mutationName, orElse: () => null);
   }
 
-  registerType(String file, TypedReference type) {
-    fragmentsRegistered = true;
-    type.file = file;
-    _generatedTypes[type.reference.symbol] = type;
+  registerType(String className) {
+    _generatedTypes.add(className);
   }
 
-  findType(String type) {
-    return _generatedTypes[type];
+  isRegistered(String className) {
+    return _generatedTypes.contains(className);
   }
 }
