@@ -196,9 +196,15 @@ class DateTimeConverter implements ScalarSerializer<DateTime> {
   @override
   serialize(DateTime data) {
     if (data is DateTime) {
-      return data.toIso8601String();
+      DateTime utcDate = data.toUtc();
+      String stamp = "${_addLeadingZeros(utcDate.year, 4)}-${_addLeadingZeros(utcDate.month)}-${_addLeadingZeros(utcDate.day)}T${_addLeadingZeros(utcDate.hour)}:${_addLeadingZeros(utcDate.minute)}:${_addLeadingZeros(utcDate.second)}";
+      String timezone = 
+          "${data.timeZoneOffset.isNegative ? '-' : '+'}${_addLeadingZeros(data.timeZoneOffset.inMinutes ~/ 60)}:${_addLeadingZeros(data.timeZoneOffset.inMinutes % 60)}";
+      return "$stamp$timezone";
     }
   }
+
+  String _addLeadingZeros(int number, [int totalLength = 2]) => number.toString().padLeft(totalLength, '0');
 
   String get dartName => "DateTime";
 
