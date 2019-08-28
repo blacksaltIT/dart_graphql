@@ -1,0 +1,20 @@
+query GitlabCEIssueLabels($firstN: Int) {
+  project(fullPath: "gitlab-org/gitlab-ce") {
+    id
+    issues(first: $firstN) {
+      edges {
+        node {
+          title
+          state
+          labels {
+            edges {
+              node {
+                title
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

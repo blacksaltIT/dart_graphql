@@ -228,7 +228,7 @@ class EnumSerializer implements ScalarSerializer<EnumValue> {
   String get dartName => "EnumValue";
 
   @override
-  String get dartPackage => 'package:eflyr/graphql/fetch.dart';
+  String get dartPackage => 'package:dart_graphql/graphql/fetch.dart';
 }
 
 class JSONStringSerializer implements ScalarSerializer<Map<String, dynamic>> {

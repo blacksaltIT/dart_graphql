@@ -8,7 +8,7 @@ import 'dart:io';
 import 'package:json_object_lite/json_object_lite.dart';
 import 'package:logging/logging.dart';
 
-import '../fetch.dart';
+import '../dart_graphql.dart';
 
 GraphqlBuildSetting createSetting(
     {String schemaUrl,

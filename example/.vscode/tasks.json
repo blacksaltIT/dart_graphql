@@ -1,0 +1,23 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "br_build",
+            "type": "process",
+            "command": "pub",
+            "args": [
+                "run",
+                "build_runner",
+                "build",
+                "--verbose",
+                "--delete-conflicting-outputs"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": "$dart-pub-build_runner"
+        }
+    ]
+}

@@ -6,7 +6,7 @@ import 'package:code_builder/code_builder.dart';
 import 'package:dart_style/dart_style.dart';
 import 'package:graphql_parser/graphql_parser.dart';
 
-import '../fetch.dart';
+import '../dart_graphql.dart';
 import 'GraphqlSchema.dart';
 
 part 'BaseTypes.dart';

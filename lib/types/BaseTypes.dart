@@ -41,7 +41,7 @@ class BaseTypes {
     }
   }
 
-  final baseClass = refer("MapObject", "../graphql/fetch.dart");
+  final baseClass = refer("MapObject", "package:dart_graphql/dart_graphql.dart");
 
   upperCaseFirst(String s) {
     return s[0].toUpperCase() + s.substring(1);
@@ -212,7 +212,7 @@ class BaseTypes {
         }
         break;
       case GraphType.OTHER:
-        Reference r = refer('scalarSerializers', '../graphql/fetch.dart');
+        Reference r = refer('scalarSerializers', 'package:dart_graphql/dart_graphql.dart');
         return new Code.scope((a) =>
             'return ${a(r)}["${type.scalaTypeName}"].deserialize(map["${sourceName ?? name}"]);');
       default:
@@ -249,7 +249,7 @@ class BaseTypes {
         }
         break;
       case GraphType.OTHER:
-        Reference r = refer('scalarSerializers', '../graphql/fetch.dart');
+        Reference r = refer('scalarSerializers', 'package:dart_graphql/dart_graphql.dart');
         return new Code.scope((a) =>
             'map["$name"] = ${a(r)}["${type.scalaTypeName}"].serialize(value)');
       default:
