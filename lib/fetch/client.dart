@@ -1,7 +1,3 @@
-// Copyright (c) 2019, the Black Salt authors.  Please see the AUTHORS file
-// for details. All rights reserved. Use of this source code is governed by a
-// BSD-style license that can be found in the LICENSE file.
-
 library graphql_fetch.client;
 
 import 'dart:async';
@@ -54,14 +50,12 @@ class RestClient extends http.BaseClient {
       [Map<String, String> headers, List<String> files]) async {
     String body = toJson(data);
     Uri uri = _baseUri.replace(path: _baseUri.path + path);
-
     Map<String, String> _headers = {'Content-Type': 'application/json'};
 
     if (headers != null) _headers.addAll(headers);
 
     http.Response response = null;
-    if (files != null && files.length > 0) {
-      //response =
+    if (files != null && files.isNotEmpty) {
       var request = new http.MultipartRequest("POST", uri);
 
       request.fields['query'] = data['query'];

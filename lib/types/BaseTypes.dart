@@ -62,11 +62,6 @@ class BaseTypes {
 
     for (var name in fields.keys) {
       TypedReference type = fields[name];
-      if (type.type == GraphType.OBJECT ||
-          type.type == GraphType.UNION ||
-          type.type == GraphType.LIST) {
-        cb.fields.add(generateField(name, type));
-      }
 
       cb.methods.add(generateGetter(name, type));
 
@@ -75,6 +70,7 @@ class BaseTypes {
     }
 
     generateFromMapConstructor(cb, className);
+    generateClone(cb, className);
   }
 
   generateUnion(ClassBuilder cb, String className,
@@ -87,7 +83,6 @@ class BaseTypes {
       var sourceName = "__typename";
       var type = fields["typename"];
 
-      //cb.fields.add(generateField(propName, type));
       cb.methods.add(generateGetter(propName, type, sourceName: sourceName));
     }
 
@@ -106,9 +101,13 @@ class BaseTypes {
     }
 
     generateFromMapConstructor(cb, className);
+    generateClone(cb, className);
   }
 
   void generateFromMapConstructor(ClassBuilder cb, String className) {
+    Reference jsonEncodeRef = refer("jsonEncode", 'dart:convert');
+    Reference jsonDecodeRef = refer("jsonDecode", 'dart:convert');
+
     cb.methods.add(new Method((MethodBuilder b) => b
       ..name = "fromMap"
       ..static = true
@@ -117,10 +116,25 @@ class BaseTypes {
             ..name = "map"
             ..type = refer("Map<String, dynamic>"))
           .build())
-      ..body = new Code('''return map == null ? 
-        null : 
-        new $className()..map.addAll(map);  
-        ''')));
+      ..optionalParameters.add((ParameterBuilder()
+            ..name = "deepCopy"
+            ..defaultTo = Code('false'))
+          .build())
+      ..body = Code.scope((a) => '''
+      if (map == null) return null;
+      if (deepCopy)
+        map = ${a(jsonDecodeRef)}(${a(jsonEncodeRef)}(map));
+      return $className()
+        ..map = map;
+      ''')));
+  }
+
+  void generateClone(ClassBuilder cb, String className) {
+    cb.methods.add(new Method((MethodBuilder b) => b
+      ..name = "clone"
+      ..returns = refer(className)
+      ..lambda = true
+      ..body = new Code('$className.fromMap(toJson(), true)')));
   }
 
   generateField(String name, TypedReference type) {
@@ -146,22 +160,55 @@ class BaseTypes {
     switch (type.type) {
       case GraphType.OBJECT:
       case GraphType.UNION:
-        return new Code(
-            'if(_$name == null) _$name = ${type.reference.symbol}.fromMap(map["${sourceName ?? name}"]); return _$name;');
+        String propName = sourceName ?? name;
+        return new Code("""
+            if(map['$propName'] is ${type.reference.symbol}) return map['$propName'];
+            return map['$propName'] = ${type.reference.symbol}.fromMap(map['$propName']);
+            """);
       case GraphType.ENUM:
         return new Code(
             'return ${type.reference.symbol}.values[map["$name"]];');
       case GraphType.LIST:
         if (type.genericReference.type == GraphType.OBJECT ||
             type.genericReference.type == GraphType.UNION) {
-          return new Code(
-              'if(_$name == null) { _$name = []; for (dynamic aVar in map["${sourceName ?? name}"]) _$name.add(${type.genericReference.reference.symbol}.fromMap(aVar)); } return _$name;');
+          String propName = sourceName ?? name;
+          String listType = "List<${type.genericReference.reference.symbol}>";
+          return new Code("""
+            if(map['$propName'] == null || map['$propName'] is $listType) return map['$propName'];
+
+            $listType items = [];
+            for (dynamic aVar in map['$propName']) 
+              items.add(${type.genericReference.reference.symbol}.fromMap(aVar));
+
+            return map['$propName'] = items;
+            """);
         } else if (type.genericReference.type == GraphType.ENUM) {
-          getter.lambda = true;
-          return new Code('_$name');
+          String propName = sourceName ?? name;
+          String listType = "List<${type.genericReference.reference.symbol}>";
+          return new Code("""
+            if(map['$propName'] == null || map['$propName'] is $listType) return map['$propName'];
+
+            $listType items = [];
+            for (dynamic aVar in map['$propName']) 
+              items.add(${type.genericReference.reference.symbol}.values[aVar]);
+
+            return map['$propName'] = items;
+            """);
+        } else if (type.genericReference.type == GraphType.SCALAR) {
+          String propName = sourceName ?? name;
+          String listType = "List<${type.genericReference.reference.symbol}>";
+          return new Code("""
+            if(map['$propName'] == null || map['$propName'] is $listType) return map['$propName'];
+
+            $listType items = [];
+            for (dynamic aVar in map['$propName']) 
+              items.add(aVar);
+
+            return map['$propName'] = items;
+            """);
         } else {
           throw new ArgumentError(
-              "Unknown or not supported graphql type '${type.type}' for getter");
+              "Unknown or not supported graphql type '${type.genericReference.type}' for LIST getter");
         }
         break;
       case GraphType.OTHER:
@@ -190,14 +237,15 @@ class BaseTypes {
   setterCode(String name, TypedReference type) {
     switch (type.type) {
       case GraphType.OBJECT:
-        return new Code('_$name = value');
+        return new Code('map["$name"] = value');
       case GraphType.LIST:
         if (type.genericReference.type == GraphType.OBJECT ||
+            type.genericReference.type == GraphType.SCALAR ||
             type.genericReference.type == GraphType.ENUM) {
-          return new Code('_$name = value');
+          return new Code('map["$name"] = value');
         } else {
           throw new ArgumentError(
-              "Unknown or not supported graphql type '${type.type}' for setter");
+              "Unknown or not supported graphql type '${type.genericReference.type}' for LIST setter");
         }
         break;
       case GraphType.OTHER:
