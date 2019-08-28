@@ -6,7 +6,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:json_object_lite/json_object_lite.dart';
-import 'package:logging/logging.dart';
 
 import '../dart_graphql.dart';
 
@@ -20,8 +19,6 @@ GraphqlBuildSetting createSetting(
 }
 
 class GraphqlBuildSetting {
-  final Logger log = new Logger('GraphqlSetting');
-
   String schemaUrl;
   String method;
   bool postIntrospectionQuery;
@@ -36,12 +33,10 @@ class GraphqlBuildSetting {
   Future getSchema() async {
     if (_schemaObject == null) {
       if (schemaFile != null) {
-        log.info("reading schema from file:$schemaFile");
         var fileContent = await new File(schemaFile).readAsString();
         _schemaObject = new JsonObjectLite.fromJsonString(fileContent);
       } else if (schemaUrl != null) {
         var client = new RestClient(this.schemaUrl);
-        log.info("fetching schema from url:${this.schemaUrl}");
         JsonResponse result;
         if (method == "post") {
           Map<String, dynamic> query = {};

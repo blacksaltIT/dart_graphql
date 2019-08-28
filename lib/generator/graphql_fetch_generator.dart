@@ -7,7 +7,6 @@ library graphql_client_generator;
 import 'dart:async';
 
 import 'package:build/build.dart';
-import 'package:logging/logging.dart';
 
 import '../types/GraphqlSchema.dart';
 import '../types/GraphqlSetting.dart';
@@ -34,8 +33,6 @@ Builder getGqlBuilder(BuilderOptions options) {
 
 class GraphqlBuilder extends Builder {
   GraphqlBuildSetting _setting;
-  final Logger log = new Logger('GraphqlSetting');
-
   Resource<GraphqlSchema> _schemaResource;
 
   GraphqlBuilder(this._setting) {
