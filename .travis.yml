@@ -3,27 +3,23 @@ sudo: false
 
 matrix:
   include:
-#  - dart: dev
-#    dart_task: dartfmt
-  - dart: dev
-    install: ./tool/travis/setup.sh
-    script: ./tool/travis/test.sh
-  - dart: dev
-    install: ./tool/travis/setup.sh
-    script: ./tool/travis/analyze.sh
-  - dart: stable
-    install: ./tool/travis/setup.sh
-    script: ./tool/travis/analyze.sh
-  - dart: dev
-    install: ./tool/travis/setup.sh
-    script: ./tool/travis/test.sh
-  - dart: stable
-    install: ./tool/travis/setup.sh
-    script: ./tool/travis/test.sh
+    #  - dart: dev
+    #    dart_task: dartfmt
+    - dart: dev
+      install: ./tool/travis/setup.sh
+      script: ./tool/travis/test.sh
+    - dart: dev
+      install: ./tool/travis/setup.sh
+      script: ./tool/travis/analyze.sh
+    - dart: stable
+      install: ./tool/travis/setup.sh
+      script: ./tool/travis/analyze.sh
+    - dart: stable
+      install: ./tool/travis/setup.sh
+      script: ./tool/travis/test.sh
 
 branches:
   only: [master]
-
 #cache:
 #  directories:
 #  - $HOME/.pub-cache

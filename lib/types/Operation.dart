@@ -32,7 +32,8 @@ class Operation extends BaseTypes {
   String get resultClassName => "${upperCaseFirst(methodName)}_OperationResult";
 
   generateCode(String resultClass) {
-    Reference graphqlQuery = refer("GraphqlQuery", "package:dart_graphql/dart_graphql.dart");
+    Reference graphqlQuery =
+        refer("GraphqlQuery", "package:dart_graphql/dart_graphql.dart");
     List<String> variables = _context.variableDefinitions?.variableDefinitions
         ?.map<String>((v) => '"${v.variable.name}": ${v.variable.name}')
         ?.toList();
@@ -80,7 +81,8 @@ class Operation extends BaseTypes {
     dynamic className = generateResultClass(b, query, payloadClassName);
 
     return [
-      refer("GraphqlQuery<$className>", "package:dart_graphql/dart_graphql.dart"),
+      refer(
+          "GraphqlQuery<$className>", "package:dart_graphql/dart_graphql.dart"),
       className
     ];
   }
