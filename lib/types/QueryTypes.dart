@@ -26,7 +26,9 @@ class QueryTypes extends BaseTypes {
         var className = generateClassForObject(b, _schema.findObject(typeName));
         return new TypedReference(refer(className), GraphType.OBJECT);
       case "ENUM":
-        return findScalarType("Enum");
+        String typeName = typeSchema.name;
+        var className = generateEnumForType(b, _schema.findObject(typeName));
+        return new TypedReference(refer(className), GraphType.ENUM);
       case "SCALAR":
         return findScalarType(typeSchema.name);
       default:

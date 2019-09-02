@@ -162,20 +162,8 @@ class MapObject {
   }
 }
 
-class EnumValue {
-  EnumValue({this.value}) {}
-
-  String value;
-
-  @override
-  String toString() {
-    return value;
-  }
-}
-
 Map<String, ScalarSerializer> scalarSerializers = {
   "DateTime": DateTimeConverter(),
-  "EnumValue": EnumSerializer(),
   "JSONString": JSONStringSerializer()
 };
 
@@ -212,25 +200,6 @@ class DateTimeConverter implements ScalarSerializer<DateTime> {
 
   @override
   String get dartPackage => null;
-}
-
-class EnumSerializer implements ScalarSerializer<EnumValue> {
-  @override
-  EnumValue deserialize(d) => d == null ? null : EnumValue(value: d);
-
-  isType(dynamic value) => value is EnumValue;
-
-  @override
-  serialize(EnumValue data) {
-    if (data is EnumValue) {
-      return data.value;
-    }
-  }
-
-  String get dartName => "EnumValue";
-
-  @override
-  String get dartPackage => 'package:dart_graphql/graphql/fetch.dart';
 }
 
 class JSONStringSerializer implements ScalarSerializer<Map<String, dynamic>> {

@@ -8,7 +8,6 @@ export './fetch/client.dart'
         GraphqlClient,
         JsonResponse,
         MapObject,
-        EnumValue,
         GraphqlQuery,
         GraphqlResponse,
         GraphqlException,
