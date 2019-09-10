@@ -19,32 +19,32 @@ class GraphqlSchema {
     return this._schema;
   }
 
-  findQuery(String queryName) {
-    String queryTypeName = _schema.queryType.name;
+  dynamic findQuery(String queryName) {
+    String queryTypeName = _schema.queryType.name as String;
     dynamic queryObject =
-        _schema.types.firstWhere((d) => d.name == queryTypeName);
+        _schema.types.firstWhere((dynamic d) => d.name == queryTypeName);
     return queryObject.fields
-        .firstWhere((d) => d.name == queryName, orElse: () => null);
+        .firstWhere((dynamic d) => d.name == queryName, orElse: () => null);
   }
 
-  findObject(String typeName) {
+  dynamic findObject(String typeName) {
     return _schema.types
-        .firstWhere((d) => d.name == typeName, orElse: () => null);
+        .firstWhere((dynamic d) => d.name == typeName, orElse: () => null);
   }
 
-  findMutation(String mutationName) {
-    String mutationTypeName = _schema.mutationType.name;
+  dynamic findMutation(String mutationName) {
+    String mutationTypeName = _schema.mutationType.name as String;
     dynamic queryObject =
-        _schema.types.firstWhere((d) => d.name == mutationTypeName);
+        _schema.types.firstWhere((dynamic d) => d.name == mutationTypeName);
     return queryObject.fields
-        .firstWhere((d) => d.name == mutationName, orElse: () => null);
+        .firstWhere((dynamic d) => d.name == mutationName, orElse: () => null);
   }
 
-  registerType(String className) {
+  void registerType(String className) {
     _generatedTypes.add(className);
   }
 
-  isRegistered(String className) {
+  bool isRegistered(String className) {
     return _generatedTypes.contains(className);
   }
 }

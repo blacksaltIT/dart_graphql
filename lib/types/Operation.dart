@@ -20,9 +20,9 @@ class Operation extends BaseTypes {
       dynamic returns = generateReturn(fb);
       b
         ..name = methodName
-        ..returns = returns[0];
+        ..returns = returns[0] as Reference;
       generateParameters(fb, b, path);
-      b.body = generateCode(returns[1]);
+      b.body = generateCode(returns[1] as String);
     });
     fb.body.add(method);
   }
@@ -31,7 +31,7 @@ class Operation extends BaseTypes {
 
   String get resultClassName => "${upperCaseFirst(methodName)}_OperationResult";
 
-  generateCode(String resultClass) {
+  Code generateCode(String resultClass) {
     Reference graphqlQuery =
         refer("GraphqlQuery", "package:dart_graphql/dart_graphql.dart");
     List<String> variables = _context.variableDefinitions?.variableDefinitions
@@ -57,30 +57,30 @@ class Operation extends BaseTypes {
     });
   }
 
-  generateResultClass(
+  String generateResultClass(
       LibraryBuilder b, dynamic schemaObject, String payloadClassName) {
-    dynamic cls = new Class((ClassBuilder cb) => generateClass(
-            cb, resultClassName, {
-          schemaObject.name:
-              new TypedReference(refer(payloadClassName), GraphType.OBJECT)
-        }));
+    Class cls =
+        new Class((ClassBuilder cb) => generateClass(cb, resultClassName, {
+              schemaObject.name as String:
+                  new TypedReference(refer(payloadClassName), GraphType.OBJECT)
+            }));
     b.body.add(cls);
     return resultClassName;
   }
 
-  generateReturn(LibraryBuilder b) {
+  List<dynamic> generateReturn(LibraryBuilder b) {
     var sel = _context.selectionSet.selections[0];
     String field = sel.field.fieldName.name;
     dynamic query = this._context.TYPE.text == "mutation"
         ? _schema.findMutation(field)
         : _schema.findQuery(field);
 
-    dynamic payloadClassName = _queryTypes.generateClassForObject(
-        b, _schema.findObject(query?.type?.name));
+    String payloadClassName = _queryTypes.generateClassForObject(
+        b, _schema.findObject(query?.type?.name as String));
 
-    dynamic className = generateResultClass(b, query, payloadClassName);
+    String className = generateResultClass(b, query, payloadClassName);
 
-    return [
+    return <dynamic>[
       refer(
           "GraphqlQuery<$className>", "package:dart_graphql/dart_graphql.dart"),
       className
@@ -95,7 +95,7 @@ class Operation extends BaseTypes {
           in _context.variableDefinitions.variableDefinitions) {
         String name = variable.variable.name;
         String type = variable.type.typeName.name;
-        dynamic parameterBuilder = new ParameterBuilder()
+        ParameterBuilder parameterBuilder = new ParameterBuilder()
           ..name = name
           ..named = true
           ..type = inputTypes

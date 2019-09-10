@@ -34,7 +34,7 @@ class RestClient extends http.BaseClient {
     return json.encode(data, toEncodable: toEncodable);
   }
 
-  toEncodable(d) {
+  dynamic toEncodable(dynamic d) {
     for (ScalarSerializer c in scalarSerializers.values) {
       if (c.isType(d)) {
         return c.serialize(d);
@@ -58,8 +58,9 @@ class RestClient extends http.BaseClient {
     if (files != null && files.isNotEmpty) {
       var request = new http.MultipartRequest("POST", uri);
 
-      request.fields['query'] = data['query'];
-      request.fields['variables'] = toJson(data['variables']);
+      request.fields['query'] = data['query'] as String;
+      request.fields['variables'] =
+          toJson(data['variables'] as Map<String, dynamic>);
       request.headers['Authorization'] = headers['Authorization'];
 
       for (var i = 0; i < files.length; i++) {
@@ -111,7 +112,7 @@ class RestClient extends http.BaseClient {
     return handleJsonResponse(response);
   }
 
-  Future<dynamic> getJson(String path, Map<String, dynamic> queries,
+  Future<JsonResponse> getJson(String path, Map<String, dynamic> queries,
       [Map<String, String> headers]) async {
     Uri uri = _baseUri.replace(
         path: _baseUri.path + path, queryParameters: toQueries(queries));
@@ -127,9 +128,9 @@ class RestClient extends http.BaseClient {
     _client.close();
   }
 
-  toQueries(Map<String, dynamic> queries) {
-    return new Map.fromIterables(
-        queries.keys, queries.values.map((v) => v.toString()));
+  Map<String, dynamic> toQueries(Map<String, dynamic> queries) {
+    return Map<String, dynamic>.fromIterables(
+        queries.keys, queries.values.map<String>((dynamic v) => v.toString()));
   }
 }
 
@@ -137,10 +138,13 @@ class GraphqlClient extends RestClient {
   GraphqlClient(String endpoint, {String language})
       : super(endpoint, language: language);
 
-  Future<JsonResponse> request<T>(String query, Map<String, dynamic> variables,
+  Future<JsonResponse> request(String query, Map<String, dynamic> variables,
       [Map<String, String> headers, List<String> files]) async {
     var result = await postJson(
-        "", {"query": query, "variables": variables}, headers, files);
+        "",
+        <String, dynamic>{"query": query, "variables": variables},
+        headers,
+        files);
     return result;
   }
 
@@ -152,13 +156,13 @@ class GraphqlClient extends RestClient {
     JsonResponse result =
         await request(query.query, query.variables, headers, files);
     return result.decode((body) {
-      Map map = json.decode(body);
+      Map<String, dynamic> map = json.decode(body) as Map<String, dynamic>;
       return new GraphqlResponse<T>(query.constructorOfData, map);
     });
   }
 }
 
-main() async {
+void main() async {
   String query = """
     query(\$alias: String) {
       allShows(filter: {
@@ -175,6 +179,6 @@ main() async {
     }""";
   GraphqlClient cli = new GraphqlClient(
       "http://localhost:60000/simple/v1/cj9mldxkd008c017544mu2vhw");
-  var result = await cli.request(query, {"alias": "atest"});
+  var result = await cli.request(query, <String, dynamic>{"alias": "atest"});
   print(result);
 }

@@ -4,14 +4,14 @@
 
 part of 'client.dart';
 
-typedef T Decoder<T>(aString);
+typedef T Decoder<T>(String aString);
 
 class JsonResponse {
   String _body;
 
   JsonResponse(this._body);
 
-  T decode<T>(decoder) {
+  T decode<T>(T Function(String) decoder) {
     return decoder(_body);
   }
 
@@ -74,27 +74,28 @@ class GraphqlQuery<T> {
 }
 
 class GraphqlResponse<T> extends MapObject {
-  GraphqlResponse(this.dataCreator, Map mapObject) {
+  GraphqlResponse(this.dataCreator, Map<String, dynamic> mapObject) {
     super.map = mapObject;
   }
 
   Function dataCreator;
 
-  T get data => dataCreator(MapObject.get(this, "data"));
+  T get data => dataCreator(MapObject.get(this, "data")) as T;
 
   List<GraphqlExceptionErrorEntry> _errors;
   List<GraphqlExceptionErrorEntry> get errors {
     if (_errors != null) return _errors;
 
     _errors = [];
-    List<dynamic> errList = MapObject.get(this, "errors");
+    List<Map<String, dynamic>> errList =
+        MapObject.get(this, "errors") as List<Map<String, dynamic>>;
     for (Map<String, dynamic> err in errList ?? []) {
       _errors.add(GraphqlExceptionErrorEntry());
-      _errors.last.message = err["message"];
+      _errors.last.message = err["message"] as String;
       _errors.last.locations = [];
       for (Map<String, dynamic> location in err["locations"] ?? []) {
         _errors.last.locations.add(GraphqlExceptionErrorLocation(
-            location["line"], location["column"]));
+            location["line"] as int, location["column"] as int));
       }
     }
     return _errors;
@@ -106,15 +107,15 @@ class GraphqlResponse<T> extends MapObject {
 }
 
 class GraphqlResponseError extends MapObject {
-  String get message => this["message"];
+  String get message => this["message"] as String;
 
-  String get requestId => this["requestId"];
+  String get requestId => this["requestId"] as String;
 
-  List<String> get path => this["path"];
+  List<String> get path => this["path"] as List<String>;
 
-  List get locations => this["path"];
+  List<dynamic> get locations => this["locations"] as List<dynamic>;
 
-  static GraphqlResponseError fromMap(Map map) {
+  static GraphqlResponseError fromMap(Map<String, dynamic> map) {
     return new GraphqlResponseError()..map.addAll(map);
   }
 
@@ -128,7 +129,7 @@ class GraphqlResponseError extends MapObject {
 
 class MapObject {
   @protected
-  Map<String, dynamic> map = {};
+  Map<String, dynamic> map = <String, dynamic>{};
 
   MapObject.fromMap(this.map) {
     compact();
@@ -136,25 +137,25 @@ class MapObject {
 
   MapObject();
 
-  static get(dynamic obj, String key) {
+  static dynamic get(dynamic obj, String key) {
     return obj[key];
   }
 
-  compact() {
+  void compact() {
     List<String> keys = [];
-    var values = [];
-    map.forEach((key, value) {
+    List<dynamic> values = <dynamic>[];
+    map.forEach((key, dynamic value) {
       if (value != null) {
         keys.add(key);
         values.add(value);
       }
     });
-    this.map = new Map.fromIterables(keys, values);
+    this.map = Map<String, dynamic>.fromIterables(keys, values);
   }
 
   dynamic operator [](String key) => map[key];
 
-  Map toJson() => map;
+  dynamic toJson() => map;
 
   @override
   String toString() {
@@ -177,12 +178,13 @@ abstract class ScalarSerializer<T> {
 
 class DateTimeConverter implements ScalarSerializer<DateTime> {
   @override
-  DateTime deserialize(d) => d == null ? null : DateTime.parse(d);
+  DateTime deserialize(dynamic d) =>
+      d == null ? null : DateTime.parse(d as String);
 
   isType(dynamic value) => value is DateTime;
 
   @override
-  serialize(DateTime data) {
+  dynamic serialize(DateTime data) {
     if (data is DateTime) {
       DateTime utcDate = data.toUtc();
       String stamp =
@@ -205,12 +207,12 @@ class DateTimeConverter implements ScalarSerializer<DateTime> {
 class JSONStringSerializer implements ScalarSerializer<Map<String, dynamic>> {
   @override
   Map<String, dynamic> deserialize(dynamic d) =>
-      d == null ? null : json.decode(d);
+      d == null ? null : json.decode(d as String) as Map<String, dynamic>;
 
   isType(dynamic value) => value is Map<String, dynamic>;
 
   @override
-  serialize(Map<String, dynamic> data) {
+  dynamic serialize(Map<String, dynamic> data) {
     return json.encode(data);
   }
 

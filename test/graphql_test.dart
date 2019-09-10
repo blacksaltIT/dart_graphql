@@ -6,9 +6,8 @@ library test.operation;
 
 import 'package:test/test.dart';
 
-main() {
-  group('Group 1', ()
-  {
+void main() {
+  group('Group 1', () {
     test('Test 1', () {
       expect(true, true);
     });

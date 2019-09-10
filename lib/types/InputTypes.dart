@@ -8,7 +8,7 @@ class InputTypes extends BaseTypes {
   InputTypes(GraphqlSchema schema) : super(schema);
 
   TypedReference generateInputType(LibraryBuilder b, dynamic typeSchema) {
-    switch (typeSchema.kind) {
+    switch (typeSchema.kind as String) {
       case "NON_NULL":
         return generateInputType(b, typeSchema.ofType);
         break;
@@ -19,7 +19,7 @@ class InputTypes extends BaseTypes {
             GraphType.LIST,
             genericReference: genericType);
       case "INPUT_OBJECT":
-        String typeName = typeSchema.name;
+        String typeName = typeSchema.name as String;
         var className =
             generateInputClassForType(b, _schema.findObject(typeName));
         return new TypedReference(
@@ -27,9 +27,9 @@ class InputTypes extends BaseTypes {
           GraphType.OBJECT,
         );
       case "SCALAR":
-        return findScalarType(typeSchema.name);
+        return findScalarType(typeSchema.name as String);
       case "ENUM":
-        String typeName = typeSchema.name;
+        String typeName = typeSchema.name as String;
         var className = generateEnumForType(b, _schema.findObject(typeName));
         return new TypedReference(refer(className), GraphType.ENUM);
 
@@ -39,14 +39,14 @@ class InputTypes extends BaseTypes {
     }
   }
 
-  generateInputClassForType(LibraryBuilder b, dynamic typeSchema) {
-    dynamic className = typeSchema.name;
+  String generateInputClassForType(LibraryBuilder b, dynamic typeSchema) {
+    String className = typeSchema.name as String;
     if (_schema.isRegistered(className)) return className;
     _schema.registerType(className);
 
     Map<String, TypedReference> fields = {};
     for (var f in typeSchema.inputFields) {
-      fields[f.name] = generateInputType(b, f.type);
+      fields[f.name as String] = generateInputType(b, f.type);
     }
     Class clazz = new Class((cb) {
       generateClass(cb, className, fields);
@@ -56,7 +56,7 @@ class InputTypes extends BaseTypes {
     return className;
   }
 
-  generateConstructor(
+  void generateConstructor(
       ClassBuilder cb, String className, Map<String, TypedReference> fields) {
     ConstructorBuilder constructor = new ConstructorBuilder();
     List<String> creatorCode = [];

@@ -28,29 +28,29 @@ class GraphqlBuildSetting {
   GraphqlBuildSetting(this.schemaUrl, this.method, this.postIntrospectionQuery,
       this.schemaFile);
 
-  dynamic _schemaObject;
+  JsonObjectLite<dynamic> _schemaObject;
 
   Future getSchema() async {
     if (_schemaObject == null) {
       if (schemaFile != null) {
         var fileContent = await new File(schemaFile).readAsString();
-        _schemaObject = new JsonObjectLite.fromJsonString(fileContent);
+        _schemaObject = new JsonObjectLite<dynamic>.fromJsonString(fileContent);
       } else if (schemaUrl != null) {
         var client = new RestClient(this.schemaUrl);
         JsonResponse result;
         if (method == "post") {
-          Map<String, dynamic> query = {};
+          Map<String, dynamic> query = <String, dynamic>{};
           if (postIntrospectionQuery) {
-            query = {"query": IntrospectionQuery};
+            query = <String, dynamic>{"query": IntrospectionQuery};
           }
           result = await client.postJson("", query);
         } else {
           result = await client.getJson("", <String, dynamic>{});
         }
-        _schemaObject = result
-            .decode((d) => new JsonObjectLite.fromJsonString(d))
-            .data
-            .__schema;
+        dynamic decoded =
+            result.decode((d) => JsonObjectLite<dynamic>.fromJsonString(d))
+                as dynamic;
+        _schemaObject = decoded.data.__schema as JsonObjectLite<dynamic>;
       }
     }
     return _schemaObject;

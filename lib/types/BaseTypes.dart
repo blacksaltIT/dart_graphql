@@ -44,11 +44,11 @@ class BaseTypes {
   final baseClass =
       refer("MapObject", "package:dart_graphql/dart_graphql.dart");
 
-  upperCaseFirst(String s) {
+  String upperCaseFirst(String s) {
     return s[0].toUpperCase() + s.substring(1);
   }
 
-  lowerCaseFirst(String s) {
+  String lowerCaseFirst(String s) {
     return s[0].toLowerCase() + s.substring(1);
   }
 
@@ -56,15 +56,16 @@ class BaseTypes {
     return '"""${code.replaceAll("\$", "\\\$")}"""';
   }
 
-  generateEnumForType(LibraryBuilder b, dynamic typeSchema) {
-    String className = typeSchema.name;
+  String generateEnumForType(LibraryBuilder b, dynamic typeSchema) {
+    String className = typeSchema.name as String;
     if (_schema.isRegistered(className)) return className;
     _schema.registerType(className);
 
     b.body.add(Code(
-        'enum $className { ${typeSchema.enumValues.map((e) => e.name).join(',')} }\n'));
-    var mapBody = typeSchema.enumValues
-        .map((e) => '"${e.name.toLowerCase()}": ${className}.${e.name}');
+        'enum $className { ${typeSchema.enumValues.map((dynamic e) => e.name).join(',')} }\n'));
+    List<dynamic> mapBody = typeSchema.enumValues
+        .map((dynamic e) => '"${e.name.toLowerCase()}": ${className}.${e.name}')
+        .toList() as List<dynamic>;
     b.body.add(Code('''
         Map<String, $className> _mapNamesFor${className} = { ${mapBody.join(",")} };
         $className parse${className}(String value) => value != null && value != "" ? _mapNamesFor${className}[value.toLowerCase()] : null;
@@ -74,7 +75,7 @@ class BaseTypes {
     return className;
   }
 
-  generateClass(
+  void generateClass(
       ClassBuilder cb, String className, Map<String, TypedReference> fields) {
     cb.name = className;
     cb.extend = baseClass;
@@ -90,7 +91,7 @@ class BaseTypes {
     generateClone(cb, className);
   }
 
-  generateUnion(ClassBuilder cb, String className,
+  void generateUnion(ClassBuilder cb, String className,
       Map<String, TypedReference> fields, List<TypedReference> possibleTypes) {
     cb.name = className;
     cb.extend = baseClass;
@@ -154,14 +155,14 @@ class BaseTypes {
       ..body = new Code('$className.fromMap(toJson(), true)')));
   }
 
-  generateField(String name, TypedReference type) {
+  Field generateField(String name, TypedReference type) {
     FieldBuilder field = new FieldBuilder()
       ..type = type.reference
       ..name = "_$name";
     return field.build();
   }
 
-  generateGetter(String name, TypedReference type, {String sourceName}) {
+  Method generateGetter(String name, TypedReference type, {String sourceName}) {
     MethodBuilder getter = new MethodBuilder();
     getter
       ..name = name
@@ -171,7 +172,7 @@ class BaseTypes {
     return getter.build();
   }
 
-  getterCode(MethodBuilder getter, String name, TypedReference type,
+  Code getterCode(MethodBuilder getter, String name, TypedReference type,
       {String sourceName}) {
     getter.lambda = false;
     switch (type.type) {
@@ -239,7 +240,7 @@ class BaseTypes {
     }
   }
 
-  generateSetter(String name, TypedReference type) {
+  Method generateSetter(String name, TypedReference type) {
     MethodBuilder getter = new MethodBuilder()
       ..name = name
       ..requiredParameters.add((new ParameterBuilder()
@@ -252,7 +253,7 @@ class BaseTypes {
     return getter.build();
   }
 
-  setterCode(String name, TypedReference type) {
+  Code setterCode(String name, TypedReference type) {
     switch (type.type) {
       case GraphType.OBJECT:
         return new Code('map["$name"] = value');

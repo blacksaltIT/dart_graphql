@@ -46,7 +46,7 @@ class GraphqlBuilder extends Builder {
   };
 
   @override
-  Future build(BuildStep buildStep) async {
+  FutureOr<void> build(BuildStep buildStep) async {
     GraphqlSchema schema = await buildStep.fetchResource(_schemaResource);
     await schema.awaitForSchema();
     var parser = new GraphqlParser(schema);
@@ -56,6 +56,6 @@ class GraphqlBuilder extends Builder {
     Module module = parser.parse(query);
     String code = module.generate(output.path);
     buildStep.writeAsString(output, code);
-    return new Future.value();
+    return Future.value();
   }
 }
