@@ -1,7 +1,7 @@
 name: dart_graphql
-version: 0.2.0
-author: BlackSalt Team <misc@dartlang.org>
-description: Support for building plugins.
+version: 0.2.1
+author: BlackSalt Team <info@blacksalt.io>
+description: Generates dart code for GraphQL endpoints.
 homepage: https://github.com/blacksaltIT/dart_graphql
 environment:
   sdk: ">=2.0.0 <3.0.0"
