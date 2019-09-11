@@ -34,9 +34,17 @@ class Operation extends BaseTypes {
   Code generateCode(String resultClass) {
     Reference graphqlQuery =
         refer("GraphqlQuery", "package:dart_graphql/dart_graphql.dart");
-    List<String> variables = _context.variableDefinitions?.variableDefinitions
-        ?.map<String>((v) => '"${v.variable.name}": ${v.variable.name}')
-        ?.toList();
+
+    List<String> variables = [];
+    for (VariableDefinitionContext variable
+        in _context.variableDefinitions?.variableDefinitions ?? []) {
+      dynamic type = _schema.findObject(variable.type.typeName.name);
+      if (type.kind as String == "ENUM") {
+        variables.add(
+            '"${variable.variable.name}": to${type.name}String(${variable.variable.name})');
+      } else
+        variables.add('"${variable.variable.name}": ${variable.variable.name}');
+    }
 
     String query = wrapStringCode(_context.span.text);
 
