@@ -42,8 +42,9 @@ class Operation extends BaseTypes {
       if (type.kind as String == "ENUM") {
         variables.add(
             '"${variable.variable.name}": to${type.name}String(${variable.variable.name})');
-      } else
+      } else {
         variables.add('"${variable.variable.name}": ${variable.variable.name}');
+      }
     }
 
     String query = wrapStringCode(_context.span.text);

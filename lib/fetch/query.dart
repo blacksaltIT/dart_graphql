@@ -39,11 +39,13 @@ class GraphqlExceptionErrorEntry {
 
   @override
   String toString() {
-    if (message != null && locations != null && locations.isNotEmpty)
+    if (message != null && locations != null && locations.isNotEmpty) {
       return "$message at (${locations.join(",")})";
+    }
 
-    if (message == null && locations != null && locations.isNotEmpty)
+    if (message == null && locations != null && locations.isNotEmpty) {
       return "${locations.join(",")}";
+    }
 
     return message;
   }
@@ -57,9 +59,13 @@ class GraphqlException implements Exception {
 
   @override
   String toString() {
-    if (message != null && errors != null && errors.isNotEmpty)
+    if (message != null && errors != null && errors.isNotEmpty) {
       return "$message: $errors";
-    if (errors != null && errors.isNotEmpty) return "GraphqlException: $errors";
+    }
+
+    if (errors != null && errors.isNotEmpty) {
+      return "GraphqlException: $errors";
+    }
 
     return "GraphqlException";
   }

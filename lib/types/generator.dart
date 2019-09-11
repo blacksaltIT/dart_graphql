@@ -35,7 +35,9 @@ class Module {
 
   String generate(String path) {
     final library = Library((b) {
-      for (Operation op in _operations) op.generate(path, b);
+      for (Operation op in _operations) {
+        op.generate(path, b);
+      }
     });
     final emitter = DartEmitter(Allocator());
     return DartFormatter()

@@ -66,17 +66,18 @@ class InputTypes extends BaseTypes {
         ..type = type.reference
         ..named = true));
 
-      if (type.type == GraphType.OTHER)
+      if (type.type == GraphType.OTHER) {
         creatorCode.add(
             '"$name" : scalarSerializers["${type.scalaTypeName}"].serialize($name)');
-      else if (type.type == GraphType.ENUM)
+      } else if (type.type == GraphType.ENUM) {
         creatorCode.add('"$name" : to${type.reference.symbol}String($name)');
-      else if (type.type == GraphType.LIST &&
-          type.genericReference.type == GraphType.ENUM)
+      } else if (type.type == GraphType.LIST &&
+          type.genericReference.type == GraphType.ENUM) {
         creatorCode.add(
             '"$name" : $name?.map((e) => to${type.genericReference.reference.symbol}String(e))?.toList()');
-      else
+      } else {
         creatorCode.add('"$name" : $name');
+      }
     }
     constructor..initializers.add(Code('''super.fromMap({
        ${creatorCode.join(",\n")}

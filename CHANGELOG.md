@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.2
+
+- Happier pub linter
+
 ## 0.2.1
 
 - Use strict mode and more linter rules

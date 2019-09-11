@@ -83,8 +83,9 @@ class RestClient extends http.BaseClient {
       } catch (e) {
         response = Response('{"error": "${e.toString()}"', 500);
       }
-    } else
+    } else {
       response = await this.post(uri.toString(), body: body, headers: _headers);
+    }
 
     return handleJsonResponse(response);
   }
