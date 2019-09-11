@@ -126,12 +126,13 @@ class BaseTypes {
           .build())
       ..optionalParameters.add((ParameterBuilder()
             ..name = "deepCopy"
+            ..type = refer("bool", "dart:core")
             ..defaultTo = const Code('false'))
           .build())
       ..body = Code.scope((a) => '''
       if (map == null) return null;
       if (deepCopy)
-        map = ${a(jsonDecodeRef)}(${a(jsonEncodeRef)}(map));
+        map = ${a(jsonDecodeRef)}(${a(jsonEncodeRef)}(map)) as Map<String, dynamic>;
       return $className()
         ..map = map;
       ''')));
@@ -142,7 +143,8 @@ class BaseTypes {
       ..name = "clone"
       ..returns = refer(className)
       ..lambda = true
-      ..body = Code('$className.fromMap(toJson(), true)')));
+      ..body =
+          Code('$className.fromMap(toJson() as Map<String, dynamic>, true)')));
   }
 
   Field generateField(String name, TypedReference type) {
@@ -170,23 +172,23 @@ class BaseTypes {
       case GraphType.UNION:
         String propName = sourceName ?? name;
         return Code("""
-            if(map['$propName'] is ${type.reference.symbol}) return map['$propName'];
-            return map['$propName'] = ${type.reference.symbol}.fromMap(map['$propName']);
+            if(map['$propName'] is ${type.reference.symbol}) return map['$propName'] as ${type.reference.symbol};
+            return map['$propName'] = ${type.reference.symbol}.fromMap(map['$propName'] as Map<String, dynamic>);
             """);
       case GraphType.ENUM:
         getter.lambda = true;
-        return Code('parse${type.reference.symbol}(map["$name"])');
+        return Code('parse${type.reference.symbol}(map["$name"] as String)');
       case GraphType.LIST:
         if (type.genericReference.type == GraphType.OBJECT ||
             type.genericReference.type == GraphType.UNION) {
           String propName = sourceName ?? name;
           String listType = "List<${type.genericReference.reference.symbol}>";
           return Code("""
-            if(map['$propName'] == null || map['$propName'] is $listType) return map['$propName'];
+            if(map['$propName'] == null || map['$propName'] is $listType) return map['$propName'] as $listType;
 
             $listType items = [];
             for (dynamic aVar in map['$propName']) 
-              items.add(${type.genericReference.reference.symbol}.fromMap(aVar));
+              items.add(${type.genericReference.reference.symbol}.fromMap(aVar as Map<String, dynamic>));
 
             return map['$propName'] = items;
             """);
@@ -226,7 +228,7 @@ class BaseTypes {
             'return ${a(r)}["${type.scalaTypeName}"].deserialize(map["${sourceName ?? name}"]);');
       default:
         getter.lambda = true;
-        return Code('map["${sourceName ?? name}"]');
+        return Code('map["${sourceName ?? name}"] as ${type.reference.symbol}');
     }
   }
 

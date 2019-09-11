@@ -43,15 +43,15 @@ class Operation extends BaseTypes {
     return Code.scope((a) {
       if (variables == null) {
         return "const query = $query;"
-            "return new ${a(graphqlQuery)}("
+            "return ${a(graphqlQuery)}("
             "query, "
             "null, "
             "$resultClass.fromMap);";
       } else {
         return "const query = $query;"
-            "return new ${a(graphqlQuery)}("
+            "return ${a(graphqlQuery)}("
             "query, "
-            "{${variables.join(',')}},"
+            "<String, dynamic>{${variables.join(',')}},"
             "$resultClass.fromMap);";
       }
     });

@@ -12,12 +12,41 @@
                 "build_runner",
                 "build",
                 "--verbose",
-                "--delete-conflicting-outputs"
+                "--delete-conflicting-outputs",
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
             },
             "problemMatcher": "$dart-pub-build_runner"
+        },
+        {
+            "label": "brclean",
+            "type": "process",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "command": "flutter",
+            "args": [
+                "packages",
+                "pub",
+                "run",
+                "build_runner",
+                "clean",
+            ],
+        },
+        {
+            "label": "fclean",
+            "type": "shell",
+            "dependsOn": [
+                "brclean"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "command": "flutter",
+            "args": [
+                "clean",
+            ],
         }
     ]
 }
