@@ -8,16 +8,11 @@ class GraphqlSchema {
   Future _schemaFuture;
 
   dynamic _schema;
-  List<String> _generatedTypes = [];
+  final List<String> _generatedTypes = [];
 
   GraphqlSchema(this._schemaFuture);
 
-  Future awaitForSchema() async {
-    if (this._schema == null) {
-      this._schema = await _schemaFuture;
-    }
-    return this._schema;
-  }
+  Future awaitForSchema() async => _schema ??= await _schemaFuture;
 
   dynamic findQuery(String queryName) {
     String queryTypeName = _schema.queryType.name as String;
@@ -27,10 +22,8 @@ class GraphqlSchema {
         .firstWhere((dynamic d) => d.name == queryName, orElse: () => null);
   }
 
-  dynamic findObject(String typeName) {
-    return _schema.types
-        .firstWhere((dynamic d) => d.name == typeName, orElse: () => null);
-  }
+  dynamic findObject(String typeName) => _schema.types
+      .firstWhere((dynamic d) => d.name == typeName, orElse: () => null);
 
   dynamic findMutation(String mutationName) {
     String mutationTypeName = _schema.mutationType.name as String;
@@ -40,11 +33,6 @@ class GraphqlSchema {
         .firstWhere((dynamic d) => d.name == mutationName, orElse: () => null);
   }
 
-  void registerType(String className) {
-    _generatedTypes.add(className);
-  }
-
-  bool isRegistered(String className) {
-    return _generatedTypes.contains(className);
-  }
+  void registerType(String className) => _generatedTypes.add(className);
+  bool isRegistered(String className) => _generatedTypes.contains(className);
 }

@@ -14,7 +14,7 @@ class InputTypes extends BaseTypes {
         break;
       case "LIST":
         TypedReference genericType = generateInputType(b, typeSchema.ofType);
-        return new TypedReference(
+        return TypedReference(
             refer("List<${genericType.reference.symbol}>", "dart:core"),
             GraphType.LIST,
             genericReference: genericType);
@@ -22,7 +22,7 @@ class InputTypes extends BaseTypes {
         String typeName = typeSchema.name as String;
         var className =
             generateInputClassForType(b, _schema.findObject(typeName));
-        return new TypedReference(
+        return TypedReference(
           refer(className),
           GraphType.OBJECT,
         );
@@ -31,11 +31,10 @@ class InputTypes extends BaseTypes {
       case "ENUM":
         String typeName = typeSchema.name as String;
         var className = generateEnumForType(b, _schema.findObject(typeName));
-        return new TypedReference(refer(className), GraphType.ENUM);
+        return TypedReference(refer(className), GraphType.ENUM);
 
       default:
-        return new TypedReference(
-            refer("dynamic", "dart:core"), GraphType.OTHER);
+        return TypedReference(refer("dynamic", "dart:core"), GraphType.OTHER);
     }
   }
 
@@ -48,7 +47,7 @@ class InputTypes extends BaseTypes {
     for (var f in typeSchema.inputFields) {
       fields[f.name as String] = generateInputType(b, f.type);
     }
-    Class clazz = new Class((cb) {
+    Class clazz = Class((cb) {
       generateClass(cb, className, fields);
       generateConstructor(cb, className, fields);
     });
@@ -58,15 +57,14 @@ class InputTypes extends BaseTypes {
 
   void generateConstructor(
       ClassBuilder cb, String className, Map<String, TypedReference> fields) {
-    ConstructorBuilder constructor = new ConstructorBuilder();
+    ConstructorBuilder constructor = ConstructorBuilder();
     List<String> creatorCode = [];
     for (var name in fields.keys) {
       TypedReference type = fields[name];
-      constructor.optionalParameters
-          .add(new Parameter((ParameterBuilder pb) => pb
-            ..name = name
-            ..type = type.reference
-            ..named = true));
+      constructor.optionalParameters.add(Parameter((pb) => pb
+        ..name = name
+        ..type = type.reference
+        ..named = true));
 
       if (type.type == GraphType.OTHER)
         creatorCode.add(
@@ -76,11 +74,11 @@ class InputTypes extends BaseTypes {
       else if (type.type == GraphType.LIST &&
           type.genericReference.type == GraphType.ENUM)
         creatorCode.add(
-            '"$name" : ${name}?.map((e) => to${type.genericReference.reference.symbol}String(e))?.toList()');
+            '"$name" : $name?.map((e) => to${type.genericReference.reference.symbol}String(e))?.toList()');
       else
         creatorCode.add('"$name" : $name');
     }
-    constructor..initializers.add(new Code('''super.fromMap({
+    constructor..initializers.add(Code('''super.fromMap({
        ${creatorCode.join(",\n")}
         })'''));
     cb.constructors.add(constructor.build());

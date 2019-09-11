@@ -11,12 +11,12 @@ class Operation extends BaseTypes {
   Operation(this._context, GraphqlSchema schema) : super(schema);
 
   void generate(String path, LibraryBuilder fb) {
-    _queryTypes = new QueryTypes(_schema);
+    _queryTypes = QueryTypes(_schema);
 
     if (_schema.isRegistered(methodName)) return;
     _schema.registerType(methodName);
 
-    Method method = new Method((MethodBuilder b) {
+    Method method = Method((b) {
       dynamic returns = generateReturn(fb);
       b
         ..name = methodName
@@ -40,7 +40,7 @@ class Operation extends BaseTypes {
 
     String query = wrapStringCode(_context.span.text);
 
-    return new Code.scope((a) {
+    return Code.scope((a) {
       if (variables == null) {
         return "const query = $query;"
             "return new ${a(graphqlQuery)}("
@@ -59,11 +59,10 @@ class Operation extends BaseTypes {
 
   String generateResultClass(
       LibraryBuilder b, dynamic schemaObject, String payloadClassName) {
-    Class cls =
-        new Class((ClassBuilder cb) => generateClass(cb, resultClassName, {
-              schemaObject.name as String:
-                  new TypedReference(refer(payloadClassName), GraphType.OBJECT)
-            }));
+    Class cls = Class((cb) => generateClass(cb, resultClassName, {
+          schemaObject.name as String:
+              TypedReference(refer(payloadClassName), GraphType.OBJECT)
+        }));
     b.body.add(cls);
     return resultClassName;
   }
@@ -71,7 +70,7 @@ class Operation extends BaseTypes {
   List<dynamic> generateReturn(LibraryBuilder b) {
     var sel = _context.selectionSet.selections[0];
     String field = sel.field.fieldName.name;
-    dynamic query = this._context.TYPE.text == "mutation"
+    dynamic query = _context.TYPE.text == "mutation"
         ? _schema.findMutation(field)
         : _schema.findQuery(field);
 
@@ -88,18 +87,18 @@ class Operation extends BaseTypes {
   }
 
   void generateParameters(LibraryBuilder fb, MethodBuilder b, String path) {
-    InputTypes inputTypes = new InputTypes(_schema);
+    InputTypes inputTypes = InputTypes(_schema);
 
     if (_context.variableDefinitions != null) {
       for (VariableDefinitionContext variable
           in _context.variableDefinitions.variableDefinitions) {
         String name = variable.variable.name;
         String type = variable.type.typeName.name;
-        ParameterBuilder parameterBuilder = new ParameterBuilder()
+        ParameterBuilder parameterBuilder = ParameterBuilder()
           ..name = name
           ..named = true
           ..type = inputTypes
-              .generateInputType(fb, this._schema.findObject(type))
+              .generateInputType(fb, _schema.findObject(type))
               .reference;
         if (variable.type?.EXCLAMATION?.text == "!") {
           parameterBuilder.annotations

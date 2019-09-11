@@ -36,26 +36,24 @@ class GraphqlBuilder extends Builder {
   Resource<GraphqlSchema> _schemaResource;
 
   GraphqlBuilder(this._setting) {
-    this._schemaResource =
-        new Resource(() => new GraphqlSchema(_setting.getSchema()));
+    _schemaResource = Resource(() => GraphqlSchema(_setting.getSchema()));
   }
 
   @override
   Map<String, List<String>> buildExtensions = const {
-    '.graphql': const ['.graphql.dart']
+    '.graphql': ['.graphql.dart']
   };
 
   @override
   FutureOr<void> build(BuildStep buildStep) async {
     GraphqlSchema schema = await buildStep.fetchResource(_schemaResource);
     await schema.awaitForSchema();
-    var parser = new GraphqlParser(schema);
+    var parser = GraphqlParser(schema);
     log.info("handling ${buildStep.inputId.path}");
     AssetId output = buildStep.inputId.addExtension('.dart');
     String query = await buildStep.readAsString(buildStep.inputId);
     Module module = parser.parse(query);
     String code = module.generate(output.path);
-    buildStep.writeAsString(output, code);
-    return Future.value();
+    return buildStep.writeAsString(output, code);
   }
 }

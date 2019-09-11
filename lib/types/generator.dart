@@ -19,12 +19,12 @@ class GraphqlParser {
   GraphqlParser(this._schema);
 
   Module parse(String query) {
-    final parser = new Parser(scan(query));
+    final parser = Parser(scan(query));
     final document = parser.parseDocument();
     Iterable<Operation> operations = document.definitions
         .whereType<OperationDefinitionContext>()
-        .map<Operation>((c) => new Operation(c, _schema));
-    return new Module(operations.toList());
+        .map<Operation>((c) => Operation(c, _schema));
+    return Module(operations.toList());
   }
 }
 
@@ -34,11 +34,11 @@ class Module {
   Module(this._operations);
 
   String generate(String path) {
-    final library = new Library((LibraryBuilder b) {
-      _operations.forEach((o) => o.generate(path, b));
+    final library = Library((b) {
+      for (Operation op in _operations) op.generate(path, b);
     });
-    final emitter = new DartEmitter(new Allocator());
-    return new DartFormatter()
+    final emitter = DartEmitter(Allocator());
+    return DartFormatter()
         .format('// GENERATED CODE - DO NOT MODIFY BY HAND\n\n'
             '${library.accept(emitter)}');
   }

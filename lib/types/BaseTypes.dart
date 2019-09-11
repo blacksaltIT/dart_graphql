@@ -12,49 +12,37 @@ class BaseTypes {
   TypedReference findScalarType(String graphqlType) {
     switch (graphqlType) {
       case "Int":
-        return new TypedReference(refer("int", "dart:core"), GraphType.SCALAR);
+        return TypedReference(refer("int", "dart:core"), GraphType.SCALAR);
       case "ID":
-        return new TypedReference(
-            refer("String", "dart:core"), GraphType.SCALAR);
+        return TypedReference(refer("String", "dart:core"), GraphType.SCALAR);
       case "String":
       case "UUID":
-        return new TypedReference(
-            refer("String", "dart:core"), GraphType.SCALAR);
+        return TypedReference(refer("String", "dart:core"), GraphType.SCALAR);
       case "Float":
-        return new TypedReference(
-            refer("double", "dart:core"), GraphType.SCALAR);
+        return TypedReference(refer("double", "dart:core"), GraphType.SCALAR);
       case "Boolean":
-        return new TypedReference(refer("bool", "dart:core"), GraphType.SCALAR);
+        return TypedReference(refer("bool", "dart:core"), GraphType.SCALAR);
       case "Enum":
-        return new TypedReference(
-            refer("String", "dart:core"), GraphType.SCALAR);
+        return TypedReference(refer("String", "dart:core"), GraphType.SCALAR);
       default:
         var serializer = scalarSerializers[graphqlType];
         if (serializer != null) {
-          return new TypedReference(
+          return TypedReference(
               refer(serializer.dartName, serializer.dartPackage),
               GraphType.OTHER,
               scalaTypeName: graphqlType);
         }
-        return new TypedReference(
-            refer("dynamic", "dart:core"), GraphType.SCALAR);
+        return TypedReference(refer("dynamic", "dart:core"), GraphType.SCALAR);
     }
   }
 
-  final baseClass =
+  final Reference baseClass =
       refer("MapObject", "package:dart_graphql/dart_graphql.dart");
 
-  String upperCaseFirst(String s) {
-    return s[0].toUpperCase() + s.substring(1);
-  }
-
-  String lowerCaseFirst(String s) {
-    return s[0].toLowerCase() + s.substring(1);
-  }
-
-  String wrapStringCode(String code) {
-    return '"""${code.replaceAll("\$", "\\\$")}"""';
-  }
+  String upperCaseFirst(String s) => s[0].toUpperCase() + s.substring(1);
+  String lowerCaseFirst(String s) => s[0].toLowerCase() + s.substring(1);
+  String wrapStringCode(String code) =>
+      '"""${code.replaceAll("\$", "\\\$")}"""';
 
   String generateEnumForType(LibraryBuilder b, dynamic typeSchema) {
     String className = typeSchema.name as String;
@@ -64,11 +52,11 @@ class BaseTypes {
     b.body.add(Code(
         'enum $className { ${typeSchema.enumValues.map((dynamic e) => e.name).join(',')} }\n'));
     List<dynamic> mapBody = typeSchema.enumValues
-        .map((dynamic e) => '"${e.name.toLowerCase()}": ${className}.${e.name}')
+        .map((dynamic e) => '"${e.name.toLowerCase()}": $className.${e.name}')
         .toList() as List<dynamic>;
     b.body.add(Code('''
-        Map<String, $className> _mapNamesFor${className} = { ${mapBody.join(",")} };
-        $className parse${className}(String value) => value != null && value != "" ? _mapNamesFor${className}[value.toLowerCase()] : null;
+        Map<String, $className> _mapNamesFor$className = { ${mapBody.join(",")} };
+        $className parse$className(String value) => value != null && value != "" ? _mapNamesFor$className[value.toLowerCase()] : null;
         String to${className}String($className value) => value?.toString()?.split(".")?.last;
         '''));
 
@@ -77,8 +65,9 @@ class BaseTypes {
 
   void generateClass(
       ClassBuilder cb, String className, Map<String, TypedReference> fields) {
-    cb.name = className;
-    cb.extend = baseClass;
+    cb
+      ..name = className
+      ..extend = baseClass;
 
     for (var name in fields.keys) {
       TypedReference type = fields[name];
@@ -93,8 +82,9 @@ class BaseTypes {
 
   void generateUnion(ClassBuilder cb, String className,
       Map<String, TypedReference> fields, List<TypedReference> possibleTypes) {
-    cb.name = className;
-    cb.extend = baseClass;
+    cb
+      ..name = className
+      ..extend = baseClass;
 
     if (fields.containsKey("typename")) {
       var propName = "typename";
@@ -108,11 +98,11 @@ class BaseTypes {
       var propName = lowerCaseFirst(pType.reference.symbol);
       cb.fields.add(generateField(propName, pType));
 
-      MethodBuilder factoryMethodBuilder = new MethodBuilder()
+      MethodBuilder factoryMethodBuilder = MethodBuilder()
         ..name = propName
         ..returns = pType.reference
         ..type = MethodType.getter
-        ..body = new Code(
+        ..body = Code(
             'if(_$propName == null) _$propName = ${pType.reference.symbol}.fromMap(map); return _$propName;');
 
       cb.methods.add(factoryMethodBuilder.build());
@@ -126,17 +116,17 @@ class BaseTypes {
     Reference jsonEncodeRef = refer("jsonEncode", 'dart:convert');
     Reference jsonDecodeRef = refer("jsonDecode", 'dart:convert');
 
-    cb.methods.add(new Method((MethodBuilder b) => b
+    cb.methods.add(Method((b) => b
       ..name = "fromMap"
       ..static = true
       ..returns = refer(className)
-      ..requiredParameters.add((new ParameterBuilder()
+      ..requiredParameters.add((ParameterBuilder()
             ..name = "map"
             ..type = refer("Map<String, dynamic>"))
           .build())
       ..optionalParameters.add((ParameterBuilder()
             ..name = "deepCopy"
-            ..defaultTo = Code('false'))
+            ..defaultTo = const Code('false'))
           .build())
       ..body = Code.scope((a) => '''
       if (map == null) return null;
@@ -148,22 +138,22 @@ class BaseTypes {
   }
 
   void generateClone(ClassBuilder cb, String className) {
-    cb.methods.add(new Method((MethodBuilder b) => b
+    cb.methods.add(Method((b) => b
       ..name = "clone"
       ..returns = refer(className)
       ..lambda = true
-      ..body = new Code('$className.fromMap(toJson(), true)')));
+      ..body = Code('$className.fromMap(toJson(), true)')));
   }
 
   Field generateField(String name, TypedReference type) {
-    FieldBuilder field = new FieldBuilder()
+    FieldBuilder field = FieldBuilder()
       ..type = type.reference
       ..name = "_$name";
     return field.build();
   }
 
   Method generateGetter(String name, TypedReference type, {String sourceName}) {
-    MethodBuilder getter = new MethodBuilder();
+    MethodBuilder getter = MethodBuilder();
     getter
       ..name = name
       ..returns = type.reference
@@ -179,19 +169,19 @@ class BaseTypes {
       case GraphType.OBJECT:
       case GraphType.UNION:
         String propName = sourceName ?? name;
-        return new Code("""
+        return Code("""
             if(map['$propName'] is ${type.reference.symbol}) return map['$propName'];
             return map['$propName'] = ${type.reference.symbol}.fromMap(map['$propName']);
             """);
       case GraphType.ENUM:
         getter.lambda = true;
-        return new Code('parse${type.reference.symbol}(map["$name"])');
+        return Code('parse${type.reference.symbol}(map["$name"])');
       case GraphType.LIST:
         if (type.genericReference.type == GraphType.OBJECT ||
             type.genericReference.type == GraphType.UNION) {
           String propName = sourceName ?? name;
           String listType = "List<${type.genericReference.reference.symbol}>";
-          return new Code("""
+          return Code("""
             if(map['$propName'] == null || map['$propName'] is $listType) return map['$propName'];
 
             $listType items = [];
@@ -203,7 +193,7 @@ class BaseTypes {
         } else if (type.genericReference.type == GraphType.ENUM) {
           String propName = sourceName ?? name;
           String listType = "List<${type.genericReference.reference.symbol}>";
-          return new Code("""
+          return Code("""
             if (map['$propName'] == null) return null;
 
             $listType items = [];
@@ -215,7 +205,7 @@ class BaseTypes {
         } else if (type.genericReference.type == GraphType.SCALAR) {
           String propName = sourceName ?? name;
           String listType = "List<${type.genericReference.reference.symbol}>";
-          return new Code("""
+          return Code("""
             if(map['$propName'] == null || map['$propName'] is $listType) return map['$propName'];
 
             $listType items = [];
@@ -225,25 +215,25 @@ class BaseTypes {
             return map['$propName'] = items;
             """);
         } else {
-          throw new ArgumentError(
+          throw ArgumentError(
               "Unknown or not supported graphql type '${type.genericReference.type}' for LIST getter");
         }
         break;
       case GraphType.OTHER:
         Reference r = refer(
             'scalarSerializers', 'package:dart_graphql/dart_graphql.dart');
-        return new Code.scope((a) =>
+        return Code.scope((a) =>
             'return ${a(r)}["${type.scalaTypeName}"].deserialize(map["${sourceName ?? name}"]);');
       default:
         getter.lambda = true;
-        return new Code('map["${sourceName ?? name}"]');
+        return Code('map["${sourceName ?? name}"]');
     }
   }
 
   Method generateSetter(String name, TypedReference type) {
-    MethodBuilder getter = new MethodBuilder()
+    MethodBuilder getter = MethodBuilder()
       ..name = name
-      ..requiredParameters.add((new ParameterBuilder()
+      ..requiredParameters.add((ParameterBuilder()
             ..name = "value"
             ..type = type.reference)
           .build())
@@ -256,16 +246,16 @@ class BaseTypes {
   Code setterCode(String name, TypedReference type) {
     switch (type.type) {
       case GraphType.OBJECT:
-        return new Code('map["$name"] = value');
+        return Code('map["$name"] = value');
       case GraphType.LIST:
         if (type.genericReference.type == GraphType.OBJECT ||
             type.genericReference.type == GraphType.SCALAR) {
-          return new Code('map["$name"] = value');
+          return Code('map["$name"] = value');
         } else if (type.genericReference.type == GraphType.ENUM) {
-          return new Code(
+          return Code(
               'map["$name"] = value?.map((e) => to${type.genericReference.reference.symbol}String(e))?.toList()');
         } else {
-          throw new ArgumentError(
+          throw ArgumentError(
               "Unknown or not supported graphql type '${type.genericReference.type}' for LIST setter");
         }
         break;
@@ -274,10 +264,10 @@ class BaseTypes {
       case GraphType.OTHER:
         Reference r = refer(
             'scalarSerializers', 'package:dart_graphql/dart_graphql.dart');
-        return new Code.scope((a) =>
+        return Code.scope((a) =>
             'map["$name"] = ${a(r)}["${type.scalaTypeName}"].serialize(value)');
       default:
-        return new Code('map["$name"] = value');
+        return Code('map["$name"] = value');
     }
   }
 }

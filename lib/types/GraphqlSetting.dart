@@ -10,13 +10,11 @@ import 'package:json_object_lite/json_object_lite.dart';
 import '../dart_graphql.dart';
 
 GraphqlBuildSetting createSetting(
-    {String schemaUrl,
-    String method: "post",
-    bool postIntrospectionQuery: true,
-    String schemaFile}) {
-  return new GraphqlBuildSetting(
-      schemaUrl, method, postIntrospectionQuery, schemaFile);
-}
+        {String schemaUrl,
+        String method = "post",
+        bool postIntrospectionQuery = true,
+        String schemaFile}) =>
+    GraphqlBuildSetting(schemaUrl, method, postIntrospectionQuery, schemaFile);
 
 class GraphqlBuildSetting {
   String schemaUrl;
@@ -33,10 +31,10 @@ class GraphqlBuildSetting {
   Future getSchema() async {
     if (_schemaObject == null) {
       if (schemaFile != null) {
-        var fileContent = await new File(schemaFile).readAsString();
-        _schemaObject = new JsonObjectLite<dynamic>.fromJsonString(fileContent);
+        var fileContent = await File(schemaFile).readAsString();
+        _schemaObject = JsonObjectLite<dynamic>.fromJsonString(fileContent);
       } else if (schemaUrl != null) {
-        var client = new RestClient(this.schemaUrl);
+        var client = RestClient(schemaUrl);
         JsonResponse result;
         if (method == "post") {
           Map<String, dynamic> query = <String, dynamic>{};

@@ -13,27 +13,26 @@ class QueryTypes extends BaseTypes {
         return generateFieldType(b, typeSchema.ofType);
       case "LIST":
         TypedReference genericType = generateFieldType(b, typeSchema.ofType);
-        return new TypedReference(
+        return TypedReference(
             refer("List<${genericType.reference.symbol}>", "dart:core"),
             GraphType.LIST,
             genericReference: genericType);
       case "UNION":
         String typeName = typeSchema.name as String;
         var className = generateClassForUnion(b, _schema.findObject(typeName));
-        return new TypedReference(refer(className), GraphType.UNION);
+        return TypedReference(refer(className), GraphType.UNION);
       case "OBJECT":
         String typeName = typeSchema.name as String;
         var className = generateClassForObject(b, _schema.findObject(typeName));
-        return new TypedReference(refer(className), GraphType.OBJECT);
+        return TypedReference(refer(className), GraphType.OBJECT);
       case "ENUM":
         String typeName = typeSchema.name as String;
         var className = generateEnumForType(b, _schema.findObject(typeName));
-        return new TypedReference(refer(className), GraphType.ENUM);
+        return TypedReference(refer(className), GraphType.ENUM);
       case "SCALAR":
         return findScalarType(typeSchema.name as String);
       default:
-        return new TypedReference(
-            refer("dynamic", "dart:core"), GraphType.OTHER);
+        return TypedReference(refer("dynamic", "dart:core"), GraphType.OTHER);
     }
   }
 
@@ -42,7 +41,7 @@ class QueryTypes extends BaseTypes {
     if (_schema.isRegistered(className)) return className;
     _schema.registerType(className);
 
-    Class clazz = new Class((ClassBuilder cb) {
+    Class clazz = Class((cb) {
       Map<String, TypedReference> fields = {};
 
       for (var field in objectSchema.fields ?? <dynamic>[]) {
@@ -61,15 +60,14 @@ class QueryTypes extends BaseTypes {
     if (_schema.isRegistered(className)) return className;
     _schema.registerType(className);
 
-    Class clazz = new Class((ClassBuilder cb) {
+    Class clazz = Class((cb) {
       // Possible types
       List<TypedReference> possibleTypes = [];
 
       for (var pTypeRef in objectSchema.possibleTypes ?? <dynamic>[]) {
         var ptClassName = generateClassForObject(
             b, _schema.findObject(pTypeRef.name as String));
-        possibleTypes
-            .add(new TypedReference(refer(ptClassName), GraphType.OBJECT));
+        possibleTypes.add(TypedReference(refer(ptClassName), GraphType.OBJECT));
       }
 
       // Fields

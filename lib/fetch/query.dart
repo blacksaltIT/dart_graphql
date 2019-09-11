@@ -4,16 +4,14 @@
 
 part of 'client.dart';
 
-typedef T Decoder<T>(String aString);
+typedef Decoder = T Function<T>(String aString);
 
 class JsonResponse {
   String _body;
 
   JsonResponse(this._body);
 
-  T decode<T>(T Function(String) decoder) {
-    return decoder(_body);
-  }
+  T decode<T>(T Function(String) decoder) => decoder(_body);
 
   String get body => _body;
 }
@@ -22,8 +20,9 @@ class GraphqlExceptionErrorLocation {
   int line;
   int column;
 
-  GraphqlExceptionErrorLocation([this.line, this.column]) {}
+  GraphqlExceptionErrorLocation([this.line, this.column]);
 
+  @override
   String toString() {
     if (line != null && column != null) return "$line:$column";
     if (line != null) return "$line";
@@ -36,8 +35,9 @@ class GraphqlExceptionErrorEntry {
   String message;
   List<GraphqlExceptionErrorLocation> locations = [];
 
-  GraphqlExceptionErrorEntry([this.message, this.locations]) {}
+  GraphqlExceptionErrorEntry([this.message, this.locations]);
 
+  @override
   String toString() {
     if (message != null && locations != null && locations.isNotEmpty)
       return "$message at (${locations.join(",")})";
@@ -53,8 +53,9 @@ class GraphqlException implements Exception {
   String message;
   List<GraphqlExceptionErrorEntry> errors = [];
 
-  GraphqlException([this.message, this.errors]) {}
+  GraphqlException([this.message, this.errors]);
 
+  @override
   String toString() {
     if (message != null && errors != null && errors.isNotEmpty)
       return "$message: $errors";
@@ -101,9 +102,7 @@ class GraphqlResponse<T> extends MapObject {
     return _errors;
   }
 
-  bool hasError() {
-    return errors.isNotEmpty;
-  }
+  bool hasError() => errors.isNotEmpty;
 }
 
 class GraphqlResponseError extends MapObject {
@@ -115,31 +114,26 @@ class GraphqlResponseError extends MapObject {
 
   List<dynamic> get locations => this["locations"] as List<dynamic>;
 
-  static GraphqlResponseError fromMap(Map<String, dynamic> map) {
-    return new GraphqlResponseError()..map.addAll(map);
-  }
+  static GraphqlResponseError fromMap(Map<String, dynamic> map) =>
+      GraphqlResponseError()..map.addAll(map);
 
-  GraphqlResponseError copy({String message, String requestId}) {
-    return new GraphqlResponseError()
-      ..map.addAll(this.map)
-      ..map["message"] = message
-      ..map["requestId"] = requestId;
-  }
+  GraphqlResponseError copy({String message, String requestId}) =>
+      GraphqlResponseError()
+        ..map.addAll(map)
+        ..map["message"] = message
+        ..map["requestId"] = requestId;
 }
 
 class MapObject {
   @protected
   Map<String, dynamic> map = <String, dynamic>{};
 
+  MapObject();
   MapObject.fromMap(this.map) {
     compact();
   }
 
-  MapObject();
-
-  static dynamic get(dynamic obj, String key) {
-    return obj[key];
-  }
+  static dynamic get(dynamic obj, String key) => obj[key];
 
   void compact() {
     List<String> keys = [];
@@ -150,7 +144,7 @@ class MapObject {
         values.add(value);
       }
     });
-    this.map = Map<String, dynamic>.fromIterables(keys, values);
+    map = Map<String, dynamic>.fromIterables(keys, values);
   }
 
   dynamic operator [](String key) => map[key];
@@ -158,9 +152,7 @@ class MapObject {
   dynamic toJson() => map;
 
   @override
-  String toString() {
-    return map.toString();
-  }
+  String toString() => map.toString();
 }
 
 Map<String, ScalarSerializer> scalarSerializers = {
@@ -181,7 +173,8 @@ class DateTimeConverter implements ScalarSerializer<DateTime> {
   DateTime deserialize(dynamic d) =>
       d == null ? null : DateTime.parse(d as String);
 
-  isType(dynamic value) => value is DateTime;
+  @override
+  bool isType(dynamic value) => value is DateTime;
 
   @override
   dynamic serialize(DateTime data) {
@@ -198,6 +191,7 @@ class DateTimeConverter implements ScalarSerializer<DateTime> {
   String _addLeadingZeros(int number, [int totalLength = 2]) =>
       number.toString().padLeft(totalLength, '0');
 
+  @override
   String get dartName => "DateTime";
 
   @override
@@ -209,13 +203,13 @@ class JSONStringSerializer implements ScalarSerializer<Map<String, dynamic>> {
   Map<String, dynamic> deserialize(dynamic d) =>
       d == null ? null : json.decode(d as String) as Map<String, dynamic>;
 
-  isType(dynamic value) => value is Map<String, dynamic>;
+  @override
+  bool isType(dynamic value) => value is Map<String, dynamic>;
 
   @override
-  dynamic serialize(Map<String, dynamic> data) {
-    return json.encode(data);
-  }
+  dynamic serialize(Map<String, dynamic> data) => json.encode(data);
 
+  @override
   String get dartName => "Map<String, dynamic>";
 
   @override
