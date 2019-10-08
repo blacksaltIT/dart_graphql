@@ -2,7 +2,6 @@ library graphql_fetch.client;
 
 import 'dart:async';
 import 'dart:convert';
-import 'dart:html';
 
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
@@ -75,8 +74,7 @@ class RestClient extends http.BaseClient {
   }
 
   JsonResponse handleJsonResponse(http.Response response) {
-    if (response.statusCode >= HttpStatus.ok &&
-        response.statusCode < HttpStatus.badRequest) {
+    if (response.statusCode >= 200 && response.statusCode < 400) {
       String bodyString = utf8.decode(response.bodyBytes);
       return JsonResponse(bodyString);
     } else {
