@@ -32,7 +32,7 @@ Builder getGqlBuilder(BuilderOptions options) {
 }
 
 class GraphqlBuilder extends Builder {
-  GraphqlBuildSetting _setting;
+  final GraphqlBuildSetting _setting;
   Resource<GraphqlSchema> _schemaResource;
 
   GraphqlBuilder(this._setting) {

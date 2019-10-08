@@ -5,7 +5,7 @@
 part of 'generator.dart';
 
 class BaseTypes {
-  GraphqlSchema _schema;
+  final GraphqlSchema _schema;
 
   BaseTypes(this._schema);
 

@@ -5,7 +5,7 @@
 part of 'generator.dart';
 
 class Operation extends BaseTypes {
-  OperationDefinitionContext _context;
+  final OperationDefinitionContext _context;
   QueryTypes _queryTypes;
 
   Operation(this._context, GraphqlSchema schema) : super(schema);

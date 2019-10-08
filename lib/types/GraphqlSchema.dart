@@ -5,7 +5,7 @@
 import 'dart:async';
 
 class GraphqlSchema {
-  Future _schemaFuture;
+  final Future _schemaFuture;
 
   dynamic _schema;
   final List<String> _generatedTypes = [];

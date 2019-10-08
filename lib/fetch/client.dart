@@ -14,7 +14,7 @@ part 'query.dart';
 
 class RestClient extends http.BaseClient {
   http.Client _client;
-  String _endpoint;
+  final String _endpoint;
   String language;
   Uri _baseUri;
 

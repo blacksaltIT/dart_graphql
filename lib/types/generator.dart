@@ -15,7 +15,7 @@ part 'Operation.dart';
 part 'QueryTypes.dart';
 
 class GraphqlParser {
-  GraphqlSchema _schema;
+  final GraphqlSchema _schema;
   GraphqlParser(this._schema);
 
   Module parse(String query) {
@@ -29,7 +29,7 @@ class GraphqlParser {
 }
 
 class Module {
-  List<Operation> _operations;
+  final List<Operation> _operations;
 
   Module(this._operations);
 

@@ -7,7 +7,7 @@ part of 'client.dart';
 typedef Decoder = T Function<T>(String aString);
 
 class JsonResponse {
-  String _body;
+  final String _body;
 
   JsonResponse(this._body);
 
