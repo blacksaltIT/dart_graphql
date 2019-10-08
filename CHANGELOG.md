@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.0
+
+- Remove dart:io dependency so the package can be used with flutter web
+
 ## 0.2.2
 
 - Happier pub linter

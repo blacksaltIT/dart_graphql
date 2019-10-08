@@ -2,31 +2,27 @@ library graphql_fetch.client;
 
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
+import 'dart:html';
 
-import 'package:async/async.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
 import 'package:meta/meta.dart';
-import 'package:path/path.dart';
 
 part 'query.dart';
 
 class RestClient extends http.BaseClient {
-  http.Client _client;
+  final http.Client _client = http.Client();
   final String _endpoint;
   String language;
   Uri _baseUri;
 
   RestClient(this._endpoint, {this.language}) {
-    _client = http.Client();
     _baseUri = Uri.parse(_endpoint);
   }
 
-  void configureRequest(BaseRequest request) {}
+  void configureRequest(http.BaseRequest request) {}
 
   @override
-  Future<StreamedResponse> send(BaseRequest request) {
+  Future<http.StreamedResponse> send(http.BaseRequest request) {
     configureRequest(request);
     return _client.send(request);
   }
@@ -47,7 +43,7 @@ class RestClient extends http.BaseClient {
   }
 
   Future<JsonResponse> postJson(String path, Map<String, dynamic> data,
-      [Map<String, String> headers, List<String> files]) async {
+      [Map<String, String> headers, Iterable<http.MultipartFile> files]) async {
     String body = toJson(data);
     Uri uri = _baseUri.replace(path: _baseUri.path + path);
     Map<String, String> _headers = <String, String>{
@@ -58,33 +54,21 @@ class RestClient extends http.BaseClient {
 
     http.Response response;
     if (files != null && files.isNotEmpty) {
-      MultipartRequest request = http.MultipartRequest("POST", uri);
+      http.MultipartRequest request = http.MultipartRequest("POST", uri);
 
       request.fields['query'] = data['query'] as String;
       request.fields['variables'] =
           toJson(data['variables'] as Map<String, dynamic>);
       request.headers['Authorization'] = headers['Authorization'];
-
-      for (int i = 0; i < files.length; i++) {
-        File imageFile = File(files[i]);
-
-        ByteStream stream =
-            http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
-        int length = await imageFile.length();
-
-        http.MultipartFile mfile = http.MultipartFile('file$i', stream, length,
-            filename: basename(files[i]));
-
-        request.files.add(mfile);
-      }
+      request.files.addAll(files);
 
       try {
-        response = await Response.fromStream(await send(request));
+        response = await http.Response.fromStream(await send(request));
       } catch (e) {
-        response = Response('{"error": "${e.toString()}"', 500);
+        response = http.Response('{"error": "${e.toString()}"', 500);
       }
     } else {
-      response = await this.post(uri.toString(), body: body, headers: _headers);
+      response = await post(uri.toString(), body: body, headers: _headers);
     }
 
     return handleJsonResponse(response);
@@ -112,7 +96,7 @@ class RestClient extends http.BaseClient {
     if (headers != null) _headers..addAll(headers);
 
     http.Response response =
-        await this.put(uri.toString(), body: body, headers: _headers);
+        await put(uri.toString(), body: body, headers: _headers);
     return handleJsonResponse(response);
   }
 
@@ -126,7 +110,7 @@ class RestClient extends http.BaseClient {
     };
     if (headers != null) _headers..addAll(headers);
 
-    http.Response response = await this.get(uri.toString(), headers: _headers);
+    http.Response response = await get(uri.toString(), headers: _headers);
     return handleJsonResponse(response);
   }
 
@@ -145,7 +129,7 @@ class GraphqlClient extends RestClient {
       : super(endpoint, language: language);
 
   Future<JsonResponse> request(String query, Map<String, dynamic> variables,
-      [Map<String, String> headers, List<String> files]) async {
+      [Map<String, String> headers, Iterable<http.MultipartFile> files]) async {
     JsonResponse result = await postJson(
         "",
         <String, dynamic>{"query": query, "variables": variables},
@@ -155,7 +139,7 @@ class GraphqlClient extends RestClient {
   }
 
   Future<GraphqlResponse<T>> query<T>(GraphqlQuery<T> query,
-      [Map<String, String> headers, List<String> files]) async {
+      [Map<String, String> headers, Iterable<http.MultipartFile> files]) async {
     headers ??= <String, String>{};
     if (language != null) headers['Accept-Language'] = language;
 
