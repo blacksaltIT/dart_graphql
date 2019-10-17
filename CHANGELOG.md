@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.3
+
+- Fix noSuchMethod error
+
 ## 0.3.2
 
 - Fix cast error during parsing errors
