@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.2
+
+- Fix cast error during parsing errors
+
 ## 0.3.1
 
 - Remove dart:html dependency so the package can be used without flutter web

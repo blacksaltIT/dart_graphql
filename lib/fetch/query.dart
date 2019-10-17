@@ -95,7 +95,8 @@ class GraphqlResponse<T> extends MapObject {
 
     _errors = [];
     List<Map<String, dynamic>> errList =
-        MapObject.get(this, "errors") as List<Map<String, dynamic>>;
+        (MapObject.get(this, "errors") as List<dynamic>)
+            .cast<Map<String, dynamic>>();
     for (Map<String, dynamic> err in errList ?? []) {
       _errors.add(GraphqlExceptionErrorEntry());
       _errors.last.message = err["message"] as String;
