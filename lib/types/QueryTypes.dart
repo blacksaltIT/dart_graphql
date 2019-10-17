@@ -15,24 +15,24 @@ class QueryTypes extends BaseTypes {
         TypedReference genericType = generateFieldType(b, typeSchema.ofType);
         return TypedReference(
             refer("List<${genericType.reference.symbol}>", "dart:core"),
-            GraphType.LIST,
+            GraphType.list,
             genericReference: genericType);
       case "UNION":
         String typeName = typeSchema.name as String;
         var className = generateClassForUnion(b, _schema.findObject(typeName));
-        return TypedReference(refer(className), GraphType.UNION);
+        return TypedReference(refer(className), GraphType.union);
       case "OBJECT":
         String typeName = typeSchema.name as String;
         var className = generateClassForObject(b, _schema.findObject(typeName));
-        return TypedReference(refer(className), GraphType.OBJECT);
+        return TypedReference(refer(className), GraphType.object);
       case "ENUM":
         String typeName = typeSchema.name as String;
         var className = generateEnumForType(b, _schema.findObject(typeName));
-        return TypedReference(refer(className), GraphType.ENUM);
+        return TypedReference(refer(className), GraphType.enumeration);
       case "SCALAR":
         return findScalarType(typeSchema.name as String);
       default:
-        return TypedReference(refer("dynamic", "dart:core"), GraphType.OTHER);
+        return TypedReference(refer("dynamic", "dart:core"), GraphType.other);
     }
   }
 
@@ -67,7 +67,7 @@ class QueryTypes extends BaseTypes {
       for (var pTypeRef in objectSchema.possibleTypes ?? <dynamic>[]) {
         var ptClassName = generateClassForObject(
             b, _schema.findObject(pTypeRef.name as String));
-        possibleTypes.add(TypedReference(refer(ptClassName), GraphType.OBJECT));
+        possibleTypes.add(TypedReference(refer(ptClassName), GraphType.object));
       }
 
       // Fields

@@ -39,7 +39,7 @@ class GraphqlBuildSetting {
         if (method == "post") {
           Map<String, dynamic> query = <String, dynamic>{};
           if (postIntrospectionQuery) {
-            query = <String, dynamic>{"query": IntrospectionQuery};
+            query = <String, dynamic>{"query": introspectionQuery};
           }
           result = await client.postJson("", query);
         } else {
@@ -54,7 +54,7 @@ class GraphqlBuildSetting {
     return _schemaObject;
   }
 
-  static const String IntrospectionQuery = """
+  static const String introspectionQuery = """
      query IntrospectionQuery {
     __schema {
       queryType { name }

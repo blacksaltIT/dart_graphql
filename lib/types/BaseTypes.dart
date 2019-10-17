@@ -12,27 +12,27 @@ class BaseTypes {
   TypedReference findScalarType(String graphqlType) {
     switch (graphqlType) {
       case "Int":
-        return TypedReference(refer("int", "dart:core"), GraphType.SCALAR);
+        return TypedReference(refer("int", "dart:core"), GraphType.scalar);
       case "ID":
-        return TypedReference(refer("String", "dart:core"), GraphType.SCALAR);
+        return TypedReference(refer("String", "dart:core"), GraphType.scalar);
       case "String":
       case "UUID":
-        return TypedReference(refer("String", "dart:core"), GraphType.SCALAR);
+        return TypedReference(refer("String", "dart:core"), GraphType.scalar);
       case "Float":
-        return TypedReference(refer("double", "dart:core"), GraphType.SCALAR);
+        return TypedReference(refer("double", "dart:core"), GraphType.scalar);
       case "Boolean":
-        return TypedReference(refer("bool", "dart:core"), GraphType.SCALAR);
+        return TypedReference(refer("bool", "dart:core"), GraphType.scalar);
       case "Enum":
-        return TypedReference(refer("String", "dart:core"), GraphType.SCALAR);
+        return TypedReference(refer("String", "dart:core"), GraphType.scalar);
       default:
         var serializer = scalarSerializers[graphqlType];
         if (serializer != null) {
           return TypedReference(
               refer(serializer.dartName, serializer.dartPackage),
-              GraphType.OTHER,
+              GraphType.other,
               scalaTypeName: graphqlType);
         }
-        return TypedReference(refer("dynamic", "dart:core"), GraphType.SCALAR);
+        return TypedReference(refer("dynamic", "dart:core"), GraphType.scalar);
     }
   }
 
@@ -168,19 +168,19 @@ class BaseTypes {
       {String sourceName}) {
     getter.lambda = false;
     switch (type.type) {
-      case GraphType.OBJECT:
-      case GraphType.UNION:
+      case GraphType.object:
+      case GraphType.union:
         String propName = sourceName ?? name;
         return Code("""
             if(map['$propName'] is ${type.reference.symbol}) return map['$propName'] as ${type.reference.symbol};
             return map['$propName'] = ${type.reference.symbol}.fromMap(map['$propName'] as Map<String, dynamic>);
             """);
-      case GraphType.ENUM:
+      case GraphType.enumeration:
         getter.lambda = true;
         return Code('parse${type.reference.symbol}(map["$name"] as String)');
-      case GraphType.LIST:
-        if (type.genericReference.type == GraphType.OBJECT ||
-            type.genericReference.type == GraphType.UNION) {
+      case GraphType.list:
+        if (type.genericReference.type == GraphType.object ||
+            type.genericReference.type == GraphType.union) {
           String propName = sourceName ?? name;
           String listType = "List<${type.genericReference.reference.symbol}>";
           return Code("""
@@ -192,7 +192,7 @@ class BaseTypes {
 
             return map['$propName'] = items;
             """);
-        } else if (type.genericReference.type == GraphType.ENUM) {
+        } else if (type.genericReference.type == GraphType.enumeration) {
           String propName = sourceName ?? name;
           String listType = "List<${type.genericReference.reference.symbol}>";
           return Code("""
@@ -204,7 +204,7 @@ class BaseTypes {
 
             return items;
             """);
-        } else if (type.genericReference.type == GraphType.SCALAR) {
+        } else if (type.genericReference.type == GraphType.scalar) {
           String propName = sourceName ?? name;
           String listType = "List<${type.genericReference.reference.symbol}>";
           return Code("""
@@ -221,7 +221,7 @@ class BaseTypes {
               "Unknown or not supported graphql type '${type.genericReference.type}' for LIST getter");
         }
         break;
-      case GraphType.OTHER:
+      case GraphType.other:
         Reference r = refer(
             'scalarSerializers', 'package:dart_graphql/dart_graphql.dart');
         return Code.scope((a) =>
@@ -247,13 +247,13 @@ class BaseTypes {
 
   Code setterCode(String name, TypedReference type) {
     switch (type.type) {
-      case GraphType.OBJECT:
+      case GraphType.object:
         return Code('map["$name"] = value');
-      case GraphType.LIST:
-        if (type.genericReference.type == GraphType.OBJECT ||
-            type.genericReference.type == GraphType.SCALAR) {
+      case GraphType.list:
+        if (type.genericReference.type == GraphType.object ||
+            type.genericReference.type == GraphType.scalar) {
           return Code('map["$name"] = value');
-        } else if (type.genericReference.type == GraphType.ENUM) {
+        } else if (type.genericReference.type == GraphType.enumeration) {
           return Code(
               'map["$name"] = value?.map((e) => to${type.genericReference.reference.symbol}String(e))?.toList()');
         } else {
@@ -261,9 +261,9 @@ class BaseTypes {
               "Unknown or not supported graphql type '${type.genericReference.type}' for LIST setter");
         }
         break;
-      case GraphType.ENUM:
+      case GraphType.enumeration:
         return Code('map["$name"] = to${type.reference.symbol}String(value)');
-      case GraphType.OTHER:
+      case GraphType.other:
         Reference r = refer(
             'scalarSerializers', 'package:dart_graphql/dart_graphql.dart');
         return Code.scope((a) =>
@@ -274,7 +274,7 @@ class BaseTypes {
   }
 }
 
-enum GraphType { LIST, OBJECT, UNION, ENUM, SCALAR, OTHER }
+enum GraphType { list, object, union, enumeration, scalar, other }
 
 class TypedReference {
   Reference reference;

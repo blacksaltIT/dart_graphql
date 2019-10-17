@@ -1,7 +1,9 @@
+import 'dart:async';
+
 import 'package:dart_graphql/dart_graphql.dart';
 import 'package:example/gitlab.graphql.dart';
 
-void main() async {
+Future<void> main() async {
   GraphqlClient gqlClient = GraphqlClient("https://gitlab.com/api/graphql");
   var gqlResponse = await gqlClient.query(GitlabCEIssueLabels(firstN: 15));
 

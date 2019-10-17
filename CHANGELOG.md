@@ -3,6 +3,7 @@
 ## 0.3.2
 
 - Fix cast error during parsing errors
+- More analysis rules
 
 ## 0.3.1
 

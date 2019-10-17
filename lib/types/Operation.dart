@@ -70,7 +70,7 @@ class Operation extends BaseTypes {
       LibraryBuilder b, dynamic schemaObject, String payloadClassName) {
     Class cls = Class((cb) => generateClass(cb, resultClassName, {
           schemaObject.name as String:
-              TypedReference(refer(payloadClassName), GraphType.OBJECT)
+              TypedReference(refer(payloadClassName), GraphType.object)
         }));
     b.body.add(cls);
     return resultClassName;

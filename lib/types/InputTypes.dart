@@ -16,7 +16,7 @@ class InputTypes extends BaseTypes {
         TypedReference genericType = generateInputType(b, typeSchema.ofType);
         return TypedReference(
             refer("List<${genericType.reference.symbol}>", "dart:core"),
-            GraphType.LIST,
+            GraphType.list,
             genericReference: genericType);
       case "INPUT_OBJECT":
         String typeName = typeSchema.name as String;
@@ -24,17 +24,17 @@ class InputTypes extends BaseTypes {
             generateInputClassForType(b, _schema.findObject(typeName));
         return TypedReference(
           refer(className),
-          GraphType.OBJECT,
+          GraphType.object,
         );
       case "SCALAR":
         return findScalarType(typeSchema.name as String);
       case "ENUM":
         String typeName = typeSchema.name as String;
         var className = generateEnumForType(b, _schema.findObject(typeName));
-        return TypedReference(refer(className), GraphType.ENUM);
+        return TypedReference(refer(className), GraphType.enumeration);
 
       default:
-        return TypedReference(refer("dynamic", "dart:core"), GraphType.OTHER);
+        return TypedReference(refer("dynamic", "dart:core"), GraphType.other);
     }
   }
 
@@ -66,20 +66,20 @@ class InputTypes extends BaseTypes {
         ..type = type.reference
         ..named = true));
 
-      if (type.type == GraphType.OTHER) {
+      if (type.type == GraphType.other) {
         creatorCode.add(
             '"$name" : scalarSerializers["${type.scalaTypeName}"].serialize($name)');
-      } else if (type.type == GraphType.ENUM) {
+      } else if (type.type == GraphType.enumeration) {
         creatorCode.add('"$name" : to${type.reference.symbol}String($name)');
-      } else if (type.type == GraphType.LIST &&
-          type.genericReference.type == GraphType.ENUM) {
+      } else if (type.type == GraphType.list &&
+          type.genericReference.type == GraphType.enumeration) {
         creatorCode.add(
             '"$name" : $name?.map((e) => to${type.genericReference.reference.symbol}String(e))?.toList()');
       } else {
         creatorCode.add('"$name" : $name');
       }
     }
-    constructor..initializers.add(Code('''super.fromMap({
+    constructor.initializers.add(Code('''super.fromMap({
        ${creatorCode.join(",\n")}
         })'''));
     cb.constructors.add(constructor.build());

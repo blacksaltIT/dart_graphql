@@ -63,7 +63,7 @@ class RestClient extends http.BaseClient {
 
       try {
         response = await http.Response.fromStream(await send(request));
-      } catch (e) {
+      } on Exception catch (e) {
         response = http.Response('{"error": "${e.toString()}"', 500);
       }
     } else {
@@ -91,7 +91,7 @@ class RestClient extends http.BaseClient {
     Map<String, String> _headers = <String, String>{
       'Content-Type': 'application/json'
     };
-    if (headers != null) _headers..addAll(headers);
+    if (headers != null) _headers.addAll(headers);
 
     http.Response response =
         await put(uri.toString(), body: body, headers: _headers);
@@ -106,7 +106,7 @@ class RestClient extends http.BaseClient {
     Map<String, String> _headers = <String, String>{
       'Content-Type': 'application/json'
     };
-    if (headers != null) _headers..addAll(headers);
+    if (headers != null) _headers.addAll(headers);
 
     http.Response response = await get(uri.toString(), headers: _headers);
     return handleJsonResponse(response);
@@ -150,7 +150,7 @@ class GraphqlClient extends RestClient {
   }
 }
 
-void main() async {
+Future<void> main() async {
   String query = """
     query(\$alias: String) {
       allShows(filter: {
