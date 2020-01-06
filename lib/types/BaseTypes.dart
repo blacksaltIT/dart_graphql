@@ -102,8 +102,8 @@ class BaseTypes {
         ..name = propName
         ..returns = pType.reference
         ..type = MethodType.getter
-        ..body = Code(
-            'if(_$propName == null) _$propName = ${pType.reference.symbol}.fromMap(map); return _$propName;');
+        ..lambda = true
+        ..body = Code('_$propName ??= ${pType.reference.symbol}.fromMap(map)');
 
       cb.methods.add(factoryMethodBuilder.build());
     }
@@ -208,11 +208,11 @@ class BaseTypes {
           String propName = sourceName ?? name;
           String listType = "List<${type.genericReference.reference.symbol}>";
           return Code("""
-            if(map['$propName'] == null || map['$propName'] is $listType) return map['$propName'];
+            if(map['$propName'] == null || map['$propName'] is $listType) return map['$propName'] as $listType;
 
             $listType items = [];
             for (dynamic aVar in map['$propName']) 
-              items.add(aVar);
+              items.add(aVar as ${type.genericReference.reference.symbol});
 
             return map['$propName'] = items;
             """);
@@ -225,7 +225,7 @@ class BaseTypes {
         Reference r = refer(
             'scalarSerializers', 'package:dart_graphql/dart_graphql.dart');
         return Code.scope((a) =>
-            'return ${a(r)}["${type.scalaTypeName}"].deserialize(map["${sourceName ?? name}"]);');
+            'return ${a(r)}["${type.scalaTypeName}"].deserialize(map["${sourceName ?? name}"]) as ${type.reference.symbol};');
       default:
         getter.lambda = true;
         return Code('map["${sourceName ?? name}"] as ${type.reference.symbol}');
@@ -255,7 +255,7 @@ class BaseTypes {
           return Code('map["$name"] = value');
         } else if (type.genericReference.type == GraphType.enumeration) {
           return Code(
-              'map["$name"] = value?.map((e) => to${type.genericReference.reference.symbol}String(e))?.toList()');
+              'map["$name"] = value?.map(to${type.genericReference.reference.symbol}String)?.toList()');
         } else {
           throw ArgumentError(
               "Unknown or not supported graphql type '${type.genericReference.type}' for LIST setter");

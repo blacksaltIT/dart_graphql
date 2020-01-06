@@ -74,12 +74,12 @@ class InputTypes extends BaseTypes {
       } else if (type.type == GraphType.list &&
           type.genericReference.type == GraphType.enumeration) {
         creatorCode.add(
-            '"$name" : $name?.map((e) => to${type.genericReference.reference.symbol}String(e))?.toList()');
+            '"$name" : $name?.map(to${type.genericReference.reference.symbol}String)?.toList()');
       } else {
         creatorCode.add('"$name" : $name');
       }
     }
-    constructor.initializers.add(Code('''super.fromMap({
+    constructor.initializers.add(Code('''super.fromMap(<String, dynamic>{
        ${creatorCode.join(",\n")}
         })'''));
     cb.constructors.add(constructor.build());

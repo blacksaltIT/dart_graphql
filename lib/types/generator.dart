@@ -40,8 +40,9 @@ class Module {
       }
     });
     final emitter = DartEmitter(Allocator());
-    return DartFormatter()
-        .format('// GENERATED CODE - DO NOT MODIFY BY HAND\n\n'
-            '${library.accept(emitter)}');
+    return DartFormatter().format(
+        '// GENERATED CODE - DO NOT MODIFY BY HAND\n\n'
+        '// ignore_for_file:directives_ordering, constant_identifier_names, camel_case_types, non_constant_identifier_names\n\n'
+        '${library.accept(emitter)}');
   }
 }
