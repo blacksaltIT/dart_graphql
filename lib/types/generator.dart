@@ -5,6 +5,7 @@
 import 'package:code_builder/code_builder.dart';
 import 'package:dart_style/dart_style.dart';
 import 'package:graphql_parser/graphql_parser.dart';
+import 'package:json_object_lite/json_object_lite.dart';
 
 import '../dart_graphql.dart';
 import 'GraphqlSchema.dart';

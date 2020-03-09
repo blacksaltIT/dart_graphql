@@ -1,5 +1,5 @@
 query GitlabCEIssueLabels($firstN: Int) {
-  project(fullPath: "gitlab-org/gitlab-ce") {
+  project(fullPath: "gitlab-org/gitlab-foss") {
     id
     issues(first: $firstN) {
       edges {

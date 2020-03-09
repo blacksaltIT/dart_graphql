@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.5
+
+- Support lists in query parameters
+
 ## 0.3.4
 
 - Fix strict analyzer errors in generated code

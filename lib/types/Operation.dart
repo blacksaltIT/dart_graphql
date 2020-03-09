@@ -38,10 +38,21 @@ class Operation extends BaseTypes {
     List<String> variables = [];
     for (VariableDefinitionContext variable
         in _context.variableDefinitions?.variableDefinitions ?? []) {
-      dynamic type = _schema.findObject(variable.type.typeName.name);
+      dynamic type;
+      if (variable.type.typeName?.name != null)
+        type = _schema.findObject(variable.type.typeName.name);
+      else
+        type = JsonObjectLite<dynamic>()
+          ..['kind'] = 'LIST'
+          ..['ofType'] = _schema.findObject(variable
+              .type.listType.type.typeName.name); // TODO: Support list of lists
+
       if (type.kind as String == "ENUM") {
         variables.add(
             '"${variable.variable.name}": to${type.name}String(${variable.variable.name})');
+      } else if (type.kind as String == "LIST" && type.ofType.name == "ENUM") {
+        variables.add(
+            '"${variable.variable.name}": ${variable.variable.name}?.map(to${type.ofType.name}String)?.toList()');
       } else {
         variables.add('"${variable.variable.name}": ${variable.variable.name}');
       }
@@ -102,13 +113,26 @@ class Operation extends BaseTypes {
       for (VariableDefinitionContext variable
           in _context.variableDefinitions.variableDefinitions) {
         String name = variable.variable.name;
-        String type = variable.type.typeName.name;
+        Reference typeReference;
+
+        if (variable.type.typeName?.name != null) {
+          typeReference = inputTypes
+              .generateInputType(
+                  fb, _schema.findObject(variable.type.typeName.name))
+              .reference;
+        } else {
+          JsonObjectLite<dynamic> listTypeDef = JsonObjectLite<dynamic>()
+            ..['kind'] = 'LIST'
+            ..['ofType'] = _schema.findObject(variable.type.listType.type
+                .typeName.name); // TODO: Support list of lists
+          typeReference =
+              inputTypes.generateInputType(fb, listTypeDef).reference;
+        }
+
         ParameterBuilder parameterBuilder = ParameterBuilder()
           ..name = name
           ..named = true
-          ..type = inputTypes
-              .generateInputType(fb, _schema.findObject(type))
-              .reference;
+          ..type = typeReference;
         if (variable.type?.EXCLAMATION?.text == "!") {
           parameterBuilder.annotations
               .add(refer("required", "package:meta/meta.dart"));

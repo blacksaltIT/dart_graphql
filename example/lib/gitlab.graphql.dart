@@ -1,43 +1,44 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+// ignore_for_file:directives_ordering, constant_identifier_names, camel_case_types, non_constant_identifier_names
+
 import 'package:dart_graphql/dart_graphql.dart';
 import 'dart:core';
 import 'dart:convert';
 
-class User extends MapObject {
-  String get avatarUrl => map["avatarUrl"] as String;
-  set avatarUrl(String value) => map["avatarUrl"] = value;
+class Board extends MapObject {
+  String get id => map["id"] as String;
+  set id(String value) => map["id"] = value;
   String get name => map["name"] as String;
   set name(String value) => map["name"] = value;
-  String get username => map["username"] as String;
-  set username(String value) => map["username"] = value;
-  String get webUrl => map["webUrl"] as String;
-  set webUrl(String value) => map["webUrl"] = value;
-  static User fromMap(Map<String, dynamic> map, [bool deepCopy = false]) {
+  int get weight => map["weight"] as int;
+  set weight(int value) => map["weight"] = value;
+  static Board fromMap(Map<String, dynamic> map, [bool deepCopy = false]) {
     if (map == null) return null;
     if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
-    return User()..map = map;
+    return Board()..map = map;
   }
 
-  User clone() => User.fromMap(toJson() as Map<String, dynamic>, true);
+  Board clone() => Board.fromMap(toJson() as Map<String, dynamic>, true);
 }
 
-class EpicEdge extends MapObject {
+class BoardEdge extends MapObject {
   String get cursor => map["cursor"] as String;
   set cursor(String value) => map["cursor"] = value;
-  Epic get node {
-    if (map['node'] is Epic) return map['node'] as Epic;
-    return map['node'] = Epic.fromMap(map['node'] as Map<String, dynamic>);
+  Board get node {
+    if (map['node'] is Board) return map['node'] as Board;
+    return map['node'] = Board.fromMap(map['node'] as Map<String, dynamic>);
   }
 
-  set node(Epic value) => map["node"] = value;
-  static EpicEdge fromMap(Map<String, dynamic> map, [bool deepCopy = false]) {
+  set node(Board value) => map["node"] = value;
+  static BoardEdge fromMap(Map<String, dynamic> map, [bool deepCopy = false]) {
     if (map == null) return null;
     if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
-    return EpicEdge()..map = map;
+    return BoardEdge()..map = map;
   }
 
-  EpicEdge clone() => EpicEdge.fromMap(toJson() as Map<String, dynamic>, true);
+  BoardEdge clone() =>
+      BoardEdge.fromMap(toJson() as Map<String, dynamic>, true);
 }
 
 class PageInfo extends MapObject {
@@ -58,19 +59,31 @@ class PageInfo extends MapObject {
   PageInfo clone() => PageInfo.fromMap(toJson() as Map<String, dynamic>, true);
 }
 
-class EpicConnection extends MapObject {
-  List<EpicEdge> get edges {
-    if (map['edges'] == null || map['edges'] is List<EpicEdge>)
-      return map['edges'] as List<EpicEdge>;
+class BoardConnection extends MapObject {
+  List<BoardEdge> get edges {
+    if (map['edges'] == null || map['edges'] is List<BoardEdge>)
+      return map['edges'] as List<BoardEdge>;
 
-    List<EpicEdge> items = [];
+    List<BoardEdge> items = [];
     for (dynamic aVar in map['edges'])
-      items.add(EpicEdge.fromMap(aVar as Map<String, dynamic>));
+      items.add(BoardEdge.fromMap(aVar as Map<String, dynamic>));
 
     return map['edges'] = items;
   }
 
-  set edges(List<EpicEdge> value) => map["edges"] = value;
+  set edges(List<BoardEdge> value) => map["edges"] = value;
+  List<Board> get nodes {
+    if (map['nodes'] == null || map['nodes'] is List<Board>)
+      return map['nodes'] as List<Board>;
+
+    List<Board> items = [];
+    for (dynamic aVar in map['nodes'])
+      items.add(Board.fromMap(aVar as Map<String, dynamic>));
+
+    return map['nodes'] = items;
+  }
+
+  set nodes(List<Board> value) => map["nodes"] = value;
   PageInfo get pageInfo {
     if (map['pageInfo'] is PageInfo) return map['pageInfo'] as PageInfo;
     return map['pageInfo'] =
@@ -78,15 +91,203 @@ class EpicConnection extends MapObject {
   }
 
   set pageInfo(PageInfo value) => map["pageInfo"] = value;
-  static EpicConnection fromMap(Map<String, dynamic> map,
+  static BoardConnection fromMap(Map<String, dynamic> map,
       [bool deepCopy = false]) {
     if (map == null) return null;
     if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
-    return EpicConnection()..map = map;
+    return BoardConnection()..map = map;
   }
 
-  EpicConnection clone() =>
-      EpicConnection.fromMap(toJson() as Map<String, dynamic>, true);
+  BoardConnection clone() =>
+      BoardConnection.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class Environment extends MapObject {
+  String get id => map["id"] as String;
+  set id(String value) => map["id"] = value;
+  String get name => map["name"] as String;
+  set name(String value) => map["name"] = value;
+  static Environment fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return Environment()..map = map;
+  }
+
+  Environment clone() =>
+      Environment.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class EnvironmentEdge extends MapObject {
+  String get cursor => map["cursor"] as String;
+  set cursor(String value) => map["cursor"] = value;
+  Environment get node {
+    if (map['node'] is Environment) return map['node'] as Environment;
+    return map['node'] =
+        Environment.fromMap(map['node'] as Map<String, dynamic>);
+  }
+
+  set node(Environment value) => map["node"] = value;
+  static EnvironmentEdge fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return EnvironmentEdge()..map = map;
+  }
+
+  EnvironmentEdge clone() =>
+      EnvironmentEdge.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class EnvironmentConnection extends MapObject {
+  List<EnvironmentEdge> get edges {
+    if (map['edges'] == null || map['edges'] is List<EnvironmentEdge>)
+      return map['edges'] as List<EnvironmentEdge>;
+
+    List<EnvironmentEdge> items = [];
+    for (dynamic aVar in map['edges'])
+      items.add(EnvironmentEdge.fromMap(aVar as Map<String, dynamic>));
+
+    return map['edges'] = items;
+  }
+
+  set edges(List<EnvironmentEdge> value) => map["edges"] = value;
+  List<Environment> get nodes {
+    if (map['nodes'] == null || map['nodes'] is List<Environment>)
+      return map['nodes'] as List<Environment>;
+
+    List<Environment> items = [];
+    for (dynamic aVar in map['nodes'])
+      items.add(Environment.fromMap(aVar as Map<String, dynamic>));
+
+    return map['nodes'] = items;
+  }
+
+  set nodes(List<Environment> value) => map["nodes"] = value;
+  PageInfo get pageInfo {
+    if (map['pageInfo'] is PageInfo) return map['pageInfo'] as PageInfo;
+    return map['pageInfo'] =
+        PageInfo.fromMap(map['pageInfo'] as Map<String, dynamic>);
+  }
+
+  set pageInfo(PageInfo value) => map["pageInfo"] = value;
+  static EnvironmentConnection fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return EnvironmentConnection()..map = map;
+  }
+
+  EnvironmentConnection clone() =>
+      EnvironmentConnection.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class GrafanaIntegration extends MapObject {
+  dynamic get createdAt => map["createdAt"] as dynamic;
+  set createdAt(dynamic value) => map["createdAt"] = value;
+  bool get enabled => map["enabled"] as bool;
+  set enabled(bool value) => map["enabled"] = value;
+  String get grafanaUrl => map["grafanaUrl"] as String;
+  set grafanaUrl(String value) => map["grafanaUrl"] = value;
+  String get id => map["id"] as String;
+  set id(String value) => map["id"] = value;
+  String get token => map["token"] as String;
+  set token(String value) => map["token"] = value;
+  dynamic get updatedAt => map["updatedAt"] as dynamic;
+  set updatedAt(dynamic value) => map["updatedAt"] = value;
+  static GrafanaIntegration fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return GrafanaIntegration()..map = map;
+  }
+
+  GrafanaIntegration clone() =>
+      GrafanaIntegration.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+enum BlobViewersType { rich, simple, auxiliary }
+Map<String, BlobViewersType> _mapNamesForBlobViewersType = {
+  "rich": BlobViewersType.rich,
+  "simple": BlobViewersType.simple,
+  "auxiliary": BlobViewersType.auxiliary
+};
+BlobViewersType parseBlobViewersType(String value) =>
+    value != null && value != ""
+        ? _mapNamesForBlobViewersType[value.toLowerCase()]
+        : null;
+String toBlobViewersTypeString(BlobViewersType value) =>
+    value?.toString()?.split(".")?.last;
+
+class SnippetBlobViewer extends MapObject {
+  bool get collapsed => map["collapsed"] as bool;
+  set collapsed(bool value) => map["collapsed"] = value;
+  String get fileType => map["fileType"] as String;
+  set fileType(String value) => map["fileType"] = value;
+  bool get loadAsync => map["loadAsync"] as bool;
+  set loadAsync(bool value) => map["loadAsync"] = value;
+  String get loadingPartialName => map["loadingPartialName"] as String;
+  set loadingPartialName(String value) => map["loadingPartialName"] = value;
+  String get renderError => map["renderError"] as String;
+  set renderError(String value) => map["renderError"] = value;
+  bool get tooLarge => map["tooLarge"] as bool;
+  set tooLarge(bool value) => map["tooLarge"] = value;
+  BlobViewersType get type => parseBlobViewersType(map["type"] as String);
+  set type(BlobViewersType value) =>
+      map["type"] = toBlobViewersTypeString(value);
+  static SnippetBlobViewer fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return SnippetBlobViewer()..map = map;
+  }
+
+  SnippetBlobViewer clone() =>
+      SnippetBlobViewer.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class SnippetBlob extends MapObject {
+  bool get binary => map["binary"] as bool;
+  set binary(bool value) => map["binary"] = value;
+  String get mode => map["mode"] as String;
+  set mode(String value) => map["mode"] = value;
+  String get name => map["name"] as String;
+  set name(String value) => map["name"] = value;
+  String get path => map["path"] as String;
+  set path(String value) => map["path"] = value;
+  String get plainData => map["plainData"] as String;
+  set plainData(String value) => map["plainData"] = value;
+  String get rawPath => map["rawPath"] as String;
+  set rawPath(String value) => map["rawPath"] = value;
+  String get richData => map["richData"] as String;
+  set richData(String value) => map["richData"] = value;
+  SnippetBlobViewer get richViewer {
+    if (map['richViewer'] is SnippetBlobViewer)
+      return map['richViewer'] as SnippetBlobViewer;
+    return map['richViewer'] =
+        SnippetBlobViewer.fromMap(map['richViewer'] as Map<String, dynamic>);
+  }
+
+  set richViewer(SnippetBlobViewer value) => map["richViewer"] = value;
+  SnippetBlobViewer get simpleViewer {
+    if (map['simpleViewer'] is SnippetBlobViewer)
+      return map['simpleViewer'] as SnippetBlobViewer;
+    return map['simpleViewer'] =
+        SnippetBlobViewer.fromMap(map['simpleViewer'] as Map<String, dynamic>);
+  }
+
+  set simpleViewer(SnippetBlobViewer value) => map["simpleViewer"] = value;
+  int get size => map["size"] as int;
+  set size(int value) => map["size"] = value;
+  static SnippetBlob fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return SnippetBlob()..map = map;
+  }
+
+  SnippetBlob clone() =>
+      SnippetBlob.fromMap(toJson() as Map<String, dynamic>, true);
 }
 
 class DiffRefs extends MapObject {
@@ -279,6 +480,18 @@ class NoteConnection extends MapObject {
   }
 
   set edges(List<NoteEdge> value) => map["edges"] = value;
+  List<Note> get nodes {
+    if (map['nodes'] == null || map['nodes'] is List<Note>)
+      return map['nodes'] as List<Note>;
+
+    List<Note> items = [];
+    for (dynamic aVar in map['nodes'])
+      items.add(Note.fromMap(aVar as Map<String, dynamic>));
+
+    return map['nodes'] = items;
+  }
+
+  set nodes(List<Note> value) => map["nodes"] = value;
   PageInfo get pageInfo {
     if (map['pageInfo'] is PageInfo) return map['pageInfo'] as PageInfo;
     return map['pageInfo'] =
@@ -355,6 +568,18 @@ class DiscussionConnection extends MapObject {
   }
 
   set edges(List<DiscussionEdge> value) => map["edges"] = value;
+  List<Discussion> get nodes {
+    if (map['nodes'] == null || map['nodes'] is List<Discussion>)
+      return map['nodes'] as List<Discussion>;
+
+    List<Discussion> items = [];
+    for (dynamic aVar in map['nodes'])
+      items.add(Discussion.fromMap(aVar as Map<String, dynamic>));
+
+    return map['nodes'] = items;
+  }
+
+  set nodes(List<Discussion> value) => map["nodes"] = value;
   PageInfo get pageInfo {
     if (map['pageInfo'] is PageInfo) return map['pageInfo'] as PageInfo;
     return map['pageInfo'] =
@@ -371,6 +596,470 @@ class DiscussionConnection extends MapObject {
 
   DiscussionConnection clone() =>
       DiscussionConnection.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class SnippetPermissions extends MapObject {
+  bool get adminSnippet => map["adminSnippet"] as bool;
+  set adminSnippet(bool value) => map["adminSnippet"] = value;
+  bool get awardEmoji => map["awardEmoji"] as bool;
+  set awardEmoji(bool value) => map["awardEmoji"] = value;
+  bool get createNote => map["createNote"] as bool;
+  set createNote(bool value) => map["createNote"] = value;
+  bool get readSnippet => map["readSnippet"] as bool;
+  set readSnippet(bool value) => map["readSnippet"] = value;
+  bool get reportSnippet => map["reportSnippet"] as bool;
+  set reportSnippet(bool value) => map["reportSnippet"] = value;
+  bool get updateSnippet => map["updateSnippet"] as bool;
+  set updateSnippet(bool value) => map["updateSnippet"] = value;
+  static SnippetPermissions fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return SnippetPermissions()..map = map;
+  }
+
+  SnippetPermissions clone() =>
+      SnippetPermissions.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+enum VisibilityLevelsEnum { private, internal, public }
+Map<String, VisibilityLevelsEnum> _mapNamesForVisibilityLevelsEnum = {
+  "private": VisibilityLevelsEnum.private,
+  "internal": VisibilityLevelsEnum.internal,
+  "public": VisibilityLevelsEnum.public
+};
+VisibilityLevelsEnum parseVisibilityLevelsEnum(String value) =>
+    value != null && value != ""
+        ? _mapNamesForVisibilityLevelsEnum[value.toLowerCase()]
+        : null;
+String toVisibilityLevelsEnumString(VisibilityLevelsEnum value) =>
+    value?.toString()?.split(".")?.last;
+
+class Snippet extends MapObject {
+  User get author {
+    if (map['author'] is User) return map['author'] as User;
+    return map['author'] = User.fromMap(map['author'] as Map<String, dynamic>);
+  }
+
+  set author(User value) => map["author"] = value;
+  SnippetBlob get blob {
+    if (map['blob'] is SnippetBlob) return map['blob'] as SnippetBlob;
+    return map['blob'] =
+        SnippetBlob.fromMap(map['blob'] as Map<String, dynamic>);
+  }
+
+  set blob(SnippetBlob value) => map["blob"] = value;
+  dynamic get createdAt => map["createdAt"] as dynamic;
+  set createdAt(dynamic value) => map["createdAt"] = value;
+  String get description => map["description"] as String;
+  set description(String value) => map["description"] = value;
+  String get descriptionHtml => map["descriptionHtml"] as String;
+  set descriptionHtml(String value) => map["descriptionHtml"] = value;
+  DiscussionConnection get discussions {
+    if (map['discussions'] is DiscussionConnection)
+      return map['discussions'] as DiscussionConnection;
+    return map['discussions'] = DiscussionConnection.fromMap(
+        map['discussions'] as Map<String, dynamic>);
+  }
+
+  set discussions(DiscussionConnection value) => map["discussions"] = value;
+  String get fileName => map["fileName"] as String;
+  set fileName(String value) => map["fileName"] = value;
+  String get id => map["id"] as String;
+  set id(String value) => map["id"] = value;
+  NoteConnection get notes {
+    if (map['notes'] is NoteConnection) return map['notes'] as NoteConnection;
+    return map['notes'] =
+        NoteConnection.fromMap(map['notes'] as Map<String, dynamic>);
+  }
+
+  set notes(NoteConnection value) => map["notes"] = value;
+  Project get project {
+    if (map['project'] is Project) return map['project'] as Project;
+    return map['project'] =
+        Project.fromMap(map['project'] as Map<String, dynamic>);
+  }
+
+  set project(Project value) => map["project"] = value;
+  String get rawUrl => map["rawUrl"] as String;
+  set rawUrl(String value) => map["rawUrl"] = value;
+  String get title => map["title"] as String;
+  set title(String value) => map["title"] = value;
+  dynamic get updatedAt => map["updatedAt"] as dynamic;
+  set updatedAt(dynamic value) => map["updatedAt"] = value;
+  SnippetPermissions get userPermissions {
+    if (map['userPermissions'] is SnippetPermissions)
+      return map['userPermissions'] as SnippetPermissions;
+    return map['userPermissions'] = SnippetPermissions.fromMap(
+        map['userPermissions'] as Map<String, dynamic>);
+  }
+
+  set userPermissions(SnippetPermissions value) =>
+      map["userPermissions"] = value;
+  VisibilityLevelsEnum get visibilityLevel =>
+      parseVisibilityLevelsEnum(map["visibilityLevel"] as String);
+  set visibilityLevel(VisibilityLevelsEnum value) =>
+      map["visibilityLevel"] = toVisibilityLevelsEnumString(value);
+  String get webUrl => map["webUrl"] as String;
+  set webUrl(String value) => map["webUrl"] = value;
+  static Snippet fromMap(Map<String, dynamic> map, [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return Snippet()..map = map;
+  }
+
+  Snippet clone() => Snippet.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class SnippetEdge extends MapObject {
+  String get cursor => map["cursor"] as String;
+  set cursor(String value) => map["cursor"] = value;
+  Snippet get node {
+    if (map['node'] is Snippet) return map['node'] as Snippet;
+    return map['node'] = Snippet.fromMap(map['node'] as Map<String, dynamic>);
+  }
+
+  set node(Snippet value) => map["node"] = value;
+  static SnippetEdge fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return SnippetEdge()..map = map;
+  }
+
+  SnippetEdge clone() =>
+      SnippetEdge.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class SnippetConnection extends MapObject {
+  List<SnippetEdge> get edges {
+    if (map['edges'] == null || map['edges'] is List<SnippetEdge>)
+      return map['edges'] as List<SnippetEdge>;
+
+    List<SnippetEdge> items = [];
+    for (dynamic aVar in map['edges'])
+      items.add(SnippetEdge.fromMap(aVar as Map<String, dynamic>));
+
+    return map['edges'] = items;
+  }
+
+  set edges(List<SnippetEdge> value) => map["edges"] = value;
+  List<Snippet> get nodes {
+    if (map['nodes'] == null || map['nodes'] is List<Snippet>)
+      return map['nodes'] as List<Snippet>;
+
+    List<Snippet> items = [];
+    for (dynamic aVar in map['nodes'])
+      items.add(Snippet.fromMap(aVar as Map<String, dynamic>));
+
+    return map['nodes'] = items;
+  }
+
+  set nodes(List<Snippet> value) => map["nodes"] = value;
+  PageInfo get pageInfo {
+    if (map['pageInfo'] is PageInfo) return map['pageInfo'] as PageInfo;
+    return map['pageInfo'] =
+        PageInfo.fromMap(map['pageInfo'] as Map<String, dynamic>);
+  }
+
+  set pageInfo(PageInfo value) => map["pageInfo"] = value;
+  static SnippetConnection fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return SnippetConnection()..map = map;
+  }
+
+  SnippetConnection clone() =>
+      SnippetConnection.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+enum TodoActionEnum {
+  assigned,
+  mentioned,
+  build_failed,
+  marked,
+  approval_required,
+  unmergeable,
+  directly_addressed
+}
+Map<String, TodoActionEnum> _mapNamesForTodoActionEnum = {
+  "assigned": TodoActionEnum.assigned,
+  "mentioned": TodoActionEnum.mentioned,
+  "build_failed": TodoActionEnum.build_failed,
+  "marked": TodoActionEnum.marked,
+  "approval_required": TodoActionEnum.approval_required,
+  "unmergeable": TodoActionEnum.unmergeable,
+  "directly_addressed": TodoActionEnum.directly_addressed
+};
+TodoActionEnum parseTodoActionEnum(String value) => value != null && value != ""
+    ? _mapNamesForTodoActionEnum[value.toLowerCase()]
+    : null;
+String toTodoActionEnumString(TodoActionEnum value) =>
+    value?.toString()?.split(".")?.last;
+enum TodoStateEnum { pending, done }
+Map<String, TodoStateEnum> _mapNamesForTodoStateEnum = {
+  "pending": TodoStateEnum.pending,
+  "done": TodoStateEnum.done
+};
+TodoStateEnum parseTodoStateEnum(String value) => value != null && value != ""
+    ? _mapNamesForTodoStateEnum[value.toLowerCase()]
+    : null;
+String toTodoStateEnumString(TodoStateEnum value) =>
+    value?.toString()?.split(".")?.last;
+enum TodoTargetEnum { COMMIT, ISSUE, MERGEREQUEST, DESIGN, EPIC }
+Map<String, TodoTargetEnum> _mapNamesForTodoTargetEnum = {
+  "commit": TodoTargetEnum.COMMIT,
+  "issue": TodoTargetEnum.ISSUE,
+  "mergerequest": TodoTargetEnum.MERGEREQUEST,
+  "design": TodoTargetEnum.DESIGN,
+  "epic": TodoTargetEnum.EPIC
+};
+TodoTargetEnum parseTodoTargetEnum(String value) => value != null && value != ""
+    ? _mapNamesForTodoTargetEnum[value.toLowerCase()]
+    : null;
+String toTodoTargetEnumString(TodoTargetEnum value) =>
+    value?.toString()?.split(".")?.last;
+
+class Todo extends MapObject {
+  TodoActionEnum get action => parseTodoActionEnum(map["action"] as String);
+  set action(TodoActionEnum value) =>
+      map["action"] = toTodoActionEnumString(value);
+  User get author {
+    if (map['author'] is User) return map['author'] as User;
+    return map['author'] = User.fromMap(map['author'] as Map<String, dynamic>);
+  }
+
+  set author(User value) => map["author"] = value;
+  String get body => map["body"] as String;
+  set body(String value) => map["body"] = value;
+  dynamic get createdAt => map["createdAt"] as dynamic;
+  set createdAt(dynamic value) => map["createdAt"] = value;
+  Group get group {
+    if (map['group'] is Group) return map['group'] as Group;
+    return map['group'] = Group.fromMap(map['group'] as Map<String, dynamic>);
+  }
+
+  set group(Group value) => map["group"] = value;
+  String get id => map["id"] as String;
+  set id(String value) => map["id"] = value;
+  Project get project {
+    if (map['project'] is Project) return map['project'] as Project;
+    return map['project'] =
+        Project.fromMap(map['project'] as Map<String, dynamic>);
+  }
+
+  set project(Project value) => map["project"] = value;
+  TodoStateEnum get state => parseTodoStateEnum(map["state"] as String);
+  set state(TodoStateEnum value) => map["state"] = toTodoStateEnumString(value);
+  TodoTargetEnum get targetType =>
+      parseTodoTargetEnum(map["targetType"] as String);
+  set targetType(TodoTargetEnum value) =>
+      map["targetType"] = toTodoTargetEnumString(value);
+  static Todo fromMap(Map<String, dynamic> map, [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return Todo()..map = map;
+  }
+
+  Todo clone() => Todo.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class TodoEdge extends MapObject {
+  String get cursor => map["cursor"] as String;
+  set cursor(String value) => map["cursor"] = value;
+  Todo get node {
+    if (map['node'] is Todo) return map['node'] as Todo;
+    return map['node'] = Todo.fromMap(map['node'] as Map<String, dynamic>);
+  }
+
+  set node(Todo value) => map["node"] = value;
+  static TodoEdge fromMap(Map<String, dynamic> map, [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return TodoEdge()..map = map;
+  }
+
+  TodoEdge clone() => TodoEdge.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class TodoConnection extends MapObject {
+  List<TodoEdge> get edges {
+    if (map['edges'] == null || map['edges'] is List<TodoEdge>)
+      return map['edges'] as List<TodoEdge>;
+
+    List<TodoEdge> items = [];
+    for (dynamic aVar in map['edges'])
+      items.add(TodoEdge.fromMap(aVar as Map<String, dynamic>));
+
+    return map['edges'] = items;
+  }
+
+  set edges(List<TodoEdge> value) => map["edges"] = value;
+  List<Todo> get nodes {
+    if (map['nodes'] == null || map['nodes'] is List<Todo>)
+      return map['nodes'] as List<Todo>;
+
+    List<Todo> items = [];
+    for (dynamic aVar in map['nodes'])
+      items.add(Todo.fromMap(aVar as Map<String, dynamic>));
+
+    return map['nodes'] = items;
+  }
+
+  set nodes(List<Todo> value) => map["nodes"] = value;
+  PageInfo get pageInfo {
+    if (map['pageInfo'] is PageInfo) return map['pageInfo'] as PageInfo;
+    return map['pageInfo'] =
+        PageInfo.fromMap(map['pageInfo'] as Map<String, dynamic>);
+  }
+
+  set pageInfo(PageInfo value) => map["pageInfo"] = value;
+  static TodoConnection fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return TodoConnection()..map = map;
+  }
+
+  TodoConnection clone() =>
+      TodoConnection.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class UserPermissions extends MapObject {
+  bool get createSnippet => map["createSnippet"] as bool;
+  set createSnippet(bool value) => map["createSnippet"] = value;
+  static UserPermissions fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return UserPermissions()..map = map;
+  }
+
+  UserPermissions clone() =>
+      UserPermissions.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class User extends MapObject {
+  String get avatarUrl => map["avatarUrl"] as String;
+  set avatarUrl(String value) => map["avatarUrl"] = value;
+  String get name => map["name"] as String;
+  set name(String value) => map["name"] = value;
+  SnippetConnection get snippets {
+    if (map['snippets'] is SnippetConnection)
+      return map['snippets'] as SnippetConnection;
+    return map['snippets'] =
+        SnippetConnection.fromMap(map['snippets'] as Map<String, dynamic>);
+  }
+
+  set snippets(SnippetConnection value) => map["snippets"] = value;
+  TodoConnection get todos {
+    if (map['todos'] is TodoConnection) return map['todos'] as TodoConnection;
+    return map['todos'] =
+        TodoConnection.fromMap(map['todos'] as Map<String, dynamic>);
+  }
+
+  set todos(TodoConnection value) => map["todos"] = value;
+  UserPermissions get userPermissions {
+    if (map['userPermissions'] is UserPermissions)
+      return map['userPermissions'] as UserPermissions;
+    return map['userPermissions'] =
+        UserPermissions.fromMap(map['userPermissions'] as Map<String, dynamic>);
+  }
+
+  set userPermissions(UserPermissions value) => map["userPermissions"] = value;
+  String get username => map["username"] as String;
+  set username(String value) => map["username"] = value;
+  String get webUrl => map["webUrl"] as String;
+  set webUrl(String value) => map["webUrl"] = value;
+  static User fromMap(Map<String, dynamic> map, [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return User()..map = map;
+  }
+
+  User clone() => User.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class EpicEdge extends MapObject {
+  String get cursor => map["cursor"] as String;
+  set cursor(String value) => map["cursor"] = value;
+  Epic get node {
+    if (map['node'] is Epic) return map['node'] as Epic;
+    return map['node'] = Epic.fromMap(map['node'] as Map<String, dynamic>);
+  }
+
+  set node(Epic value) => map["node"] = value;
+  static EpicEdge fromMap(Map<String, dynamic> map, [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return EpicEdge()..map = map;
+  }
+
+  EpicEdge clone() => EpicEdge.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class EpicConnection extends MapObject {
+  List<EpicEdge> get edges {
+    if (map['edges'] == null || map['edges'] is List<EpicEdge>)
+      return map['edges'] as List<EpicEdge>;
+
+    List<EpicEdge> items = [];
+    for (dynamic aVar in map['edges'])
+      items.add(EpicEdge.fromMap(aVar as Map<String, dynamic>));
+
+    return map['edges'] = items;
+  }
+
+  set edges(List<EpicEdge> value) => map["edges"] = value;
+  List<Epic> get nodes {
+    if (map['nodes'] == null || map['nodes'] is List<Epic>)
+      return map['nodes'] as List<Epic>;
+
+    List<Epic> items = [];
+    for (dynamic aVar in map['nodes'])
+      items.add(Epic.fromMap(aVar as Map<String, dynamic>));
+
+    return map['nodes'] = items;
+  }
+
+  set nodes(List<Epic> value) => map["nodes"] = value;
+  PageInfo get pageInfo {
+    if (map['pageInfo'] is PageInfo) return map['pageInfo'] as PageInfo;
+    return map['pageInfo'] =
+        PageInfo.fromMap(map['pageInfo'] as Map<String, dynamic>);
+  }
+
+  set pageInfo(PageInfo value) => map["pageInfo"] = value;
+  static EpicConnection fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return EpicConnection()..map = map;
+  }
+
+  EpicConnection clone() =>
+      EpicConnection.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class EpicDescendantCount extends MapObject {
+  int get closedEpics => map["closedEpics"] as int;
+  set closedEpics(int value) => map["closedEpics"] = value;
+  int get closedIssues => map["closedIssues"] as int;
+  set closedIssues(int value) => map["closedIssues"] = value;
+  int get openedEpics => map["openedEpics"] as int;
+  set openedEpics(int value) => map["openedEpics"] = value;
+  int get openedIssues => map["openedIssues"] as int;
+  set openedIssues(int value) => map["openedIssues"] = value;
+  static EpicDescendantCount fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return EpicDescendantCount()..map = map;
+  }
+
+  EpicDescendantCount clone() =>
+      EpicDescendantCount.fromMap(toJson() as Map<String, dynamic>, true);
 }
 
 class UserEdge extends MapObject {
@@ -404,6 +1093,18 @@ class UserConnection extends MapObject {
   }
 
   set edges(List<UserEdge> value) => map["edges"] = value;
+  List<User> get nodes {
+    if (map['nodes'] == null || map['nodes'] is List<User>)
+      return map['nodes'] as List<User>;
+
+    List<User> items = [];
+    for (dynamic aVar in map['nodes'])
+      items.add(User.fromMap(aVar as Map<String, dynamic>));
+
+    return map['nodes'] = items;
+  }
+
+  set nodes(List<User> value) => map["nodes"] = value;
   PageInfo get pageInfo {
     if (map['pageInfo'] is PageInfo) return map['pageInfo'] as PageInfo;
     return map['pageInfo'] =
@@ -422,6 +1123,20 @@ class UserConnection extends MapObject {
       UserConnection.fromMap(toJson() as Map<String, dynamic>, true);
 }
 
+enum DesignVersionEvent { NONE, CREATION, MODIFICATION, DELETION }
+Map<String, DesignVersionEvent> _mapNamesForDesignVersionEvent = {
+  "none": DesignVersionEvent.NONE,
+  "creation": DesignVersionEvent.CREATION,
+  "modification": DesignVersionEvent.MODIFICATION,
+  "deletion": DesignVersionEvent.DELETION
+};
+DesignVersionEvent parseDesignVersionEvent(String value) =>
+    value != null && value != ""
+        ? _mapNamesForDesignVersionEvent[value.toLowerCase()]
+        : null;
+String toDesignVersionEventString(DesignVersionEvent value) =>
+    value?.toString()?.split(".")?.last;
+
 class Label extends MapObject {
   String get color => map["color"] as String;
   set color(String value) => map["color"] = value;
@@ -429,6 +1144,8 @@ class Label extends MapObject {
   set description(String value) => map["description"] = value;
   String get descriptionHtml => map["descriptionHtml"] as String;
   set descriptionHtml(String value) => map["descriptionHtml"] = value;
+  String get id => map["id"] as String;
+  set id(String value) => map["id"] = value;
   String get textColor => map["textColor"] as String;
   set textColor(String value) => map["textColor"] = value;
   String get title => map["title"] as String;
@@ -474,6 +1191,18 @@ class LabelConnection extends MapObject {
   }
 
   set edges(List<LabelEdge> value) => map["edges"] = value;
+  List<Label> get nodes {
+    if (map['nodes'] == null || map['nodes'] is List<Label>)
+      return map['nodes'] as List<Label>;
+
+    List<Label> items = [];
+    for (dynamic aVar in map['nodes'])
+      items.add(Label.fromMap(aVar as Map<String, dynamic>));
+
+    return map['nodes'] = items;
+  }
+
+  set nodes(List<Label> value) => map["nodes"] = value;
   PageInfo get pageInfo {
     if (map['pageInfo'] is PageInfo) return map['pageInfo'] as PageInfo;
     return map['pageInfo'] =
@@ -492,6 +1221,18 @@ class LabelConnection extends MapObject {
       LabelConnection.fromMap(toJson() as Map<String, dynamic>, true);
 }
 
+enum MilestoneStateEnum { active, closed }
+Map<String, MilestoneStateEnum> _mapNamesForMilestoneStateEnum = {
+  "active": MilestoneStateEnum.active,
+  "closed": MilestoneStateEnum.closed
+};
+MilestoneStateEnum parseMilestoneStateEnum(String value) =>
+    value != null && value != ""
+        ? _mapNamesForMilestoneStateEnum[value.toLowerCase()]
+        : null;
+String toMilestoneStateEnumString(MilestoneStateEnum value) =>
+    value?.toString()?.split(".")?.last;
+
 class Milestone extends MapObject {
   dynamic get createdAt => map["createdAt"] as dynamic;
   set createdAt(dynamic value) => map["createdAt"] = value;
@@ -499,14 +1240,20 @@ class Milestone extends MapObject {
   set description(String value) => map["description"] = value;
   dynamic get dueDate => map["dueDate"] as dynamic;
   set dueDate(dynamic value) => map["dueDate"] = value;
+  String get id => map["id"] as String;
+  set id(String value) => map["id"] = value;
   dynamic get startDate => map["startDate"] as dynamic;
   set startDate(dynamic value) => map["startDate"] = value;
-  String get state => map["state"] as String;
-  set state(String value) => map["state"] = value;
+  MilestoneStateEnum get state =>
+      parseMilestoneStateEnum(map["state"] as String);
+  set state(MilestoneStateEnum value) =>
+      map["state"] = toMilestoneStateEnumString(value);
   String get title => map["title"] as String;
   set title(String value) => map["title"] = value;
   dynamic get updatedAt => map["updatedAt"] as dynamic;
   set updatedAt(dynamic value) => map["updatedAt"] = value;
+  String get webPath => map["webPath"] as String;
+  set webPath(String value) => map["webPath"] = value;
   static Milestone fromMap(Map<String, dynamic> map, [bool deepCopy = false]) {
     if (map == null) return null;
     if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
@@ -629,6 +1376,12 @@ class Issue extends MapObject {
   set downvotes(int value) => map["downvotes"] = value;
   dynamic get dueDate => map["dueDate"] as dynamic;
   set dueDate(dynamic value) => map["dueDate"] = value;
+  Epic get epic {
+    if (map['epic'] is Epic) return map['epic'] as Epic;
+    return map['epic'] = Epic.fromMap(map['epic'] as Map<String, dynamic>);
+  }
+
+  set epic(Epic value) => map["epic"] = value;
   String get iid => map["iid"] as String;
   set iid(String value) => map["iid"] = value;
   LabelConnection get labels {
@@ -653,12 +1406,22 @@ class Issue extends MapObject {
   }
 
   set notes(NoteConnection value) => map["notes"] = value;
+  UserConnection get participants {
+    if (map['participants'] is UserConnection)
+      return map['participants'] as UserConnection;
+    return map['participants'] =
+        UserConnection.fromMap(map['participants'] as Map<String, dynamic>);
+  }
+
+  set participants(UserConnection value) => map["participants"] = value;
   String get reference => map["reference"] as String;
   set reference(String value) => map["reference"] = value;
   int get relativePosition => map["relativePosition"] as int;
   set relativePosition(int value) => map["relativePosition"] = value;
   IssueState get state => parseIssueState(map["state"] as String);
   set state(IssueState value) => map["state"] = toIssueStateString(value);
+  bool get subscribed => map["subscribed"] as bool;
+  set subscribed(bool value) => map["subscribed"] = value;
   TaskCompletionStatus get taskCompletionStatus {
     if (map['taskCompletionStatus'] is TaskCompletionStatus)
       return map['taskCompletionStatus'] as TaskCompletionStatus;
@@ -668,10 +1431,14 @@ class Issue extends MapObject {
 
   set taskCompletionStatus(TaskCompletionStatus value) =>
       map["taskCompletionStatus"] = value;
+  int get timeEstimate => map["timeEstimate"] as int;
+  set timeEstimate(int value) => map["timeEstimate"] = value;
   String get title => map["title"] as String;
   set title(String value) => map["title"] = value;
   String get titleHtml => map["titleHtml"] as String;
   set titleHtml(String value) => map["titleHtml"] = value;
+  int get totalTimeSpent => map["totalTimeSpent"] as int;
+  set totalTimeSpent(int value) => map["totalTimeSpent"] = value;
   dynamic get updatedAt => map["updatedAt"] as dynamic;
   set updatedAt(dynamic value) => map["updatedAt"] = value;
   int get upvotes => map["upvotes"] as int;
@@ -701,7 +1468,201 @@ class Issue extends MapObject {
   Issue clone() => Issue.fromMap(toJson() as Map<String, dynamic>, true);
 }
 
+class DesignAtVersion extends MapObject {
+  Design get design {
+    if (map['design'] is Design) return map['design'] as Design;
+    return map['design'] =
+        Design.fromMap(map['design'] as Map<String, dynamic>);
+  }
+
+  set design(Design value) => map["design"] = value;
+  DiffRefs get diffRefs {
+    if (map['diffRefs'] is DiffRefs) return map['diffRefs'] as DiffRefs;
+    return map['diffRefs'] =
+        DiffRefs.fromMap(map['diffRefs'] as Map<String, dynamic>);
+  }
+
+  set diffRefs(DiffRefs value) => map["diffRefs"] = value;
+  DesignVersionEvent get event =>
+      parseDesignVersionEvent(map["event"] as String);
+  set event(DesignVersionEvent value) =>
+      map["event"] = toDesignVersionEventString(value);
+  String get filename => map["filename"] as String;
+  set filename(String value) => map["filename"] = value;
+  String get fullPath => map["fullPath"] as String;
+  set fullPath(String value) => map["fullPath"] = value;
+  String get id => map["id"] as String;
+  set id(String value) => map["id"] = value;
+  String get image => map["image"] as String;
+  set image(String value) => map["image"] = value;
+  Issue get issue {
+    if (map['issue'] is Issue) return map['issue'] as Issue;
+    return map['issue'] = Issue.fromMap(map['issue'] as Map<String, dynamic>);
+  }
+
+  set issue(Issue value) => map["issue"] = value;
+  int get notesCount => map["notesCount"] as int;
+  set notesCount(int value) => map["notesCount"] = value;
+  Project get project {
+    if (map['project'] is Project) return map['project'] as Project;
+    return map['project'] =
+        Project.fromMap(map['project'] as Map<String, dynamic>);
+  }
+
+  set project(Project value) => map["project"] = value;
+  DesignVersion get version {
+    if (map['version'] is DesignVersion) return map['version'] as DesignVersion;
+    return map['version'] =
+        DesignVersion.fromMap(map['version'] as Map<String, dynamic>);
+  }
+
+  set version(DesignVersion value) => map["version"] = value;
+  static DesignAtVersion fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return DesignAtVersion()..map = map;
+  }
+
+  DesignAtVersion clone() =>
+      DesignAtVersion.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class DesignEdge extends MapObject {
+  String get cursor => map["cursor"] as String;
+  set cursor(String value) => map["cursor"] = value;
+  Design get node {
+    if (map['node'] is Design) return map['node'] as Design;
+    return map['node'] = Design.fromMap(map['node'] as Map<String, dynamic>);
+  }
+
+  set node(Design value) => map["node"] = value;
+  static DesignEdge fromMap(Map<String, dynamic> map, [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return DesignEdge()..map = map;
+  }
+
+  DesignEdge clone() =>
+      DesignEdge.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class DesignConnection extends MapObject {
+  List<DesignEdge> get edges {
+    if (map['edges'] == null || map['edges'] is List<DesignEdge>)
+      return map['edges'] as List<DesignEdge>;
+
+    List<DesignEdge> items = [];
+    for (dynamic aVar in map['edges'])
+      items.add(DesignEdge.fromMap(aVar as Map<String, dynamic>));
+
+    return map['edges'] = items;
+  }
+
+  set edges(List<DesignEdge> value) => map["edges"] = value;
+  List<Design> get nodes {
+    if (map['nodes'] == null || map['nodes'] is List<Design>)
+      return map['nodes'] as List<Design>;
+
+    List<Design> items = [];
+    for (dynamic aVar in map['nodes'])
+      items.add(Design.fromMap(aVar as Map<String, dynamic>));
+
+    return map['nodes'] = items;
+  }
+
+  set nodes(List<Design> value) => map["nodes"] = value;
+  PageInfo get pageInfo {
+    if (map['pageInfo'] is PageInfo) return map['pageInfo'] as PageInfo;
+    return map['pageInfo'] =
+        PageInfo.fromMap(map['pageInfo'] as Map<String, dynamic>);
+  }
+
+  set pageInfo(PageInfo value) => map["pageInfo"] = value;
+  static DesignConnection fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return DesignConnection()..map = map;
+  }
+
+  DesignConnection clone() =>
+      DesignConnection.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class DesignAtVersionEdge extends MapObject {
+  String get cursor => map["cursor"] as String;
+  set cursor(String value) => map["cursor"] = value;
+  DesignAtVersion get node {
+    if (map['node'] is DesignAtVersion) return map['node'] as DesignAtVersion;
+    return map['node'] =
+        DesignAtVersion.fromMap(map['node'] as Map<String, dynamic>);
+  }
+
+  set node(DesignAtVersion value) => map["node"] = value;
+  static DesignAtVersionEdge fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return DesignAtVersionEdge()..map = map;
+  }
+
+  DesignAtVersionEdge clone() =>
+      DesignAtVersionEdge.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class DesignAtVersionConnection extends MapObject {
+  List<DesignAtVersionEdge> get edges {
+    if (map['edges'] == null || map['edges'] is List<DesignAtVersionEdge>)
+      return map['edges'] as List<DesignAtVersionEdge>;
+
+    List<DesignAtVersionEdge> items = [];
+    for (dynamic aVar in map['edges'])
+      items.add(DesignAtVersionEdge.fromMap(aVar as Map<String, dynamic>));
+
+    return map['edges'] = items;
+  }
+
+  set edges(List<DesignAtVersionEdge> value) => map["edges"] = value;
+  List<DesignAtVersion> get nodes {
+    if (map['nodes'] == null || map['nodes'] is List<DesignAtVersion>)
+      return map['nodes'] as List<DesignAtVersion>;
+
+    List<DesignAtVersion> items = [];
+    for (dynamic aVar in map['nodes'])
+      items.add(DesignAtVersion.fromMap(aVar as Map<String, dynamic>));
+
+    return map['nodes'] = items;
+  }
+
+  set nodes(List<DesignAtVersion> value) => map["nodes"] = value;
+  PageInfo get pageInfo {
+    if (map['pageInfo'] is PageInfo) return map['pageInfo'] as PageInfo;
+    return map['pageInfo'] =
+        PageInfo.fromMap(map['pageInfo'] as Map<String, dynamic>);
+  }
+
+  set pageInfo(PageInfo value) => map["pageInfo"] = value;
+  static DesignAtVersionConnection fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return DesignAtVersionConnection()..map = map;
+  }
+
+  DesignAtVersionConnection clone() =>
+      DesignAtVersionConnection.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
 class DesignVersion extends MapObject {
+  DesignAtVersion get designAtVersion {
+    if (map['designAtVersion'] is DesignAtVersion)
+      return map['designAtVersion'] as DesignAtVersion;
+    return map['designAtVersion'] =
+        DesignAtVersion.fromMap(map['designAtVersion'] as Map<String, dynamic>);
+  }
+
+  set designAtVersion(DesignAtVersion value) => map["designAtVersion"] = value;
   DesignConnection get designs {
     if (map['designs'] is DesignConnection)
       return map['designs'] as DesignConnection;
@@ -710,6 +1671,15 @@ class DesignVersion extends MapObject {
   }
 
   set designs(DesignConnection value) => map["designs"] = value;
+  DesignAtVersionConnection get designsAtVersion {
+    if (map['designsAtVersion'] is DesignAtVersionConnection)
+      return map['designsAtVersion'] as DesignAtVersionConnection;
+    return map['designsAtVersion'] = DesignAtVersionConnection.fromMap(
+        map['designsAtVersion'] as Map<String, dynamic>);
+  }
+
+  set designsAtVersion(DesignAtVersionConnection value) =>
+      map["designsAtVersion"] = value;
   String get id => map["id"] as String;
   set id(String value) => map["id"] = value;
   String get sha => map["sha"] as String;
@@ -759,6 +1729,18 @@ class DesignVersionConnection extends MapObject {
   }
 
   set edges(List<DesignVersionEdge> value) => map["edges"] = value;
+  List<DesignVersion> get nodes {
+    if (map['nodes'] == null || map['nodes'] is List<DesignVersion>)
+      return map['nodes'] as List<DesignVersion>;
+
+    List<DesignVersion> items = [];
+    for (dynamic aVar in map['nodes'])
+      items.add(DesignVersion.fromMap(aVar as Map<String, dynamic>));
+
+    return map['nodes'] = items;
+  }
+
+  set nodes(List<DesignVersion> value) => map["nodes"] = value;
   PageInfo get pageInfo {
     if (map['pageInfo'] is PageInfo) return map['pageInfo'] as PageInfo;
     return map['pageInfo'] =
@@ -793,6 +1775,10 @@ class Design extends MapObject {
   }
 
   set discussions(DiscussionConnection value) => map["discussions"] = value;
+  DesignVersionEvent get event =>
+      parseDesignVersionEvent(map["event"] as String);
+  set event(DesignVersionEvent value) =>
+      map["event"] = toDesignVersionEventString(value);
   String get filename => map["filename"] as String;
   set filename(String value) => map["filename"] = value;
   String get fullPath => map["fullPath"] as String;
@@ -840,57 +1826,22 @@ class Design extends MapObject {
   Design clone() => Design.fromMap(toJson() as Map<String, dynamic>, true);
 }
 
-class DesignEdge extends MapObject {
-  String get cursor => map["cursor"] as String;
-  set cursor(String value) => map["cursor"] = value;
-  Design get node {
-    if (map['node'] is Design) return map['node'] as Design;
-    return map['node'] = Design.fromMap(map['node'] as Map<String, dynamic>);
-  }
-
-  set node(Design value) => map["node"] = value;
-  static DesignEdge fromMap(Map<String, dynamic> map, [bool deepCopy = false]) {
-    if (map == null) return null;
-    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
-    return DesignEdge()..map = map;
-  }
-
-  DesignEdge clone() =>
-      DesignEdge.fromMap(toJson() as Map<String, dynamic>, true);
-}
-
-class DesignConnection extends MapObject {
-  List<DesignEdge> get edges {
-    if (map['edges'] == null || map['edges'] is List<DesignEdge>)
-      return map['edges'] as List<DesignEdge>;
-
-    List<DesignEdge> items = [];
-    for (dynamic aVar in map['edges'])
-      items.add(DesignEdge.fromMap(aVar as Map<String, dynamic>));
-
-    return map['edges'] = items;
-  }
-
-  set edges(List<DesignEdge> value) => map["edges"] = value;
-  PageInfo get pageInfo {
-    if (map['pageInfo'] is PageInfo) return map['pageInfo'] as PageInfo;
-    return map['pageInfo'] =
-        PageInfo.fromMap(map['pageInfo'] as Map<String, dynamic>);
-  }
-
-  set pageInfo(PageInfo value) => map["pageInfo"] = value;
-  static DesignConnection fromMap(Map<String, dynamic> map,
-      [bool deepCopy = false]) {
-    if (map == null) return null;
-    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
-    return DesignConnection()..map = map;
-  }
-
-  DesignConnection clone() =>
-      DesignConnection.fromMap(toJson() as Map<String, dynamic>, true);
-}
-
 class DesignCollection extends MapObject {
+  Design get design {
+    if (map['design'] is Design) return map['design'] as Design;
+    return map['design'] =
+        Design.fromMap(map['design'] as Map<String, dynamic>);
+  }
+
+  set design(Design value) => map["design"] = value;
+  DesignAtVersion get designAtVersion {
+    if (map['designAtVersion'] is DesignAtVersion)
+      return map['designAtVersion'] as DesignAtVersion;
+    return map['designAtVersion'] =
+        DesignAtVersion.fromMap(map['designAtVersion'] as Map<String, dynamic>);
+  }
+
+  set designAtVersion(DesignAtVersion value) => map["designAtVersion"] = value;
   DesignConnection get designs {
     if (map['designs'] is DesignConnection)
       return map['designs'] as DesignConnection;
@@ -912,6 +1863,13 @@ class DesignCollection extends MapObject {
   }
 
   set project(Project value) => map["project"] = value;
+  DesignVersion get version {
+    if (map['version'] is DesignVersion) return map['version'] as DesignVersion;
+    return map['version'] =
+        DesignVersion.fromMap(map['version'] as Map<String, dynamic>);
+  }
+
+  set version(DesignVersion value) => map["version"] = value;
   DesignVersionConnection get versions {
     if (map['versions'] is DesignVersionConnection)
       return map['versions'] as DesignVersionConnection;
@@ -987,8 +1945,16 @@ class EpicIssue extends MapObject {
   set downvotes(int value) => map["downvotes"] = value;
   dynamic get dueDate => map["dueDate"] as dynamic;
   set dueDate(dynamic value) => map["dueDate"] = value;
+  Epic get epic {
+    if (map['epic'] is Epic) return map['epic'] as Epic;
+    return map['epic'] = Epic.fromMap(map['epic'] as Map<String, dynamic>);
+  }
+
+  set epic(Epic value) => map["epic"] = value;
   String get epicIssueId => map["epicIssueId"] as String;
   set epicIssueId(String value) => map["epicIssueId"] = value;
+  String get id => map["id"] as String;
+  set id(String value) => map["id"] = value;
   String get iid => map["iid"] as String;
   set iid(String value) => map["iid"] = value;
   LabelConnection get labels {
@@ -1013,6 +1979,14 @@ class EpicIssue extends MapObject {
   }
 
   set notes(NoteConnection value) => map["notes"] = value;
+  UserConnection get participants {
+    if (map['participants'] is UserConnection)
+      return map['participants'] as UserConnection;
+    return map['participants'] =
+        UserConnection.fromMap(map['participants'] as Map<String, dynamic>);
+  }
+
+  set participants(UserConnection value) => map["participants"] = value;
   String get reference => map["reference"] as String;
   set reference(String value) => map["reference"] = value;
   String get relationPath => map["relationPath"] as String;
@@ -1021,6 +1995,8 @@ class EpicIssue extends MapObject {
   set relativePosition(int value) => map["relativePosition"] = value;
   IssueState get state => parseIssueState(map["state"] as String);
   set state(IssueState value) => map["state"] = toIssueStateString(value);
+  bool get subscribed => map["subscribed"] as bool;
+  set subscribed(bool value) => map["subscribed"] = value;
   TaskCompletionStatus get taskCompletionStatus {
     if (map['taskCompletionStatus'] is TaskCompletionStatus)
       return map['taskCompletionStatus'] as TaskCompletionStatus;
@@ -1030,10 +2006,14 @@ class EpicIssue extends MapObject {
 
   set taskCompletionStatus(TaskCompletionStatus value) =>
       map["taskCompletionStatus"] = value;
+  int get timeEstimate => map["timeEstimate"] as int;
+  set timeEstimate(int value) => map["timeEstimate"] = value;
   String get title => map["title"] as String;
   set title(String value) => map["title"] = value;
   String get titleHtml => map["titleHtml"] as String;
   set titleHtml(String value) => map["titleHtml"] = value;
+  int get totalTimeSpent => map["totalTimeSpent"] as int;
+  set totalTimeSpent(int value) => map["totalTimeSpent"] = value;
   dynamic get updatedAt => map["updatedAt"] as dynamic;
   set updatedAt(dynamic value) => map["updatedAt"] = value;
   int get upvotes => map["upvotes"] as int;
@@ -1097,6 +2077,18 @@ class EpicIssueConnection extends MapObject {
   }
 
   set edges(List<EpicIssueEdge> value) => map["edges"] = value;
+  List<EpicIssue> get nodes {
+    if (map['nodes'] == null || map['nodes'] is List<EpicIssue>)
+      return map['nodes'] as List<EpicIssue>;
+
+    List<EpicIssue> items = [];
+    for (dynamic aVar in map['nodes'])
+      items.add(EpicIssue.fromMap(aVar as Map<String, dynamic>));
+
+    return map['nodes'] = items;
+  }
+
+  set nodes(List<EpicIssue> value) => map["nodes"] = value;
   PageInfo get pageInfo {
     if (map['pageInfo'] is PageInfo) return map['pageInfo'] as PageInfo;
     return map['pageInfo'] =
@@ -1115,8 +2107,9 @@ class EpicIssueConnection extends MapObject {
       EpicIssueConnection.fromMap(toJson() as Map<String, dynamic>, true);
 }
 
-enum EpicState { opened, closed }
+enum EpicState { all, opened, closed }
 Map<String, EpicState> _mapNamesForEpicState = {
+  "all": EpicState.all,
   "opened": EpicState.opened,
   "closed": EpicState.closed
 };
@@ -1173,6 +2166,15 @@ class Epic extends MapObject {
   set closedAt(dynamic value) => map["closedAt"] = value;
   dynamic get createdAt => map["createdAt"] as dynamic;
   set createdAt(dynamic value) => map["createdAt"] = value;
+  EpicDescendantCount get descendantCounts {
+    if (map['descendantCounts'] is EpicDescendantCount)
+      return map['descendantCounts'] as EpicDescendantCount;
+    return map['descendantCounts'] = EpicDescendantCount.fromMap(
+        map['descendantCounts'] as Map<String, dynamic>);
+  }
+
+  set descendantCounts(EpicDescendantCount value) =>
+      map["descendantCounts"] = value;
   String get description => map["description"] as String;
   set description(String value) => map["description"] = value;
   DiscussionConnection get discussions {
@@ -1183,6 +2185,8 @@ class Epic extends MapObject {
   }
 
   set discussions(DiscussionConnection value) => map["discussions"] = value;
+  int get downvotes => map["downvotes"] as int;
+  set downvotes(int value) => map["downvotes"] = value;
   dynamic get dueDate => map["dueDate"] as dynamic;
   set dueDate(dynamic value) => map["dueDate"] = value;
   dynamic get dueDateFixed => map["dueDateFixed"] as dynamic;
@@ -1214,6 +2218,14 @@ class Epic extends MapObject {
   }
 
   set issues(EpicIssueConnection value) => map["issues"] = value;
+  LabelConnection get labels {
+    if (map['labels'] is LabelConnection)
+      return map['labels'] as LabelConnection;
+    return map['labels'] =
+        LabelConnection.fromMap(map['labels'] as Map<String, dynamic>);
+  }
+
+  set labels(LabelConnection value) => map["labels"] = value;
   NoteConnection get notes {
     if (map['notes'] is NoteConnection) return map['notes'] as NoteConnection;
     return map['notes'] =
@@ -1227,10 +2239,20 @@ class Epic extends MapObject {
   }
 
   set parent(Epic value) => map["parent"] = value;
+  UserConnection get participants {
+    if (map['participants'] is UserConnection)
+      return map['participants'] as UserConnection;
+    return map['participants'] =
+        UserConnection.fromMap(map['participants'] as Map<String, dynamic>);
+  }
+
+  set participants(UserConnection value) => map["participants"] = value;
   String get reference => map["reference"] as String;
   set reference(String value) => map["reference"] = value;
   String get relationPath => map["relationPath"] as String;
   set relationPath(String value) => map["relationPath"] = value;
+  int get relativePosition => map["relativePosition"] as int;
+  set relativePosition(int value) => map["relativePosition"] = value;
   dynamic get startDate => map["startDate"] as dynamic;
   set startDate(dynamic value) => map["startDate"] = value;
   dynamic get startDateFixed => map["startDateFixed"] as dynamic;
@@ -1243,10 +2265,14 @@ class Epic extends MapObject {
   set startDateIsFixed(bool value) => map["startDateIsFixed"] = value;
   EpicState get state => parseEpicState(map["state"] as String);
   set state(EpicState value) => map["state"] = toEpicStateString(value);
+  bool get subscribed => map["subscribed"] as bool;
+  set subscribed(bool value) => map["subscribed"] = value;
   String get title => map["title"] as String;
   set title(String value) => map["title"] = value;
   dynamic get updatedAt => map["updatedAt"] as dynamic;
   set updatedAt(dynamic value) => map["updatedAt"] = value;
+  int get upvotes => map["upvotes"] as int;
+  set upvotes(int value) => map["upvotes"] = value;
   EpicPermissions get userPermissions {
     if (map['userPermissions'] is EpicPermissions)
       return map['userPermissions'] as EpicPermissions;
@@ -1266,6 +2292,69 @@ class Epic extends MapObject {
   }
 
   Epic clone() => Epic.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class MilestoneEdge extends MapObject {
+  String get cursor => map["cursor"] as String;
+  set cursor(String value) => map["cursor"] = value;
+  Milestone get node {
+    if (map['node'] is Milestone) return map['node'] as Milestone;
+    return map['node'] = Milestone.fromMap(map['node'] as Map<String, dynamic>);
+  }
+
+  set node(Milestone value) => map["node"] = value;
+  static MilestoneEdge fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return MilestoneEdge()..map = map;
+  }
+
+  MilestoneEdge clone() =>
+      MilestoneEdge.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class MilestoneConnection extends MapObject {
+  List<MilestoneEdge> get edges {
+    if (map['edges'] == null || map['edges'] is List<MilestoneEdge>)
+      return map['edges'] as List<MilestoneEdge>;
+
+    List<MilestoneEdge> items = [];
+    for (dynamic aVar in map['edges'])
+      items.add(MilestoneEdge.fromMap(aVar as Map<String, dynamic>));
+
+    return map['edges'] = items;
+  }
+
+  set edges(List<MilestoneEdge> value) => map["edges"] = value;
+  List<Milestone> get nodes {
+    if (map['nodes'] == null || map['nodes'] is List<Milestone>)
+      return map['nodes'] as List<Milestone>;
+
+    List<Milestone> items = [];
+    for (dynamic aVar in map['nodes'])
+      items.add(Milestone.fromMap(aVar as Map<String, dynamic>));
+
+    return map['nodes'] = items;
+  }
+
+  set nodes(List<Milestone> value) => map["nodes"] = value;
+  PageInfo get pageInfo {
+    if (map['pageInfo'] is PageInfo) return map['pageInfo'] as PageInfo;
+    return map['pageInfo'] =
+        PageInfo.fromMap(map['pageInfo'] as Map<String, dynamic>);
+  }
+
+  set pageInfo(PageInfo value) => map["pageInfo"] = value;
+  static MilestoneConnection fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return MilestoneConnection()..map = map;
+  }
+
+  MilestoneConnection clone() =>
+      MilestoneConnection.fromMap(toJson() as Map<String, dynamic>, true);
 }
 
 class ProjectEdge extends MapObject {
@@ -1301,6 +2390,18 @@ class ProjectConnection extends MapObject {
   }
 
   set edges(List<ProjectEdge> value) => map["edges"] = value;
+  List<Project> get nodes {
+    if (map['nodes'] == null || map['nodes'] is List<Project>)
+      return map['nodes'] as List<Project>;
+
+    List<Project> items = [];
+    for (dynamic aVar in map['nodes'])
+      items.add(Project.fromMap(aVar as Map<String, dynamic>));
+
+    return map['nodes'] = items;
+  }
+
+  set nodes(List<Project> value) => map["nodes"] = value;
   PageInfo get pageInfo {
     if (map['pageInfo'] is PageInfo) return map['pageInfo'] as PageInfo;
     return map['pageInfo'] =
@@ -1343,6 +2444,95 @@ class RootStorageStatistics extends MapObject {
       RootStorageStatistics.fromMap(toJson() as Map<String, dynamic>, true);
 }
 
+class Timelog extends MapObject {
+  dynamic get date => map["date"] as dynamic;
+  set date(dynamic value) => map["date"] = value;
+  Issue get issue {
+    if (map['issue'] is Issue) return map['issue'] as Issue;
+    return map['issue'] = Issue.fromMap(map['issue'] as Map<String, dynamic>);
+  }
+
+  set issue(Issue value) => map["issue"] = value;
+  int get timeSpent => map["timeSpent"] as int;
+  set timeSpent(int value) => map["timeSpent"] = value;
+  User get user {
+    if (map['user'] is User) return map['user'] as User;
+    return map['user'] = User.fromMap(map['user'] as Map<String, dynamic>);
+  }
+
+  set user(User value) => map["user"] = value;
+  static Timelog fromMap(Map<String, dynamic> map, [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return Timelog()..map = map;
+  }
+
+  Timelog clone() => Timelog.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class TimelogEdge extends MapObject {
+  String get cursor => map["cursor"] as String;
+  set cursor(String value) => map["cursor"] = value;
+  Timelog get node {
+    if (map['node'] is Timelog) return map['node'] as Timelog;
+    return map['node'] = Timelog.fromMap(map['node'] as Map<String, dynamic>);
+  }
+
+  set node(Timelog value) => map["node"] = value;
+  static TimelogEdge fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return TimelogEdge()..map = map;
+  }
+
+  TimelogEdge clone() =>
+      TimelogEdge.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class TimelogConnection extends MapObject {
+  List<TimelogEdge> get edges {
+    if (map['edges'] == null || map['edges'] is List<TimelogEdge>)
+      return map['edges'] as List<TimelogEdge>;
+
+    List<TimelogEdge> items = [];
+    for (dynamic aVar in map['edges'])
+      items.add(TimelogEdge.fromMap(aVar as Map<String, dynamic>));
+
+    return map['edges'] = items;
+  }
+
+  set edges(List<TimelogEdge> value) => map["edges"] = value;
+  List<Timelog> get nodes {
+    if (map['nodes'] == null || map['nodes'] is List<Timelog>)
+      return map['nodes'] as List<Timelog>;
+
+    List<Timelog> items = [];
+    for (dynamic aVar in map['nodes'])
+      items.add(Timelog.fromMap(aVar as Map<String, dynamic>));
+
+    return map['nodes'] = items;
+  }
+
+  set nodes(List<Timelog> value) => map["nodes"] = value;
+  PageInfo get pageInfo {
+    if (map['pageInfo'] is PageInfo) return map['pageInfo'] as PageInfo;
+    return map['pageInfo'] =
+        PageInfo.fromMap(map['pageInfo'] as Map<String, dynamic>);
+  }
+
+  set pageInfo(PageInfo value) => map["pageInfo"] = value;
+  static TimelogConnection fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return TimelogConnection()..map = map;
+  }
+
+  TimelogConnection clone() =>
+      TimelogConnection.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
 class GroupPermissions extends MapObject {
   bool get readGroup => map["readGroup"] as bool;
   set readGroup(bool value) => map["readGroup"] = value;
@@ -1358,12 +2548,30 @@ class GroupPermissions extends MapObject {
 }
 
 class Group extends MapObject {
+  bool get autoDevopsEnabled => map["autoDevopsEnabled"] as bool;
+  set autoDevopsEnabled(bool value) => map["autoDevopsEnabled"] = value;
   String get avatarUrl => map["avatarUrl"] as String;
   set avatarUrl(String value) => map["avatarUrl"] = value;
+  Board get board {
+    if (map['board'] is Board) return map['board'] as Board;
+    return map['board'] = Board.fromMap(map['board'] as Map<String, dynamic>);
+  }
+
+  set board(Board value) => map["board"] = value;
+  BoardConnection get boards {
+    if (map['boards'] is BoardConnection)
+      return map['boards'] as BoardConnection;
+    return map['boards'] =
+        BoardConnection.fromMap(map['boards'] as Map<String, dynamic>);
+  }
+
+  set boards(BoardConnection value) => map["boards"] = value;
   String get description => map["description"] as String;
   set description(String value) => map["description"] = value;
   String get descriptionHtml => map["descriptionHtml"] as String;
   set descriptionHtml(String value) => map["descriptionHtml"] = value;
+  bool get emailsDisabled => map["emailsDisabled"] as bool;
+  set emailsDisabled(bool value) => map["emailsDisabled"] = value;
   Epic get epic {
     if (map['epic'] is Epic) return map['epic'] as Epic;
     return map['epic'] = Epic.fromMap(map['epic'] as Map<String, dynamic>);
@@ -1383,10 +2591,22 @@ class Group extends MapObject {
   set fullName(String value) => map["fullName"] = value;
   String get fullPath => map["fullPath"] as String;
   set fullPath(String value) => map["fullPath"] = value;
+  bool get groupTimelogsEnabled => map["groupTimelogsEnabled"] as bool;
+  set groupTimelogsEnabled(bool value) => map["groupTimelogsEnabled"] = value;
   String get id => map["id"] as String;
   set id(String value) => map["id"] = value;
   bool get lfsEnabled => map["lfsEnabled"] as bool;
   set lfsEnabled(bool value) => map["lfsEnabled"] = value;
+  bool get mentionsDisabled => map["mentionsDisabled"] as bool;
+  set mentionsDisabled(bool value) => map["mentionsDisabled"] = value;
+  MilestoneConnection get milestones {
+    if (map['milestones'] is MilestoneConnection)
+      return map['milestones'] as MilestoneConnection;
+    return map['milestones'] =
+        MilestoneConnection.fromMap(map['milestones'] as Map<String, dynamic>);
+  }
+
+  set milestones(MilestoneConnection value) => map["milestones"] = value;
   String get name => map["name"] as String;
   set name(String value) => map["name"] = value;
   Group get parent {
@@ -1397,6 +2617,8 @@ class Group extends MapObject {
   set parent(Group value) => map["parent"] = value;
   String get path => map["path"] as String;
   set path(String value) => map["path"] = value;
+  String get projectCreationLevel => map["projectCreationLevel"] as String;
+  set projectCreationLevel(String value) => map["projectCreationLevel"] = value;
   ProjectConnection get projects {
     if (map['projects'] is ProjectConnection)
       return map['projects'] as ProjectConnection;
@@ -1407,6 +2629,10 @@ class Group extends MapObject {
   set projects(ProjectConnection value) => map["projects"] = value;
   bool get requestAccessEnabled => map["requestAccessEnabled"] as bool;
   set requestAccessEnabled(bool value) => map["requestAccessEnabled"] = value;
+  bool get requireTwoFactorAuthentication =>
+      map["requireTwoFactorAuthentication"] as bool;
+  set requireTwoFactorAuthentication(bool value) =>
+      map["requireTwoFactorAuthentication"] = value;
   RootStorageStatistics get rootStorageStatistics {
     if (map['rootStorageStatistics'] is RootStorageStatistics)
       return map['rootStorageStatistics'] as RootStorageStatistics;
@@ -1416,6 +2642,21 @@ class Group extends MapObject {
 
   set rootStorageStatistics(RootStorageStatistics value) =>
       map["rootStorageStatistics"] = value;
+  bool get shareWithGroupLock => map["shareWithGroupLock"] as bool;
+  set shareWithGroupLock(bool value) => map["shareWithGroupLock"] = value;
+  String get subgroupCreationLevel => map["subgroupCreationLevel"] as String;
+  set subgroupCreationLevel(String value) =>
+      map["subgroupCreationLevel"] = value;
+  TimelogConnection get timelogs {
+    if (map['timelogs'] is TimelogConnection)
+      return map['timelogs'] as TimelogConnection;
+    return map['timelogs'] =
+        TimelogConnection.fromMap(map['timelogs'] as Map<String, dynamic>);
+  }
+
+  set timelogs(TimelogConnection value) => map["timelogs"] = value;
+  int get twoFactorGracePeriod => map["twoFactorGracePeriod"] as int;
+  set twoFactorGracePeriod(int value) => map["twoFactorGracePeriod"] = value;
   GroupPermissions get userPermissions {
     if (map['userPermissions'] is GroupPermissions)
       return map['userPermissions'] as GroupPermissions;
@@ -1469,6 +2710,18 @@ class IssueConnection extends MapObject {
   }
 
   set edges(List<IssueEdge> value) => map["edges"] = value;
+  List<Issue> get nodes {
+    if (map['nodes'] == null || map['nodes'] is List<Issue>)
+      return map['nodes'] as List<Issue>;
+
+    List<Issue> items = [];
+    for (dynamic aVar in map['nodes'])
+      items.add(Issue.fromMap(aVar as Map<String, dynamic>));
+
+    return map['nodes'] = items;
+  }
+
+  set nodes(List<Issue> value) => map["nodes"] = value;
   PageInfo get pageInfo {
     if (map['pageInfo'] is PageInfo) return map['pageInfo'] as PageInfo;
     return map['pageInfo'] =
@@ -1517,6 +2770,7 @@ class DetailedStatus extends MapObject {
 
 enum PipelineStatusEnum {
   CREATED,
+  WAITING_FOR_RESOURCE,
   PREPARING,
   PENDING,
   RUNNING,
@@ -1529,6 +2783,7 @@ enum PipelineStatusEnum {
 }
 Map<String, PipelineStatusEnum> _mapNamesForPipelineStatusEnum = {
   "created": PipelineStatusEnum.CREATED,
+  "waiting_for_resource": PipelineStatusEnum.WAITING_FOR_RESOURCE,
   "preparing": PipelineStatusEnum.PREPARING,
   "pending": PipelineStatusEnum.PENDING,
   "running": PipelineStatusEnum.RUNNING,
@@ -1650,6 +2905,18 @@ class PipelineConnection extends MapObject {
   }
 
   set edges(List<PipelineEdge> value) => map["edges"] = value;
+  List<Pipeline> get nodes {
+    if (map['nodes'] == null || map['nodes'] is List<Pipeline>)
+      return map['nodes'] as List<Pipeline>;
+
+    List<Pipeline> items = [];
+    for (dynamic aVar in map['nodes'])
+      items.add(Pipeline.fromMap(aVar as Map<String, dynamic>));
+
+    return map['nodes'] = items;
+  }
+
+  set nodes(List<Pipeline> value) => map["nodes"] = value;
   PageInfo get pageInfo {
     if (map['pageInfo'] is PageInfo) return map['pageInfo'] as PageInfo;
     return map['pageInfo'] =
@@ -1717,6 +2984,14 @@ class MergeRequestPermissions extends MapObject {
 class MergeRequest extends MapObject {
   bool get allowCollaboration => map["allowCollaboration"] as bool;
   set allowCollaboration(bool value) => map["allowCollaboration"] = value;
+  UserConnection get assignees {
+    if (map['assignees'] is UserConnection)
+      return map['assignees'] as UserConnection;
+    return map['assignees'] =
+        UserConnection.fromMap(map['assignees'] as Map<String, dynamic>);
+  }
+
+  set assignees(UserConnection value) => map["assignees"] = value;
   dynamic get createdAt => map["createdAt"] as dynamic;
   set createdAt(dynamic value) => map["createdAt"] = value;
   String get defaultMergeCommitMessage =>
@@ -1736,6 +3011,8 @@ class MergeRequest extends MapObject {
   }
 
   set diffRefs(DiffRefs value) => map["diffRefs"] = value;
+  bool get discussionLocked => map["discussionLocked"] as bool;
+  set discussionLocked(bool value) => map["discussionLocked"] = value;
   DiscussionConnection get discussions {
     if (map['discussions'] is DiscussionConnection)
       return map['discussions'] as DiscussionConnection;
@@ -1764,6 +3041,14 @@ class MergeRequest extends MapObject {
       map["inProgressMergeCommitSha"] as String;
   set inProgressMergeCommitSha(String value) =>
       map["inProgressMergeCommitSha"] = value;
+  LabelConnection get labels {
+    if (map['labels'] is LabelConnection)
+      return map['labels'] as LabelConnection;
+    return map['labels'] =
+        LabelConnection.fromMap(map['labels'] as Map<String, dynamic>);
+  }
+
+  set labels(LabelConnection value) => map["labels"] = value;
   String get mergeCommitMessage => map["mergeCommitMessage"] as String;
   set mergeCommitMessage(String value) => map["mergeCommitMessage"] = value;
   String get mergeCommitSha => map["mergeCommitSha"] as String;
@@ -1782,6 +3067,13 @@ class MergeRequest extends MapObject {
       map["mergeableDiscussionsState"] as bool;
   set mergeableDiscussionsState(bool value) =>
       map["mergeableDiscussionsState"] = value;
+  Milestone get milestone {
+    if (map['milestone'] is Milestone) return map['milestone'] as Milestone;
+    return map['milestone'] =
+        Milestone.fromMap(map['milestone'] as Map<String, dynamic>);
+  }
+
+  set milestone(Milestone value) => map["milestone"] = value;
   NoteConnection get notes {
     if (map['notes'] is NoteConnection) return map['notes'] as NoteConnection;
     return map['notes'] =
@@ -1789,6 +3081,14 @@ class MergeRequest extends MapObject {
   }
 
   set notes(NoteConnection value) => map["notes"] = value;
+  UserConnection get participants {
+    if (map['participants'] is UserConnection)
+      return map['participants'] as UserConnection;
+    return map['participants'] =
+        UserConnection.fromMap(map['participants'] as Map<String, dynamic>);
+  }
+
+  set participants(UserConnection value) => map["participants"] = value;
   PipelineConnection get pipelines {
     if (map['pipelines'] is PipelineConnection)
       return map['pipelines'] as PipelineConnection;
@@ -1810,6 +3110,8 @@ class MergeRequest extends MapObject {
   set rebaseCommitSha(String value) => map["rebaseCommitSha"] = value;
   bool get rebaseInProgress => map["rebaseInProgress"] as bool;
   set rebaseInProgress(bool value) => map["rebaseInProgress"] = value;
+  String get reference => map["reference"] as String;
+  set reference(String value) => map["reference"] = value;
   bool get shouldBeRebased => map["shouldBeRebased"] as bool;
   set shouldBeRebased(bool value) => map["shouldBeRebased"] = value;
   bool get shouldRemoveSourceBranch => map["shouldRemoveSourceBranch"] as bool;
@@ -1853,10 +3155,14 @@ class MergeRequest extends MapObject {
 
   set taskCompletionStatus(TaskCompletionStatus value) =>
       map["taskCompletionStatus"] = value;
+  int get timeEstimate => map["timeEstimate"] as int;
+  set timeEstimate(int value) => map["timeEstimate"] = value;
   String get title => map["title"] as String;
   set title(String value) => map["title"] = value;
   String get titleHtml => map["titleHtml"] as String;
   set titleHtml(String value) => map["titleHtml"] = value;
+  int get totalTimeSpent => map["totalTimeSpent"] as int;
+  set totalTimeSpent(int value) => map["totalTimeSpent"] = value;
   dynamic get updatedAt => map["updatedAt"] as dynamic;
   set updatedAt(dynamic value) => map["updatedAt"] = value;
   int get upvotes => map["upvotes"] as int;
@@ -1921,6 +3227,18 @@ class MergeRequestConnection extends MapObject {
   }
 
   set edges(List<MergeRequestEdge> value) => map["edges"] = value;
+  List<MergeRequest> get nodes {
+    if (map['nodes'] == null || map['nodes'] is List<MergeRequest>)
+      return map['nodes'] as List<MergeRequest>;
+
+    List<MergeRequest> items = [];
+    for (dynamic aVar in map['nodes'])
+      items.add(MergeRequest.fromMap(aVar as Map<String, dynamic>));
+
+    return map['nodes'] = items;
+  }
+
+  set nodes(List<MergeRequest> value) => map["nodes"] = value;
   PageInfo get pageInfo {
     if (map['pageInfo'] is PageInfo) return map['pageInfo'] as PageInfo;
     return map['pageInfo'] =
@@ -2010,6 +3328,8 @@ class Blob extends MapObject {
   set name(String value) => map["name"] = value;
   String get path => map["path"] as String;
   set path(String value) => map["path"] = value;
+  String get sha => map["sha"] as String;
+  set sha(String value) => map["sha"] = value;
   EntryType get type => parseEntryType(map["type"] as String);
   set type(EntryType value) => map["type"] = toEntryTypeString(value);
   String get webUrl => map["webUrl"] as String;
@@ -2054,6 +3374,18 @@ class BlobConnection extends MapObject {
   }
 
   set edges(List<BlobEdge> value) => map["edges"] = value;
+  List<Blob> get nodes {
+    if (map['nodes'] == null || map['nodes'] is List<Blob>)
+      return map['nodes'] as List<Blob>;
+
+    List<Blob> items = [];
+    for (dynamic aVar in map['nodes'])
+      items.add(Blob.fromMap(aVar as Map<String, dynamic>));
+
+    return map['nodes'] = items;
+  }
+
+  set nodes(List<Blob> value) => map["nodes"] = value;
   PageInfo get pageInfo {
     if (map['pageInfo'] is PageInfo) return map['pageInfo'] as PageInfo;
     return map['pageInfo'] =
@@ -2079,6 +3411,10 @@ class Commit extends MapObject {
   }
 
   set author(User value) => map["author"] = value;
+  String get authorGravatar => map["authorGravatar"] as String;
+  set authorGravatar(String value) => map["authorGravatar"] = value;
+  String get authorName => map["authorName"] as String;
+  set authorName(String value) => map["authorName"] = value;
   dynamic get authoredDate => map["authoredDate"] as dynamic;
   set authoredDate(dynamic value) => map["authoredDate"] = value;
   String get description => map["description"] as String;
@@ -2095,8 +3431,18 @@ class Commit extends MapObject {
   set latestPipeline(Pipeline value) => map["latestPipeline"] = value;
   String get message => map["message"] as String;
   set message(String value) => map["message"] = value;
+  PipelineConnection get pipelines {
+    if (map['pipelines'] is PipelineConnection)
+      return map['pipelines'] as PipelineConnection;
+    return map['pipelines'] =
+        PipelineConnection.fromMap(map['pipelines'] as Map<String, dynamic>);
+  }
+
+  set pipelines(PipelineConnection value) => map["pipelines"] = value;
   String get sha => map["sha"] as String;
   set sha(String value) => map["sha"] = value;
+  String get signatureHtml => map["signatureHtml"] as String;
+  set signatureHtml(String value) => map["signatureHtml"] = value;
   String get title => map["title"] as String;
   set title(String value) => map["title"] = value;
   String get webUrl => map["webUrl"] as String;
@@ -2119,6 +3465,8 @@ class Submodule extends MapObject {
   set name(String value) => map["name"] = value;
   String get path => map["path"] as String;
   set path(String value) => map["path"] = value;
+  String get sha => map["sha"] as String;
+  set sha(String value) => map["sha"] = value;
   String get treeUrl => map["treeUrl"] as String;
   set treeUrl(String value) => map["treeUrl"] = value;
   EntryType get type => parseEntryType(map["type"] as String);
@@ -2168,6 +3516,18 @@ class SubmoduleConnection extends MapObject {
   }
 
   set edges(List<SubmoduleEdge> value) => map["edges"] = value;
+  List<Submodule> get nodes {
+    if (map['nodes'] == null || map['nodes'] is List<Submodule>)
+      return map['nodes'] as List<Submodule>;
+
+    List<Submodule> items = [];
+    for (dynamic aVar in map['nodes'])
+      items.add(Submodule.fromMap(aVar as Map<String, dynamic>));
+
+    return map['nodes'] = items;
+  }
+
+  set nodes(List<Submodule> value) => map["nodes"] = value;
   PageInfo get pageInfo {
     if (map['pageInfo'] is PageInfo) return map['pageInfo'] as PageInfo;
     return map['pageInfo'] =
@@ -2195,6 +3555,8 @@ class TreeEntry extends MapObject {
   set name(String value) => map["name"] = value;
   String get path => map["path"] as String;
   set path(String value) => map["path"] = value;
+  String get sha => map["sha"] as String;
+  set sha(String value) => map["sha"] = value;
   EntryType get type => parseEntryType(map["type"] as String);
   set type(EntryType value) => map["type"] = toEntryTypeString(value);
   String get webUrl => map["webUrl"] as String;
@@ -2242,6 +3604,18 @@ class TreeEntryConnection extends MapObject {
   }
 
   set edges(List<TreeEntryEdge> value) => map["edges"] = value;
+  List<TreeEntry> get nodes {
+    if (map['nodes'] == null || map['nodes'] is List<TreeEntry>)
+      return map['nodes'] as List<TreeEntry>;
+
+    List<TreeEntry> items = [];
+    for (dynamic aVar in map['nodes'])
+      items.add(TreeEntry.fromMap(aVar as Map<String, dynamic>));
+
+    return map['nodes'] = items;
+  }
+
+  set nodes(List<TreeEntry> value) => map["nodes"] = value;
   PageInfo get pageInfo {
     if (map['pageInfo'] is PageInfo) return map['pageInfo'] as PageInfo;
     return map['pageInfo'] =
@@ -2323,6 +3697,389 @@ class Repository extends MapObject {
       Repository.fromMap(toJson() as Map<String, dynamic>, true);
 }
 
+class SentryErrorFrequency extends MapObject {
+  int get count => map["count"] as int;
+  set count(int value) => map["count"] = value;
+  dynamic get time => map["time"] as dynamic;
+  set time(dynamic value) => map["time"] = value;
+  static SentryErrorFrequency fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return SentryErrorFrequency()..map = map;
+  }
+
+  SentryErrorFrequency clone() =>
+      SentryErrorFrequency.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+enum SentryErrorStatus {
+  RESOLVED,
+  RESOLVED_IN_NEXT_RELEASE,
+  UNRESOLVED,
+  IGNORED
+}
+Map<String, SentryErrorStatus> _mapNamesForSentryErrorStatus = {
+  "resolved": SentryErrorStatus.RESOLVED,
+  "resolved_in_next_release": SentryErrorStatus.RESOLVED_IN_NEXT_RELEASE,
+  "unresolved": SentryErrorStatus.UNRESOLVED,
+  "ignored": SentryErrorStatus.IGNORED
+};
+SentryErrorStatus parseSentryErrorStatus(String value) =>
+    value != null && value != ""
+        ? _mapNamesForSentryErrorStatus[value.toLowerCase()]
+        : null;
+String toSentryErrorStatusString(SentryErrorStatus value) =>
+    value?.toString()?.split(".")?.last;
+
+class SentryErrorTags extends MapObject {
+  String get level => map["level"] as String;
+  set level(String value) => map["level"] = value;
+  String get logger => map["logger"] as String;
+  set logger(String value) => map["logger"] = value;
+  static SentryErrorTags fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return SentryErrorTags()..map = map;
+  }
+
+  SentryErrorTags clone() =>
+      SentryErrorTags.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class SentryDetailedError extends MapObject {
+  int get count => map["count"] as int;
+  set count(int value) => map["count"] = value;
+  String get culprit => map["culprit"] as String;
+  set culprit(String value) => map["culprit"] = value;
+  String get externalBaseUrl => map["externalBaseUrl"] as String;
+  set externalBaseUrl(String value) => map["externalBaseUrl"] = value;
+  String get externalUrl => map["externalUrl"] as String;
+  set externalUrl(String value) => map["externalUrl"] = value;
+  String get firstReleaseLastCommit => map["firstReleaseLastCommit"] as String;
+  set firstReleaseLastCommit(String value) =>
+      map["firstReleaseLastCommit"] = value;
+  String get firstReleaseShortVersion =>
+      map["firstReleaseShortVersion"] as String;
+  set firstReleaseShortVersion(String value) =>
+      map["firstReleaseShortVersion"] = value;
+  dynamic get firstSeen => map["firstSeen"] as dynamic;
+  set firstSeen(dynamic value) => map["firstSeen"] = value;
+  List<SentryErrorFrequency> get frequency {
+    if (map['frequency'] == null ||
+        map['frequency'] is List<SentryErrorFrequency>)
+      return map['frequency'] as List<SentryErrorFrequency>;
+
+    List<SentryErrorFrequency> items = [];
+    for (dynamic aVar in map['frequency'])
+      items.add(SentryErrorFrequency.fromMap(aVar as Map<String, dynamic>));
+
+    return map['frequency'] = items;
+  }
+
+  set frequency(List<SentryErrorFrequency> value) => map["frequency"] = value;
+  String get gitlabCommit => map["gitlabCommit"] as String;
+  set gitlabCommit(String value) => map["gitlabCommit"] = value;
+  String get gitlabCommitPath => map["gitlabCommitPath"] as String;
+  set gitlabCommitPath(String value) => map["gitlabCommitPath"] = value;
+  String get gitlabIssuePath => map["gitlabIssuePath"] as String;
+  set gitlabIssuePath(String value) => map["gitlabIssuePath"] = value;
+  String get id => map["id"] as String;
+  set id(String value) => map["id"] = value;
+  String get lastReleaseLastCommit => map["lastReleaseLastCommit"] as String;
+  set lastReleaseLastCommit(String value) =>
+      map["lastReleaseLastCommit"] = value;
+  String get lastReleaseShortVersion =>
+      map["lastReleaseShortVersion"] as String;
+  set lastReleaseShortVersion(String value) =>
+      map["lastReleaseShortVersion"] = value;
+  dynamic get lastSeen => map["lastSeen"] as dynamic;
+  set lastSeen(dynamic value) => map["lastSeen"] = value;
+  String get message => map["message"] as String;
+  set message(String value) => map["message"] = value;
+  String get sentryId => map["sentryId"] as String;
+  set sentryId(String value) => map["sentryId"] = value;
+  String get sentryProjectId => map["sentryProjectId"] as String;
+  set sentryProjectId(String value) => map["sentryProjectId"] = value;
+  String get sentryProjectName => map["sentryProjectName"] as String;
+  set sentryProjectName(String value) => map["sentryProjectName"] = value;
+  String get sentryProjectSlug => map["sentryProjectSlug"] as String;
+  set sentryProjectSlug(String value) => map["sentryProjectSlug"] = value;
+  String get shortId => map["shortId"] as String;
+  set shortId(String value) => map["shortId"] = value;
+  SentryErrorStatus get status =>
+      parseSentryErrorStatus(map["status"] as String);
+  set status(SentryErrorStatus value) =>
+      map["status"] = toSentryErrorStatusString(value);
+  SentryErrorTags get tags {
+    if (map['tags'] is SentryErrorTags) return map['tags'] as SentryErrorTags;
+    return map['tags'] =
+        SentryErrorTags.fromMap(map['tags'] as Map<String, dynamic>);
+  }
+
+  set tags(SentryErrorTags value) => map["tags"] = value;
+  String get title => map["title"] as String;
+  set title(String value) => map["title"] = value;
+  String get type => map["type"] as String;
+  set type(String value) => map["type"] = value;
+  int get userCount => map["userCount"] as int;
+  set userCount(int value) => map["userCount"] = value;
+  static SentryDetailedError fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return SentryDetailedError()..map = map;
+  }
+
+  SentryDetailedError clone() =>
+      SentryDetailedError.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class SentryErrorStackTraceContext extends MapObject {
+  String get code => map["code"] as String;
+  set code(String value) => map["code"] = value;
+  int get line => map["line"] as int;
+  set line(int value) => map["line"] = value;
+  static SentryErrorStackTraceContext fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return SentryErrorStackTraceContext()..map = map;
+  }
+
+  SentryErrorStackTraceContext clone() => SentryErrorStackTraceContext.fromMap(
+      toJson() as Map<String, dynamic>, true);
+}
+
+class SentryErrorStackTraceEntry extends MapObject {
+  String get col => map["col"] as String;
+  set col(String value) => map["col"] = value;
+  String get fileName => map["fileName"] as String;
+  set fileName(String value) => map["fileName"] = value;
+  String get function => map["function"] as String;
+  set function(String value) => map["function"] = value;
+  String get line => map["line"] as String;
+  set line(String value) => map["line"] = value;
+  List<SentryErrorStackTraceContext> get traceContext {
+    if (map['traceContext'] == null ||
+        map['traceContext'] is List<SentryErrorStackTraceContext>)
+      return map['traceContext'] as List<SentryErrorStackTraceContext>;
+
+    List<SentryErrorStackTraceContext> items = [];
+    for (dynamic aVar in map['traceContext'])
+      items.add(
+          SentryErrorStackTraceContext.fromMap(aVar as Map<String, dynamic>));
+
+    return map['traceContext'] = items;
+  }
+
+  set traceContext(List<SentryErrorStackTraceContext> value) =>
+      map["traceContext"] = value;
+  static SentryErrorStackTraceEntry fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return SentryErrorStackTraceEntry()..map = map;
+  }
+
+  SentryErrorStackTraceEntry clone() => SentryErrorStackTraceEntry.fromMap(
+      toJson() as Map<String, dynamic>, true);
+}
+
+class SentryErrorStackTrace extends MapObject {
+  String get dateReceived => map["dateReceived"] as String;
+  set dateReceived(String value) => map["dateReceived"] = value;
+  String get issueId => map["issueId"] as String;
+  set issueId(String value) => map["issueId"] = value;
+  List<SentryErrorStackTraceEntry> get stackTraceEntries {
+    if (map['stackTraceEntries'] == null ||
+        map['stackTraceEntries'] is List<SentryErrorStackTraceEntry>)
+      return map['stackTraceEntries'] as List<SentryErrorStackTraceEntry>;
+
+    List<SentryErrorStackTraceEntry> items = [];
+    for (dynamic aVar in map['stackTraceEntries'])
+      items.add(
+          SentryErrorStackTraceEntry.fromMap(aVar as Map<String, dynamic>));
+
+    return map['stackTraceEntries'] = items;
+  }
+
+  set stackTraceEntries(List<SentryErrorStackTraceEntry> value) =>
+      map["stackTraceEntries"] = value;
+  static SentryErrorStackTrace fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return SentryErrorStackTrace()..map = map;
+  }
+
+  SentryErrorStackTrace clone() =>
+      SentryErrorStackTrace.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class SentryError extends MapObject {
+  int get count => map["count"] as int;
+  set count(int value) => map["count"] = value;
+  String get culprit => map["culprit"] as String;
+  set culprit(String value) => map["culprit"] = value;
+  String get externalUrl => map["externalUrl"] as String;
+  set externalUrl(String value) => map["externalUrl"] = value;
+  dynamic get firstSeen => map["firstSeen"] as dynamic;
+  set firstSeen(dynamic value) => map["firstSeen"] = value;
+  List<SentryErrorFrequency> get frequency {
+    if (map['frequency'] == null ||
+        map['frequency'] is List<SentryErrorFrequency>)
+      return map['frequency'] as List<SentryErrorFrequency>;
+
+    List<SentryErrorFrequency> items = [];
+    for (dynamic aVar in map['frequency'])
+      items.add(SentryErrorFrequency.fromMap(aVar as Map<String, dynamic>));
+
+    return map['frequency'] = items;
+  }
+
+  set frequency(List<SentryErrorFrequency> value) => map["frequency"] = value;
+  String get id => map["id"] as String;
+  set id(String value) => map["id"] = value;
+  dynamic get lastSeen => map["lastSeen"] as dynamic;
+  set lastSeen(dynamic value) => map["lastSeen"] = value;
+  String get message => map["message"] as String;
+  set message(String value) => map["message"] = value;
+  String get sentryId => map["sentryId"] as String;
+  set sentryId(String value) => map["sentryId"] = value;
+  String get sentryProjectId => map["sentryProjectId"] as String;
+  set sentryProjectId(String value) => map["sentryProjectId"] = value;
+  String get sentryProjectName => map["sentryProjectName"] as String;
+  set sentryProjectName(String value) => map["sentryProjectName"] = value;
+  String get sentryProjectSlug => map["sentryProjectSlug"] as String;
+  set sentryProjectSlug(String value) => map["sentryProjectSlug"] = value;
+  String get shortId => map["shortId"] as String;
+  set shortId(String value) => map["shortId"] = value;
+  SentryErrorStatus get status =>
+      parseSentryErrorStatus(map["status"] as String);
+  set status(SentryErrorStatus value) =>
+      map["status"] = toSentryErrorStatusString(value);
+  String get title => map["title"] as String;
+  set title(String value) => map["title"] = value;
+  String get type => map["type"] as String;
+  set type(String value) => map["type"] = value;
+  int get userCount => map["userCount"] as int;
+  set userCount(int value) => map["userCount"] = value;
+  static SentryError fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return SentryError()..map = map;
+  }
+
+  SentryError clone() =>
+      SentryError.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class SentryErrorEdge extends MapObject {
+  String get cursor => map["cursor"] as String;
+  set cursor(String value) => map["cursor"] = value;
+  SentryError get node {
+    if (map['node'] is SentryError) return map['node'] as SentryError;
+    return map['node'] =
+        SentryError.fromMap(map['node'] as Map<String, dynamic>);
+  }
+
+  set node(SentryError value) => map["node"] = value;
+  static SentryErrorEdge fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return SentryErrorEdge()..map = map;
+  }
+
+  SentryErrorEdge clone() =>
+      SentryErrorEdge.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class SentryErrorConnection extends MapObject {
+  List<SentryErrorEdge> get edges {
+    if (map['edges'] == null || map['edges'] is List<SentryErrorEdge>)
+      return map['edges'] as List<SentryErrorEdge>;
+
+    List<SentryErrorEdge> items = [];
+    for (dynamic aVar in map['edges'])
+      items.add(SentryErrorEdge.fromMap(aVar as Map<String, dynamic>));
+
+    return map['edges'] = items;
+  }
+
+  set edges(List<SentryErrorEdge> value) => map["edges"] = value;
+  List<SentryError> get nodes {
+    if (map['nodes'] == null || map['nodes'] is List<SentryError>)
+      return map['nodes'] as List<SentryError>;
+
+    List<SentryError> items = [];
+    for (dynamic aVar in map['nodes'])
+      items.add(SentryError.fromMap(aVar as Map<String, dynamic>));
+
+    return map['nodes'] = items;
+  }
+
+  set nodes(List<SentryError> value) => map["nodes"] = value;
+  PageInfo get pageInfo {
+    if (map['pageInfo'] is PageInfo) return map['pageInfo'] as PageInfo;
+    return map['pageInfo'] =
+        PageInfo.fromMap(map['pageInfo'] as Map<String, dynamic>);
+  }
+
+  set pageInfo(PageInfo value) => map["pageInfo"] = value;
+  static SentryErrorConnection fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return SentryErrorConnection()..map = map;
+  }
+
+  SentryErrorConnection clone() =>
+      SentryErrorConnection.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
+class SentryErrorCollection extends MapObject {
+  SentryDetailedError get detailedError {
+    if (map['detailedError'] is SentryDetailedError)
+      return map['detailedError'] as SentryDetailedError;
+    return map['detailedError'] = SentryDetailedError.fromMap(
+        map['detailedError'] as Map<String, dynamic>);
+  }
+
+  set detailedError(SentryDetailedError value) => map["detailedError"] = value;
+  SentryErrorStackTrace get errorStackTrace {
+    if (map['errorStackTrace'] is SentryErrorStackTrace)
+      return map['errorStackTrace'] as SentryErrorStackTrace;
+    return map['errorStackTrace'] = SentryErrorStackTrace.fromMap(
+        map['errorStackTrace'] as Map<String, dynamic>);
+  }
+
+  set errorStackTrace(SentryErrorStackTrace value) =>
+      map["errorStackTrace"] = value;
+  SentryErrorConnection get errors {
+    if (map['errors'] is SentryErrorConnection)
+      return map['errors'] as SentryErrorConnection;
+    return map['errors'] =
+        SentryErrorConnection.fromMap(map['errors'] as Map<String, dynamic>);
+  }
+
+  set errors(SentryErrorConnection value) => map["errors"] = value;
+  String get externalUrl => map["externalUrl"] as String;
+  set externalUrl(String value) => map["externalUrl"] = value;
+  static SentryErrorCollection fromMap(Map<String, dynamic> map,
+      [bool deepCopy = false]) {
+    if (map == null) return null;
+    if (deepCopy) map = jsonDecode(jsonEncode(map)) as Map<String, dynamic>;
+    return SentryErrorCollection()..map = map;
+  }
+
+  SentryErrorCollection clone() =>
+      SentryErrorCollection.fromMap(toJson() as Map<String, dynamic>, true);
+}
+
 class ProjectStatistics extends MapObject {
   int get buildArtifactsSize => map["buildArtifactsSize"] as int;
   set buildArtifactsSize(int value) => map["buildArtifactsSize"] = value;
@@ -2350,6 +4107,8 @@ class ProjectStatistics extends MapObject {
 }
 
 class ProjectPermissions extends MapObject {
+  bool get adminOperations => map["adminOperations"] as bool;
+  set adminOperations(bool value) => map["adminOperations"] = value;
   bool get adminProject => map["adminProject"] as bool;
   set adminProject(bool value) => map["adminProject"] = value;
   bool get adminRemoteMirror => map["adminRemoteMirror"] as bool;
@@ -2382,8 +4141,8 @@ class ProjectPermissions extends MapObject {
   bool get createPipelineSchedule => map["createPipelineSchedule"] as bool;
   set createPipelineSchedule(bool value) =>
       map["createPipelineSchedule"] = value;
-  bool get createProjectSnippet => map["createProjectSnippet"] as bool;
-  set createProjectSnippet(bool value) => map["createProjectSnippet"] = value;
+  bool get createSnippet => map["createSnippet"] as bool;
+  set createSnippet(bool value) => map["createSnippet"] = value;
   bool get createWiki => map["createWiki"] as bool;
   set createWiki(bool value) => map["createWiki"] = value;
   bool get destroyDesign => map["destroyDesign"] as bool;
@@ -2410,6 +4169,8 @@ class ProjectPermissions extends MapObject {
   set readCycleAnalytics(bool value) => map["readCycleAnalytics"] = value;
   bool get readDesign => map["readDesign"] as bool;
   set readDesign(bool value) => map["readDesign"] = value;
+  bool get readMergeRequest => map["readMergeRequest"] as bool;
+  set readMergeRequest(bool value) => map["readMergeRequest"] = value;
   bool get readPagesContent => map["readPagesContent"] as bool;
   set readPagesContent(bool value) => map["readPagesContent"] = value;
   bool get readProject => map["readProject"] as bool;
@@ -2448,8 +4209,26 @@ class ProjectPermissions extends MapObject {
 class Project extends MapObject {
   bool get archived => map["archived"] as bool;
   set archived(bool value) => map["archived"] = value;
+  bool get autocloseReferencedIssues =>
+      map["autocloseReferencedIssues"] as bool;
+  set autocloseReferencedIssues(bool value) =>
+      map["autocloseReferencedIssues"] = value;
   String get avatarUrl => map["avatarUrl"] as String;
   set avatarUrl(String value) => map["avatarUrl"] = value;
+  Board get board {
+    if (map['board'] is Board) return map['board'] as Board;
+    return map['board'] = Board.fromMap(map['board'] as Map<String, dynamic>);
+  }
+
+  set board(Board value) => map["board"] = value;
+  BoardConnection get boards {
+    if (map['boards'] is BoardConnection)
+      return map['boards'] as BoardConnection;
+    return map['boards'] =
+        BoardConnection.fromMap(map['boards'] as Map<String, dynamic>);
+  }
+
+  set boards(BoardConnection value) => map["boards"] = value;
   bool get containerRegistryEnabled => map["containerRegistryEnabled"] as bool;
   set containerRegistryEnabled(bool value) =>
       map["containerRegistryEnabled"] = value;
@@ -2459,10 +4238,27 @@ class Project extends MapObject {
   set description(String value) => map["description"] = value;
   String get descriptionHtml => map["descriptionHtml"] as String;
   set descriptionHtml(String value) => map["descriptionHtml"] = value;
+  EnvironmentConnection get environments {
+    if (map['environments'] is EnvironmentConnection)
+      return map['environments'] as EnvironmentConnection;
+    return map['environments'] = EnvironmentConnection.fromMap(
+        map['environments'] as Map<String, dynamic>);
+  }
+
+  set environments(EnvironmentConnection value) => map["environments"] = value;
   int get forksCount => map["forksCount"] as int;
   set forksCount(int value) => map["forksCount"] = value;
   String get fullPath => map["fullPath"] as String;
   set fullPath(String value) => map["fullPath"] = value;
+  GrafanaIntegration get grafanaIntegration {
+    if (map['grafanaIntegration'] is GrafanaIntegration)
+      return map['grafanaIntegration'] as GrafanaIntegration;
+    return map['grafanaIntegration'] = GrafanaIntegration.fromMap(
+        map['grafanaIntegration'] as Map<String, dynamic>);
+  }
+
+  set grafanaIntegration(GrafanaIntegration value) =>
+      map["grafanaIntegration"] = value;
   Group get group {
     if (map['group'] is Group) return map['group'] as Group;
     return map['group'] = Group.fromMap(map['group'] as Map<String, dynamic>);
@@ -2557,6 +4353,10 @@ class Project extends MapObject {
       map["printingMergeRequestLinkEnabled"] = value;
   bool get publicJobs => map["publicJobs"] as bool;
   set publicJobs(bool value) => map["publicJobs"] = value;
+  bool get removeSourceBranchAfterMerge =>
+      map["removeSourceBranchAfterMerge"] as bool;
+  set removeSourceBranchAfterMerge(bool value) =>
+      map["removeSourceBranchAfterMerge"] = value;
   Repository get repository {
     if (map['repository'] is Repository) return map['repository'] as Repository;
     return map['repository'] =
@@ -2566,8 +4366,37 @@ class Project extends MapObject {
   set repository(Repository value) => map["repository"] = value;
   bool get requestAccessEnabled => map["requestAccessEnabled"] as bool;
   set requestAccessEnabled(bool value) => map["requestAccessEnabled"] = value;
+  SentryDetailedError get sentryDetailedError {
+    if (map['sentryDetailedError'] is SentryDetailedError)
+      return map['sentryDetailedError'] as SentryDetailedError;
+    return map['sentryDetailedError'] = SentryDetailedError.fromMap(
+        map['sentryDetailedError'] as Map<String, dynamic>);
+  }
+
+  set sentryDetailedError(SentryDetailedError value) =>
+      map["sentryDetailedError"] = value;
+  SentryErrorCollection get sentryErrors {
+    if (map['sentryErrors'] is SentryErrorCollection)
+      return map['sentryErrors'] as SentryErrorCollection;
+    return map['sentryErrors'] = SentryErrorCollection.fromMap(
+        map['sentryErrors'] as Map<String, dynamic>);
+  }
+
+  set sentryErrors(SentryErrorCollection value) => map["sentryErrors"] = value;
+  String get serviceDeskAddress => map["serviceDeskAddress"] as String;
+  set serviceDeskAddress(String value) => map["serviceDeskAddress"] = value;
+  bool get serviceDeskEnabled => map["serviceDeskEnabled"] as bool;
+  set serviceDeskEnabled(bool value) => map["serviceDeskEnabled"] = value;
   bool get sharedRunnersEnabled => map["sharedRunnersEnabled"] as bool;
   set sharedRunnersEnabled(bool value) => map["sharedRunnersEnabled"] = value;
+  SnippetConnection get snippets {
+    if (map['snippets'] is SnippetConnection)
+      return map['snippets'] as SnippetConnection;
+    return map['snippets'] =
+        SnippetConnection.fromMap(map['snippets'] as Map<String, dynamic>);
+  }
+
+  set snippets(SnippetConnection value) => map["snippets"] = value;
   bool get snippetsEnabled => map["snippetsEnabled"] as bool;
   set snippetsEnabled(bool value) => map["snippetsEnabled"] = value;
   String get sshUrlToRepo => map["sshUrlToRepo"] as String;
@@ -2582,6 +4411,10 @@ class Project extends MapObject {
   }
 
   set statistics(ProjectStatistics value) => map["statistics"] = value;
+  String get suggestionCommitMessage =>
+      map["suggestionCommitMessage"] as String;
+  set suggestionCommitMessage(String value) =>
+      map["suggestionCommitMessage"] = value;
   String get tagList => map["tagList"] as String;
   set tagList(String value) => map["tagList"] = value;
   ProjectPermissions get userPermissions {
@@ -2631,7 +4464,7 @@ class GitlabCEIssueLabels_OperationResult extends MapObject {
 GraphqlQuery<GitlabCEIssueLabels_OperationResult> GitlabCEIssueLabels(
     {int firstN}) {
   const query = """query GitlabCEIssueLabels(\$firstN: Int) {
-  project(fullPath: "gitlab-org/gitlab-ce") {
+  project(fullPath: "gitlab-org/gitlab-foss") {
     id
     issues(first: \$firstN) {
       edges {
