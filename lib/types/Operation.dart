@@ -39,13 +39,14 @@ class Operation extends BaseTypes {
     for (VariableDefinitionContext variable
         in _context.variableDefinitions?.variableDefinitions ?? []) {
       dynamic type;
-      if (variable.type.typeName?.name != null)
+      if (variable.type.typeName?.name != null) {
         type = _schema.findObject(variable.type.typeName.name);
-      else
+      } else {
         type = JsonObjectLite<dynamic>()
           ..['kind'] = 'LIST'
           ..['ofType'] = _schema.findObject(variable
               .type.listType.type.typeName.name); // TODO: Support list of lists
+      }
 
       if (type.kind as String == "ENUM") {
         variables.add(

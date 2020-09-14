@@ -13,6 +13,7 @@ The code generation is based on a set of graphql queries but all affected types 
 - Generate directly from http endpoint
 - Lazy response parsing
 - Case insensitive enum handling
+- File upload respects https://github.com/jaydenseric/graphql-multipart-request-spec
 
 ## Getting started
 
@@ -94,6 +95,16 @@ void main() async {
 }
 ```
 
+### File upload
+
+  On your server create a new scalar type called 'Upload' and use the generator.
+  The generator will create a `FileUploadInput` everywhere where it sees `Upload`.
+  Before the request the library goes into the query variables recursively and
+  collect all files and their paths in the tree. You can restore them on your server
+  as described in https://github.com/jaydenseric/graphql-multipart-request-spec
+  All file fields will have `null` value in the request.
+  You can save bandwidth if you use the same `FileUploadInput` instance if you
+  want to use the same file.
 
 # Notes
 

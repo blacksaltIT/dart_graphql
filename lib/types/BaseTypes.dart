@@ -24,6 +24,10 @@ class BaseTypes {
         return TypedReference(refer("bool", "dart:core"), GraphType.scalar);
       case "Enum":
         return TypedReference(refer("String", "dart:core"), GraphType.scalar);
+      case "Upload":
+        return TypedReference(
+            refer("FileUploadInput", "package:dart_graphql/dart_graphql.dart"),
+            GraphType.scalar);
       default:
         var serializer = scalarSerializers[graphqlType];
         if (serializer != null) {

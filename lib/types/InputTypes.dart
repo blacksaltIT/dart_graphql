@@ -61,10 +61,14 @@ class InputTypes extends BaseTypes {
     List<String> creatorCode = [];
     for (var name in fields.keys) {
       TypedReference type = fields[name];
-      constructor.optionalParameters.add(Parameter((pb) => pb
-        ..name = name
-        ..type = type.reference
-        ..named = true));
+      constructor.optionalParameters.add(
+        Parameter(
+          (pb) => pb
+            ..name = name
+            ..type = type.reference
+            ..named = true,
+        ),
+      );
 
       if (type.type == GraphType.other) {
         creatorCode.add(

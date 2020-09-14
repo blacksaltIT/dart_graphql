@@ -131,6 +131,29 @@ class GraphqlResponseError extends MapObject {
         ..map["requestId"] = requestId;
 }
 
+class FileUploadInput {
+  final Stream<List<int>> chunkStream;
+  final Stream<int> byteStream;
+  final List<int> bytes;
+  final String string;
+  final Uri uri;
+
+  final String fileName;
+
+  FileUploadInput({
+    this.chunkStream,
+    this.byteStream,
+    this.bytes,
+    this.string,
+    this.uri,
+    this.fileName,
+  }) {
+    assert([chunkStream, byteStream, bytes, string, uri]
+            .fold<int>(0, (count, arg) => count + (arg != null ? 1 : 0)) ==
+        1);
+  }
+}
+
 class MapObject {
   @protected
   Map<String, dynamic> map = <String, dynamic>{};

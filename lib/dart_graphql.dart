@@ -8,6 +8,7 @@ export "./fetch/client.dart"
         GraphqlClient,
         JsonResponse,
         MapObject,
+        FileUploadInput,
         GraphqlQuery,
         GraphqlResponse,
         GraphqlException,

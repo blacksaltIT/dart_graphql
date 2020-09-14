@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.0
+
+Breaking changes:
+- Support for graphql multipart request spec (https://github.com/jaydenseric/graphql-multipart-request-spec) which
+  affects how files are sent.
+- A few parameters became named instead of positional.
+
 ## 0.3.5
 
 - Support lists in query parameters

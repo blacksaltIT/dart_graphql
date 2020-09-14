@@ -1,6 +1,7 @@
 library graphql_fetch.client;
 
 import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
@@ -42,23 +43,21 @@ class RestClient extends http.BaseClient {
   }
 
   Future<JsonResponse> postJson(String path, Map<String, dynamic> data,
-      [Map<String, String> headers, Iterable<http.MultipartFile> files]) async {
+      {Map<String, String> headers,
+      Iterable<http.MultipartFile> files,
+      Map<String, List<String>> map}) async {
+    headers ??= {};
     String body = toJson(data);
     Uri uri = _baseUri.replace(path: _baseUri.path + path);
-    Map<String, String> _headers = <String, String>{
-      'Content-Type': 'application/json'
-    };
-
-    if (headers != null) _headers.addAll(headers);
 
     http.Response response;
     if (files != null && files.isNotEmpty) {
       http.MultipartRequest request = http.MultipartRequest("POST", uri);
 
-      request.fields['query'] = data['query'] as String;
-      request.fields['variables'] =
-          toJson(data['variables'] as Map<String, dynamic>);
-      request.headers['Authorization'] = headers['Authorization'];
+      request.fields['operations'] = body;
+      if (map != null) request.fields['map'] = toJson(map);
+
+      request.headers.addAll(headers);
       request.files.addAll(files);
 
       try {
@@ -67,7 +66,10 @@ class RestClient extends http.BaseClient {
         response = http.Response('{"error": "${e.toString()}"', 500);
       }
     } else {
-      response = await post(uri.toString(), body: body, headers: _headers);
+      if (!headers.keys.any((h) => h.toLowerCase() == 'content-type'))
+        headers['Content-Type'] = 'application/json';
+
+      response = await post(uri.toString(), body: body, headers: headers);
     }
 
     return handleJsonResponse(response);
@@ -84,7 +86,7 @@ class RestClient extends http.BaseClient {
   }
 
   Future<JsonResponse> putJson(String path, Map<String, dynamic> data,
-      [Map<String, String> headers]) async {
+      {Map<String, String> headers}) async {
     String body = toJson(data);
     Uri uri = _baseUri.replace(path: _baseUri.path + path);
 
@@ -99,7 +101,7 @@ class RestClient extends http.BaseClient {
   }
 
   Future<JsonResponse> getJson(String path, Map<String, dynamic> queries,
-      [Map<String, String> headers]) async {
+      {Map<String, String> headers}) async {
     Uri uri = _baseUri.replace(
         path: _baseUri.path + path, queryParameters: toQueries(queries));
 
@@ -127,26 +129,107 @@ class GraphqlClient extends RestClient {
       : super(endpoint, language: language);
 
   Future<JsonResponse> request(String query, Map<String, dynamic> variables,
-      [Map<String, String> headers, Iterable<http.MultipartFile> files]) async {
+      {Map<String, String> headers,
+      Iterable<http.MultipartFile> files,
+      Map<String, List<String>> map}) async {
     JsonResponse result = await postJson(
-        "",
-        <String, dynamic>{"query": query, "variables": variables},
-        headers,
-        files);
+        "", <String, dynamic>{"query": query, "variables": variables},
+        headers: headers, files: files, map: map);
     return result;
   }
 
   Future<GraphqlResponse<T>> query<T>(GraphqlQuery<T> query,
-      [Map<String, String> headers, Iterable<http.MultipartFile> files]) async {
+      {Map<String, String> headers}) async {
     headers ??= <String, String>{};
     if (language != null) headers['Accept-Language'] = language;
 
-    JsonResponse result =
-        await request(query.query, query.variables, headers, files);
+    Map<http.MultipartFile, List<String>> fileMapping =
+        await _mapFilesFromVariables(query.variables,
+            path: Queue<dynamic>()..addLast('variables'));
+    Map<String, List<String>> map =
+        fileMapping.map((mf, lst) => MapEntry(mf.field, lst));
+
+    JsonResponse result = await request(query.query, query.variables,
+        headers: headers, files: fileMapping.keys, map: map);
     return result.decode((body) {
       Map<String, dynamic> map = json.decode(body) as Map<String, dynamic>;
       return GraphqlResponse<T>(query.constructorOfData, map);
     });
+  }
+
+  Future<Map<http.MultipartFile, List<String>>> _mapFilesFromVariables(
+    dynamic node, {
+    Map<http.MultipartFile, List<String>> result,
+    Queue<dynamic> path,
+    void Function() clearFn,
+  }) async {
+    result ??= {};
+    path ??= Queue<dynamic>();
+
+    if (node is MapObject) {
+      await _mapFilesFromVariables(node.map, result: result, path: path);
+    } else if (node is List) {
+      for (int i = 0; i < node.length; i++) {
+        path.addLast(i);
+        await _mapFilesFromVariables(node[i],
+            result: result, path: path, clearFn: () => node[i] = null);
+        path.removeLast();
+      }
+    } else if (node is Map<String, dynamic>) {
+      for (MapEntry<String, dynamic> entry in node.entries.toList()) {
+        path.addLast(entry.key);
+        await _mapFilesFromVariables(entry.value,
+            result: result, path: path, clearFn: () => node[entry.key] = null);
+        path.removeLast();
+      }
+    } else if (node is FileUploadInput) {
+      String fieldName = 'f${node.hashCode}';
+      http.MultipartFile mpf = result.keys
+          .firstWhere((mf) => mf.field == fieldName, orElse: () => null);
+
+      String fileName = node.fileName ?? fieldName;
+      if (mpf == null) {
+        if (node.byteStream != null) {
+          mpf = http.MultipartFile.fromBytes(
+            fieldName,
+            await node.byteStream.fold(<int>[], (res, byte) => res..add(byte)),
+            filename: fileName,
+          );
+        } else if (node.bytes != null) {
+          mpf ??= http.MultipartFile.fromBytes(
+            fieldName,
+            node.bytes,
+            filename: fileName,
+          );
+        } else if (node.chunkStream != null) {
+          mpf = http.MultipartFile.fromBytes(
+            fieldName,
+            await node.chunkStream
+                .fold<List<int>>(<int>[], (res, bytes) => res..addAll(bytes)),
+            filename: fileName,
+          );
+        } else if (node.string != null) {
+          mpf = http.MultipartFile.fromString(
+            fieldName,
+            node.string,
+            filename: fileName,
+          );
+        } else if (node.uri != null) {
+          http.Response httpRes = await http.get(node.uri);
+          mpf = http.MultipartFile.fromBytes(
+            fieldName,
+            httpRes.bodyBytes,
+            filename: fileName,
+          );
+        }
+      }
+
+      result.putIfAbsent(mpf, () => <String>[]);
+      result[mpf].add(path.join('.'));
+      clearFn?.call();
+    }
+
+    return result;
   }
 }
 
