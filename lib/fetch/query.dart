@@ -187,7 +187,8 @@ class MapObject {
 
 Map<String, ScalarSerializer> scalarSerializers = {
   "DateTime": DateTimeConverter(),
-  "JSONString": JSONStringSerializer()
+  "JSONString": JSONStringSerializer(),
+  "TimeDelta": TimeDeltaSerializer(),
 };
 
 abstract class ScalarSerializer<T> {
@@ -241,6 +242,39 @@ class JSONStringSerializer implements ScalarSerializer<Map<String, dynamic>> {
 
   @override
   String get dartName => "Map<String, dynamic>";
+
+  @override
+  String get dartPackage => 'dart:core';
+}
+
+class TimeDeltaSerializer implements ScalarSerializer<Duration> {
+  static final RegExp pyFormat = RegExp(
+      r'((?<days>-?\d+) days?, )?(?<hrs>\d+):(?<mins>\d\d):(?<secs>\d\d)(\.(?<usecs>\d{6}))?');
+
+  @override
+  Duration deserialize(dynamic d) {
+    if (d == null || d is! String) return null;
+
+    RegExpMatch match = pyFormat.firstMatch(d as String);
+    if (match == null) return null;
+
+    return Duration(
+      days: int.parse(match.namedGroup('days') ?? '0'),
+      hours: int.parse(match.namedGroup('hrs') ?? '0'),
+      minutes: int.parse(match.namedGroup('mins') ?? '0'),
+      seconds: int.parse(match.namedGroup('secs') ?? '0'),
+      microseconds: int.parse(match.namedGroup('usecs') ?? '0'),
+    );
+  }
+
+  @override
+  bool isType(dynamic value) => value is Duration;
+
+  @override
+  dynamic serialize(Duration data) => data?.toString();
+
+  @override
+  String get dartName => "Duration";
 
   @override
   String get dartPackage => 'dart:core';

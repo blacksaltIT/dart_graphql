@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.1
+
+- Support `TimeDelta` scalar serializer (generates `Duration`).
+  Input format: [[D day[s], ][H]H:MM:SS[.UUUUUU]](https://docs.python.org/3/library/datetime.html#timedelta-objects), output format is `Duration.toString()`: ([H]H:MM:SS.UUUUUU like '135:05:59.365145').
+
 ## 0.4.0
 
 Breaking changes:
