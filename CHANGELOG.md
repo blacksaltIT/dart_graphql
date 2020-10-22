@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.2
+
+- Fix timezone information handling in DateTime serialize/deserialize
+
 ## 0.4.1
 
 - Support `TimeDelta` scalar serializer (generates `Duration`).

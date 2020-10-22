@@ -202,7 +202,7 @@ abstract class ScalarSerializer<T> {
 class DateTimeConverter implements ScalarSerializer<DateTime> {
   @override
   DateTime deserialize(dynamic d) =>
-      d == null ? null : DateTime.parse(d as String);
+      d == null ? null : DateTime.parse(d as String).toLocal();
 
   @override
   bool isType(dynamic value) => value is DateTime;
@@ -214,7 +214,7 @@ class DateTimeConverter implements ScalarSerializer<DateTime> {
       String stamp =
           "${_addLeadingZeros(utcDate.year, 4)}-${_addLeadingZeros(utcDate.month)}-${_addLeadingZeros(utcDate.day)}T${_addLeadingZeros(utcDate.hour)}:${_addLeadingZeros(utcDate.minute)}:${_addLeadingZeros(utcDate.second)}";
       String timezone =
-          "${data.timeZoneOffset.isNegative ? '-' : '+'}${_addLeadingZeros(data.timeZoneOffset.inMinutes ~/ 60)}:${_addLeadingZeros(data.timeZoneOffset.inMinutes % 60)}";
+          "${utcDate.timeZoneOffset.isNegative ? '-' : '+'}${_addLeadingZeros(utcDate.timeZoneOffset.inMinutes ~/ 60)}:${_addLeadingZeros(utcDate.timeZoneOffset.inMinutes % 60)}";
       return "$stamp$timezone";
     }
   }

@@ -1,5 +1,5 @@
 name: dart_graphql
-version: 0.4.1
+version: 0.4.2
 description: Generates dart code for GraphQL endpoints using the original type names and all properties.
 homepage: https://github.com/blacksaltIT/dart_graphql
 environment:
